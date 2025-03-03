@@ -1,0 +1,132 @@
+
+/* Modal content (Form container) */
+.kyc-form-container{
+    position: fixed;
+    top: 0;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 20000;
+}
+.kyc-form-content {
+    background-color: white;
+    width: 90%;
+    padding: 20px;
+    border-radius: 8px;
+    max-height: 90vh;  /* Reduced height */
+    overflow-y: auto;  /* Enable scrolling if content exceeds height */
+    position: relative;
+    max-width: 600px;
+ 
+}
+
+/* Close button */
+.kyc-close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #2A3650;
+}
+
+/* Title */
+.kyc-form-title {
+    text-align: center;
+    color: #2A3650; /* Dark blue for the title */
+    font-size: 1.8rem;
+    font-weight: 600; /* Less bold for a smoother look */
+    margin-bottom: 20px;
+}
+
+/* Form layout */
+.kyc-form-unique {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.kyc-form-group-unique {
+    display: flex;
+    flex-direction: column;
+}
+
+.kyc-form-group-full {
+    grid-column: 1 / span 2;
+}
+
+/* Labels */
+.kyc-form-label {
+    font-weight: 500; /* Less bold for labels */
+    margin-bottom: 6px;
+    font-size: 1rem;
+    color: #2A3650;
+}
+
+/* Inputs and Selects */
+.kyc-form-input,
+.kyc-form-select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    background-color: #f4f6fb; /* Softer background for inputs */
+    transition: border 0.3s ease;
+}
+
+.kyc-form-input:focus,
+.kyc-form-select:focus {
+    border-color: #2A3650; /* Focus state in theme color */
+    outline: none;
+}
+
+/* Error message */
+.kyc-error-message {
+    color: #d9534f;
+    font-size: 0.85rem;
+    margin-top: 3px;
+}
+
+/* Submit button */
+.kyc-submit-btn {
+    background-color: #2A3650;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: 600;
+    grid-column: 1 / span 2;
+    transition: background-color 0.3s ease;
+}
+
+.kyc-submit-btn:hover {
+    background-color: #1f2b42; /* Slightly darker on hover */
+}
+
+.kyc-submit-btn:disabled {
+    background-color: #ccc; /* Disabled state */
+    cursor: not-allowed;
+}
+
+/* Declaration */
+.kyc-form-declaration {
+    display: flex;
+    align-items: center;
+    font-size: 0.8rem;
+    grid-column: 1 / span 2;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .kyc-form-unique {
+        grid-template-columns: 1fr;
+    }
+}

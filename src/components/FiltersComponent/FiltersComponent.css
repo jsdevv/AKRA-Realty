@@ -1,0 +1,70 @@
+.filters-container {
+    width: 100%;
+    padding:8px 10px;
+    font-family: 'Outfit', sans-serif;
+  }
+  
+  .filters-container .MuiTypography-root {
+    font-size: 11px;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 3px;
+  }
+  
+  .filters-container .MuiTextField-root {
+    font-size: 12px;
+  }
+  
+  .apply-filters-button {
+    padding: 10px;
+    background-color: #2A3650 !important;
+    color: white !important;
+    font-size: 11px;
+    font-weight: 400;
+    border-radius: 8px;
+  }
+
+  .apply-filters-button:hover {
+    color: #2A3650 !important;
+    background-color: white !important;
+    border:1px solid #2A3650;
+   
+  }
+
+  .apply-filters-button1 {
+    padding: 10px 8px;
+    background-color: white !important;
+    color: #2A3650 !important;
+    border: 1px solid #2A3650 !important;
+    font-size: 11px;
+    font-weight: 400;
+    border-radius: 8px;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .filters-container {
+      padding: 12px;
+    }
+  
+    .apply-filters-button {
+      font-size: 12px;
+      padding: 8px;
+    }
+  }
+
+  /* Reduce the placeholder font size */
+.filters-container .MuiInputBase-input::placeholder {
+    font-size: 0.8rem; /* Adjust this value to your preference */
+  }
+  
+  /* If needed, apply additional styling */
+  .filters-container .MuiInputBase-input {
+    font-size: 1rem; /* You can adjust the input font size too */
+  }
+  
+/* Add this to your FiltersComponent.css */
+.area-grid-item {
+  padding-top: 4px !important;  /* Reduced padding */
+}
+

@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+
+body {
+  margin: 0;
+  font-family: 'Outfit', sans-serif; /* Use Outfit */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.slick-prev, .slick-next {
+  z-index: 10 !important;
+}
+.slick-prev{
+  left: 0 !important;
+}
+.slick-next{
+  right: 0 !important;
+}
+.slick-dots{
+  bottom: 0px !important;
+  background: #45454591 !important;
+}

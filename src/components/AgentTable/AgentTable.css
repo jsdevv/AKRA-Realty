@@ -1,0 +1,130 @@
+/* Agent Table Container */
+.agent-table-container {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+    margin-top: 4px;
+    overflow: auto;
+  }
+  
+  .agent-table{
+    overflow-y: scroll;
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid #ccc !important;
+    transition: width 0.5s ease-in-out; /* Smooth resizing */
+  }
+  
+  .agent-table {
+    width: 100%;
+    max-height: 600px; 
+  
+  }
+  
+  .agent-table thead, .agent-table td {
+    /* padding: 10px; */
+    border: 1px solid #ccc;
+    text-align: left;
+    font-size: 14px;
+  }
+  
+  .agent-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .agent-table th {
+    padding: 16px;
+    text-align: center;
+    color: #333;
+    font-size: 14px;
+    font-weight: 600;
+    border-right: 1px solid #c0c0c0;
+  }
+  
+  .agent-table th:last-child {
+    border-right: none;
+  }
+  
+  /* Table Body */
+  .agent-table tbody tr {
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .agent-table td {
+    padding: 4px;
+    color: #666;
+    font-size: 14px;
+    text-align: center;
+    vertical-align: middle;
+    /* border-right: 1px solid #e0e0e0; */
+  }
+  
+  .agent-table td:last-child {
+    border-right: none;
+  }
+  
+  /* Image Styling */
+  .agent-table__image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  /* Rating Styling */
+  .agent-table__rating {
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+  }
+  
+  .agent-table__star {
+    color: #f5a623;
+    font-size: 16px;
+    margin-right: 2px;
+  }
+  
+  /* Agent Name Styling */
+  .agent-table__name {
+    color: #428cdb;
+    font-weight: 600;
+    transition: color 0.3s;
+  }
+  
+  .agent-table__name:hover {
+    color: #000;
+  }
+  
+  .agent-table__listings {
+    text-decoration: underline;
+    color: #428cdb;
+    font-weight: 600;
+    transition: color 0.3s;
+  }
+  
+  .agent-table__listings:hover {
+    color: #000;
+  }
+  
+/* Properties View Container */
+.agent-properties-view__container {
+  position: relative;
+  padding: 10px;
+}
+
+
+
+
+.agent-property-table__image {
+  width: 80px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.agent-property-table__name, .agent-property-table__address, .agent-property-table__location, .agent-property-table__area {
+  font-size: 12px;
+  color: #666;
+}
+
+
+

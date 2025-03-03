@@ -1,0 +1,48 @@
+.dashboard-tabs {
+  padding: 10px 5px;
+  margin-bottom:5px ;
+  display: flex;
+  justify-content: space-between; /* Spread items to the left and right */
+  align-items: center; /* Center-align the items vertically */
+}
+
+.dashboard-tab-group-left {
+  display: flex;
+  justify-content: flex-start;
+  gap: 5px; /* Add space between tabs */
+}
+
+
+.dashboard-tab-group-right {
+  display: flex;
+  margin-right: 2%; /* Move this group to the far right */
+}
+
+.dashboard-tab.add-listing {
+  margin-left: 75px;  /* Push it to the right */
+
+
+}
+
+.dashboard-tab {
+  padding: 6px 12px;
+  margin: 0 4px;
+  border: none;
+  border-radius: 4px;
+  background-color: #ced4d5;
+  color: #2c3e50;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.dashboard-tab:hover{
+  background-color: #2c3e50;
+  color: #ffffff;
+}
+
+.dashboard-tab.active {
+  background-color: #2c3e50;
+  color: #ffffff;
+}
+

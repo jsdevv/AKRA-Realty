@@ -1,0 +1,25 @@
+#map {
+    height: 100%;
+    width: 100%;
+  }
+.geolocation-container{
+    width: 100%;
+    height: 100%;
+}
+
+.geolocation-container .search-box {
+  position: absolute;
+  top: 24%;
+  left: 74%;
+  transform: translateX(-50%);
+  z-index: 10;
+  width: 300px;
+}
+
+.geolocation-container .search-input {
+  width: 58%;
+  padding: 10px 15px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}

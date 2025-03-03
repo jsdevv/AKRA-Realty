@@ -1,0 +1,414 @@
+.backtoproperty {
+    padding: 10px 5px;
+    margin-bottom:5px ;
+    display: flex;
+    justify-content: space-between; /* Spread items to the left and right */
+    align-items: center; /* Center-align the items vertically */
+  }
+
+  .backtoproperty button {
+    padding: 6px 12px;
+    margin: 0 4px;
+    border: none;
+    border-radius: 4px;
+    background-color: #ced4d5;
+    color: #2c3e50;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .backtoproperty button:hover{
+    background-color: #2c3e50;
+    color: #ffffff;
+  }
+/* Main container for overall layout */
+.ownerclass{
+    display: flex;
+    flex-direction: column;
+    /* height: 100%; */
+    padding: 15px;
+    background-color: #f0f0f0;
+}
+.main-container {
+    display: grid;
+    grid-template-columns: 2fr 3fr 1fr; /* Three-column layout */
+    gap: 10px; /* Space between columns */
+}
+
+/* Container for owner details and stats */
+.owner-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr; /* Adjusted for better alignment */
+    gap: 20px; /* Space between columns */
+    box-sizing: border-box;
+    width: 100%; /* Full width within main-container */
+}
+
+/* Styling for details column */
+.details-column {
+    font-size: 12px; /* Smaller font size */
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding:0px 6px; /* Padding around the column */
+    box-sizing: border-box;
+    width: 100%; /* Full width in its container */
+    margin: 0 auto; /* Center the column if it is smaller than its container */
+    overflow: hidden; /* Prevent text overflow */
+}
+
+/* Grid layout within the details column */
+.details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two columns layout */ 
+    padding-top: 4px;
+}
+/* Styling for left side of the details column */
+.details-left {
+    display: flex;
+    flex-direction: column;
+    gap: 6px; /* Space between items */
+}
+
+/* Styling for right side of the details column */
+.details-right {
+    display: flex;
+    flex-direction: column;
+    gap: 6px; /* Space between items */
+}
+
+/* Paragraph styling in details column */
+.details-left p, .details-right p {
+    margin: 0; /* Remove margin */
+    line-height: 1.3; /* Improved readability with less height */
+    overflow-wrap: break-word; /* Ensure long words break properly */
+}
+
+.property-info {
+    display: flex; /* Use flexbox to align items horizontally */
+    align-items: center; /* Align items vertically in the center */
+
+}
+
+.ownerproperty-name {
+    font-size: 16px; 
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.property-location {
+    position: relative;
+    /* right: 47%; */
+    font-size: 12px; /* Match font size with property name */
+}
+
+/* Additional box below the details column */
+.additional-box {
+    background-color: #ffffff;
+    border-radius: 12px;
+    /* box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); */
+    padding: 10px; /* Reduced padding */
+    box-sizing: border-box;
+    margin-top: 20px; /* Space above the additional box */
+    text-align: center;
+}
+
+/* Stats column flex layout */
+.stats-column {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Space between stats boxes */
+}
+
+/* Container for individual stats boxes */
+.stats-container {
+    display: flex;
+    flex-wrap: wrap; /* Allows wrapping on smaller screens */
+    gap: 10px; /* Space between stats boxes */
+}
+
+/* Styling for individual stats boxes */
+.stat-box {
+    background-color: #ffffff;
+    color: #3c3838;
+    border-radius: 12px;
+    border: 1px solid #040305;
+    padding: 0px; /* Adjusted padding for better spacing */
+    text-align: center;
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+    flex: 1; /* Flexible width */
+    min-height: 60px; /* Minimum height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+/* Heading and paragraph styles within stats boxes */
+.stat-box h3 {
+    margin: 0;
+    font-size: 0.8em; /* Slightly larger font size */
+    /* color: #604a7b; */
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.stat-box p {
+    font-size: 0.8em; /* Slightly larger font size */
+    margin: 4px 0;
+    /* color: #604a7b; */
+}
+
+/* Row for chart display */
+.charts-row {
+    display: flex;
+    gap: 10px; /* Space between charts */
+    flex-wrap: nowrap; /* Prevent wrapping */
+    justify-content: space-between;
+    width: 100%; /* Full width */
+    max-width: 100%; /* Prevent overflow */
+    margin-bottom: 20px; /* Bottom margin */
+    box-sizing: border-box;
+}
+
+
+/* Styling for chart boxes */
+.chart-box {
+    background-color: #ffffff;
+    border-radius: 12px;
+    /* box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); */
+    padding: 10px; /* Reduced padding */
+    box-sizing: border-box;
+    overflow: hidden; /* Hide overflow */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Specific styles for BarRace and Pie charts */
+.chart-box.barrace{
+    flex: 2; /* Adjust width flexibly */
+    min-width: 300px; /* Minimum width */
+    min-height: 180px; /* Reduced minimum height */
+    max-width: 100%; /* Responsive width */
+}
+
+
+.chart-box.pie {
+    flex: 1; /* Adjust width flexibly */
+    min-width: 250px; /* Minimum width */
+    min-height: 180px; /* Reduced minimum height */
+    max-width: 100%; /* Responsive width */
+}
+
+/* Styling for the form column */
+.form-column {
+    height: 89%;
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 8px 14px; /* Reduced padding */
+}
+
+
+
+/* Uniform styling for labels */
+.form-group label {
+    display: inline-block; /* Ensures the label takes up space */
+    width: 100px; /* Fixed width for uniform alignment */
+    margin-right: 2px; /* Space between label and input */
+    color: #333;
+    font-size: 9px; /* Font size for labels */
+    text-align: left; /* Align label text to the right */
+}
+
+
+
+.form-group select {
+    width: calc(100% - 80px); 
+    padding: 6px; 
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s ease;
+    font-size: 12px; 
+}
+
+#registrationFee, #brokerageFee, #documentationFee, #platformFee, #netAmount{
+    width: calc(100% - 80px); 
+    padding: 6px; 
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s ease;
+    font-size: 12px;
+}
+
+/* Focus state for input fields */
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #00796b;
+}
+
+/* Flexbox layout for form groups */
+.form-group {
+    display: flex;
+    align-items: center; /* Align items vertically */
+    margin-bottom: 14px !important; /* Space between form groups */
+}
+
+/* Submit button styling */
+.submit-button {
+    font-size: 13px; /* Reduced font size */
+    padding: 8px; /* Reduced padding */
+    background-color: #00796b;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover state for submit button */
+.submit-button:hover {
+    background-color: #00574b;
+}
+
+
+
+/* Container for line chart and transaction history */
+.linechart-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two columns layout */
+    gap: 10px; /* Space between columns */
+    /* padding: 0px 30px; */
+    position: relative;
+    bottom: 2%;
+}
+
+/* Box styling for line chart */
+.linechart-box {
+    font-size: 12px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+    padding: 10px; /* Reduced padding */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    min-width: 300px; /* Minimum width */
+    min-height: 200px; /* Reduced minimum height */
+}
+
+/* Box styling for transaction history */
+.transaction-history-box {
+    background-color: #ffffff;
+    border-radius: 12px;
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+    padding: 10px; /* Reduced padding */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    min-width: 300px; /* Minimum width */
+    min-height: 200px; /* Reduced minimum height */
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .main-container {
+        grid-template-columns: 1fr; /* Single column layout */
+        padding: 10px; /* Adjust padding */
+    }
+
+    .owner-container {
+        grid-template-columns: 1fr; /* Single column inside owner-container */
+    }
+
+    .charts-row {
+        flex-direction: column; /* Stack charts vertically on smaller screens */
+    }
+
+    .linechart-container {
+        grid-template-columns: 1fr; /* Single column layout */
+    }
+}
+
+@media (max-width: 768px) {
+    .details-column,
+    .form-column {
+        width: 100%; /* Full width on small screens */
+        margin: 0; /* Remove margin */
+    }
+
+    .chart-box {
+        width: 100%; /* Full width for charts */
+        min-height: 200px; /* Further reduced height for small screens */
+    }
+
+    .stats-column {
+        flex-direction: column; /* Stack stats boxes vertically */
+    }
+}
+
+/* Container for the offers table */
+.offers-table-container {
+    background-color: #ffffff;
+    border-radius: 12px;
+    /* box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); */
+    padding: 10px 20px; /* Adjust padding */
+    height: 91%;
+    box-sizing: border-box;
+    font-size: 12px;
+}
+
+.offers-table-container h4 {
+    margin:0;
+    padding: 0px 0px 12px 0px;
+}
+
+/* Table styling */
+.offers-table {
+    width: 100%; /* Full width */
+    border-collapse: collapse; /* Collapse borders */
+}
+
+/* Table header styling */
+.offers-table thead th {
+    background-color: #f4f4f4; /* Light background for headers */
+    padding: 10px; /* Padding inside headers */
+    text-align: left; /* Align text to the left */
+    font-weight: bold; /* Bold text */
+    font-size: 12px;
+    border: none;
+}
+
+/* Table cell styling */
+.offers-table td, .offers-table th {
+    border: 1px solid #ddd; /* Border for cells */
+    padding: 8px; 
+    border: none;
+}
+
+/* Alternate row color for better readability */
+.offers-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+    border: none;
+}
+
+/* Link styling */
+.offers-table a {
+    color: #00796b; /* Link color */
+    text-decoration: none; /* Remove underline */
+}
+
+.offers-table a:hover {
+    text-decoration: underline; /* Underline on hover */
+}
+.first-column{
+    display: grid;
+    gap: 10px;
+}

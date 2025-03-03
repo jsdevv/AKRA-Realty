@@ -1,0 +1,88 @@
+/* Grid Container */
+.ag-theme-quartz {
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    font-family: "Outfit", sans-serif;
+}
+
+/* Table Borders */
+.ag-theme-quartz .ag-root-wrapper {
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid #ddd;
+}
+
+/* Style for AG Grid header cells with custom class */
+.custom-header {
+    /* border-right:1px solid #ccc; */
+    font-size:12px;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 500;
+    text-align: center;
+    margin: 2px;
+}
+
+/* Ensure the header text inside cells is properly aligned */
+.custom-header .ag-header-cell-label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.bordered-grid{
+    color: rgb(201, 201, 201) !important;
+}
+
+
+/* Cell Styling */
+.ag-theme-quartz .ag-cell {
+    font-size: 13px;
+    font-weight: 400;
+    text-align: center;
+    margin: 2px 2px 4px 2px ;
+    padding: 0px 2px 2px 2px ;
+    color: #333;
+}
+
+/* Row Hover Effect */
+.ag-theme-quartz .ag-row:hover {
+    background-color: #E0F7FA !important;
+    cursor: pointer;
+}
+
+/* Details Link Styling */
+.details-link {
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 600;
+    color: #b94747;
+    transition: color 0.3s ease-in-out;
+    text-decoration: underline;
+}
+
+/* Amount Styling with Rupee Icon */
+.amount-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: #2e7d32;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .ag-theme-quartz {
+        font-size: 12px;
+    }
+
+    .custom-header {
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    .ag-theme-quartz .ag-cell {
+        padding: 8px;
+    }
+}

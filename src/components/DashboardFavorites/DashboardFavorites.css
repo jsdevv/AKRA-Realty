@@ -1,0 +1,171 @@
+.dashboard-favorites-main{
+    display: flex;
+    flex: 1 1;
+}
+.dashboard-favorites-table-container {
+    display: flex;
+    align-items: flex-start;
+    width: 70%;
+    min-height: 60vh;
+    height: 77vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border: 1px solid #c0c0c0;
+    
+}
+
+.dashboard-favorites-map-container {
+    width: 30%;
+    height: 77vh;
+  }
+  
+
+.dashboard-favorites-empty {
+    font-size: 14px;
+    color: #777;
+    text-align: center;
+}
+
+/* Table Styling */
+.dashboard-favorites-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 10px; 
+}
+
+.dashboard-favorites-table th {
+    position: sticky;
+    top: 0; /* Ensures it stays at the top */
+    background-color: #DADEE7;
+    z-index: 2; /* Keeps the header above the table rows */
+    padding: 10px;
+    text-align: center;
+    border-right: 1px solid #c0c0c0;
+    font-weight: 500;
+    font-size: 11px;
+    color: #333;
+}
+
+.favproperty-table__image{
+    cursor: pointer;
+    width: 80px;
+    height: 50px;
+    padding: 2px;
+ 
+    object-fit: cover;
+}
+
+
+.dashboard-favorites-table td {
+    padding: 0px;
+    text-align: center;
+    align-items: center;
+    border: 1px solid #c0c0c0;
+    font-size: 11px;
+    color: #555;
+}
+
+
+
+.dashboard-favorites-table tbody tr:nth-child(even) {
+    background-color: #DADEE7;
+    /* Light background for odd rows */
+}
+
+.dashboard-favorites-table thead,
+.dashboard-favorites-table tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.dashboard-favorites-table tr:hover {
+    background-color: #f7f7f7;
+}
+
+.dashboard-favorites-table td input[type='checkbox'] {
+    margin: 0;
+}
+
+/* Buttons */
+.dashboard-details-button,
+.dashboard-remove-button,
+.dashboard-shortlist-button {
+    background: none;
+    border: none;
+    color: #2C3E50;
+    cursor: pointer;
+    font-size: 14px;
+    transition: color 0.3s;
+}
+
+.dashboard-details-button {
+    padding: 0px;
+    font-size: 11px;
+    text-decoration: underline;
+    color: #418bd5;
+}
+.dashboard-details-button {
+    padding: 0px;
+    font-size: 11px;
+}
+
+.dashboard-details-button:hover{
+    color:#2C3E50 ;
+  
+}
+.dashboard-remove-button:hover,
+.dashboard-shortlist-button:hover {
+    color: #2C3E50;
+}
+
+/* Shortlist Styling */
+/* Default state for the star icon (white) */
+.dashboard-shortlist-icon {
+    color: #c0c0c0;
+    transition: color 0.3s;
+}
+
+/* When the property is shortlisted, turn the star yellow */
+.dashboard-shortlist-icon.dashboard-shortlist-highlighted {
+    color: #ffcb00; /* Yellow */
+}
+
+/* Comparison Button - Positioned Above Table */
+.dashboard-favcompare-button-container {
+    width: 26%;
+    position: sticky;
+    bottom: 0px;
+    left: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    z-index: 10;
+    background-color: white;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-favcompare-button {
+    padding: 10px 20px;
+    background-color: #2C3E50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.dashboard-favcompare-button:hover {
+    color: #2C3E50;
+    background-color: white;
+    border: 1px solid #2C3E50;
+}
+
+.dashboard-favcompare-button-container p {
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #333;
+}

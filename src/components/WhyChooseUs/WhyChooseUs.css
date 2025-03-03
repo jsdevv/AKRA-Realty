@@ -1,0 +1,52 @@
+.why-choose-us-section {
+    text-align: center;
+    padding: 4rem 1rem;
+    background-color: #f9f9f9;
+  }
+  
+  .why-choose-us-title {
+    font-size: 1.5rem; /* Increased font size for the main title */
+    font-weight: 600;
+    margin-bottom: 2.5rem;
+    color: #333;
+  }
+  
+  .why-choose-us-features {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+  }
+  
+  .why-choose-us-feature {
+    flex: 1;
+    min-width: 250px;
+    max-width: 325px;
+    background-color: #ffffff;
+    padding: 2rem 2rem 3rem 2rem; 
+    /* border-radius: 10px; */
+    /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); */
+    text-align: center;
+
+  }
+  
+  .why-choose-us-icon {
+    font-size: 3.5rem; /* Slightly increased icon size */
+    margin-bottom: 1.5rem;
+    color: #2A3650; /* Added color for consistency */
+  }
+  
+  .why-choose-us-feature-title {
+    font-size: 1rem; /* Increased size for feature title */
+    font-weight: 500;
+    margin-bottom: 1rem;
+    color: #1c1c1c; /* Darker color for better contrast */
+  }
+  
+  .why-choose-us-feature-description {
+    font-size: 0.8rem; /* Adjusted size for readability */
+    color: #666666;
+    line-height: 1.6;
+    padding: 0 1rem; 
+    text-align: justify;
+  }
+  

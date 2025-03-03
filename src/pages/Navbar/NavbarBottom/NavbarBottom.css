@@ -1,0 +1,384 @@
+.navbar-bottom {
+    position: relative;
+    padding: 8px 10px;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    background-color: #f0f0f0;
+    z-index: 4;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    flex: 0 1 350px;
+    margin-right: 7px;
+}
+
+.search-input {
+    position: relative;
+    width: 100%;
+}
+
+.react-autosuggest__suggestions-container {
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 10; /* Ensure the suggestions appear above other content */
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  /* Remove bullets from the suggestions list */
+.react-autosuggest__suggestions-container ul {
+    list-style-type: none; /* Removes default list bullets */
+    padding: 0; /* Removes padding */
+    margin: 0; /* Removes margin */
+  }
+  
+  
+  /* Style for each suggestion item */
+  .react-autosuggest__suggestion {
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  /* Highlight suggestion item when hovered */
+  .react-autosuggest__suggestion--highlighted {
+    background-color: #f0f0f0;
+  }
+
+.search-input input {
+    width: 100%;
+    padding: 10px; /* Adjusted padding for better spacing */
+    border: 1px solid #ccc;
+    background-color: #fff;
+    border-radius: 4px;
+    font-size: 12px;
+    box-sizing: border-box;
+}
+
+.search-input .clear-button,
+.search-input .search-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
+    cursor: pointer;
+    background: none;
+    border: none;
+}
+
+.search-input .clear-button {
+    right: 40px; /* Adjust position as needed */
+}
+
+.search-input .search-button {
+    right: 10px; /* Adjust position as needed */
+}
+
+.dropdowns-container {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Consistent gap for better spacing */
+}
+
+.dropdown-toggle {
+    position: relative;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    color: #333;
+    font-size: 12px;
+    white-space: nowrap; 
+    padding: 8px 45px 8px 16px; /* Adjusted padding */
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; /* Ensures the icon stays aligned */
+}
+
+.dropdown-toggle:hover {
+   color:#fff;
+    background-color: #2A3650;
+
+}
+
+
+.dropdown-toggle .fa-home {
+    margin-right: 6px; /* Adjust this value to control the space between the icon and the text */
+    font-size: 16px; /* Ensure the icon size is appropriate */
+    vertical-align: middle; /* Align the icon vertically with the text */
+}
+
+
+.dropdown-toggle .icon {
+    position: absolute;
+    right: 10px; /* Adjusted position to prevent overlap */
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 80%;
+    width: 100%;
+    max-width:155px; /* Set a max-width for better control */
+    background-color: #fff;
+    border: 1px solid #ddd;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+    z-index: 100;
+    border-radius: 4px;
+    padding: 0; /* Remove default padding */
+    margin-top: 5px; /* Add space between the dropdown button and menu */
+    display: flex;
+    flex-direction: column; /* Ensure items stack vertically */
+    box-sizing: border-box; /* Ensure padding and border are included in width */
+
+}
+
+.dropdown-pricemenu {
+    position: absolute;
+    top: 80%;
+    width: 100%;
+    height: 102px;
+    max-width:320px; /* Set a max-width for better control */
+    background-color: #fff;
+    border: 1px solid #ddd;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+    z-index: 100;
+    border-radius: 4px;
+    padding: 2px 25px 2px 16px; /* Remove default padding */
+    margin-top: 5px; /* Add space between the dropdown button and menu */
+    display: flex;
+    flex-direction: column; /* Ensure items stack vertically */
+    box-sizing: border-box; /* Ensure padding and border are included in width */
+
+}
+
+
+.dropdown-item.selected {
+    background-color: #e0e0e0; /* Background color for selected items */
+}
+
+.dropdown-item {
+    padding: 8px;
+    cursor: pointer;
+    font-size: 12px !important;
+    background-color: #fff; /* Background color */
+    display: flex; /* Use flexbox for alignment */
+    align-items: center; /* Align items vertically */
+    text-align: left; /* Align text to the left */
+    border: none; /* Remove border from dropdown items */
+    white-space: nowrap; /* Prevent text from wrapping */
+    overflow: hidden; /* Hide overflow text */
+    text-overflow: ellipsis; /* Show ellipsis for overflow text */
+}
+
+.dropdown-item:hover {
+    background-color: #f0f0f0; /* Hover background color */
+}
+
+.dropdown-item input[type="checkbox"] {
+    margin-right: 12px; /* Space between checkbox and label */
+    cursor: pointer;
+}
+
+.dropdown-item .label {
+    flex: 1; /* Allow label to take available space */
+}
+
+.dropdown-item.selected {
+    background-color: #e0e0e0; /* Background color for selected items */
+}
+
+.dropdownfilter-item {
+    width:180px;
+    padding: 10px;
+    background-color: #fff; /* Background color */
+    display: flex; /* Use flexbox for alignment */
+    overflow: hidden; /* Hide overflow text */
+}
+
+.multi-select {
+    display: flex;
+    flex-direction: column;
+}
+
+.select-all {
+    font-weight: bold;
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.select-all input {
+    margin-right: 8px; /* Space between checkbox and label */
+}
+
+.dropdowns-container .save-search-button {
+    padding: 8px 22px;
+    background-color: #fff; 
+    color:#333 ;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    align-items: center;
+}
+
+.save-search-button:hover {
+    color: #fff;
+    background-color: #2A3650;
+    border: 1px solid #fff;
+}
+
+
+.premium-toggle-container {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: flex-end; /* Aligns the toggle to the right */
+    font-size: 14px; /* Adjust the font size for better readability */
+    white-space: nowrap; /* Prevents text wrapping */
+}
+
+.premium-toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 40px; /* Reduced width */
+    height: 20px; /* Reduced height */
+    margin-right: 8px; /* Space between toggle and label */
+}
+
+.premium-toggle-switch input {
+    opacity: 0; /* Hide the default checkbox */
+    width: 0;
+    height: 0;
+}
+
+.premium-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc; /* Default background color */
+    transition: .4s; /* Transition for smooth effect */
+    border-radius: 20px; /* Rounded corners */
+}
+
+.premium-slider:before {
+    position: absolute;
+    content: "";
+    height: 16px; /* Height of the inner slider */
+    width: 16px; /* Width of the inner slider */
+    left: 0px; /* Align the inner slider */
+    bottom: 2px; /* Align the inner slider */
+    background-color: white; /* Inner slider color */
+    border-radius: 50%; /* Round inner slider */
+    transition: .4s; /* Transition for smooth effect */
+}
+
+input:checked + .premium-slider {
+    background-color: #4CAF50; /* Color when checked */
+}
+
+input:checked + .premium-slider:before {
+    transform: translateX(20px); /* Move the inner slider */
+}
+
+.premium-toggle-container span {
+    margin-left: 5px; /* Space between toggle and text */
+    font-weight: 500; /* Font weight for emphasis */
+    line-height: 20px; /* Aligns the text vertically with the toggle */
+}
+
+
+.range-track {
+    background-color: #ddd;
+    height: 5px;
+    width: 100%;
+
+}
+
+.range-thumb {
+    background-color: #007bff;
+    border-radius: 50%;
+    height: 15px;
+    width: 15px;
+    cursor: pointer;
+}
+
+/* .price-range-values {
+    display: flex;
+    justify-content: space-between; 
+
+} */
+
+.price-range-values {
+    position: relative;
+    width:300px;
+    right: 10px;
+    font-size: 12px;
+   padding: 10px 0px;
+    display: flex;
+    justify-content: space-between; /* Aligns elements to the ends */
+    align-items: center; /* Centers the icon and text vertically */
+   
+}
+
+.price-range-values span {
+    display: flex;
+    align-items: center; /* Ensures the icon and text are vertically aligned */
+}
+.price-range-values span:first-child {
+    left: 0 !important; /* Aligns to the start of the slider track */
+}
+
+.price-range-values span:last-child {
+    right: 0 !important; /* Aligns to the end of the slider track */
+}
+
+
+
+
+.range-labels {
+    width: 100%;
+    position: relative;
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #333;
+  }
+  
+.pipe-symbol {
+    font-size: 10px;
+    color: #000;  /* Adjust color */
+    margin-bottom: 4px;  /* Space between the pipe and the label */
+}
+
+.price-range-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 20px; 
+    font-size: 12px;
+}
+.price-label-values {
+    display: flex;
+    justify-content: space-around; /* Spread the price ranges evenly */
+}
+
+.premium-builders-switch{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}

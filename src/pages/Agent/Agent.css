@@ -1,0 +1,46 @@
+.agent-container {
+  display: flex;
+  height: 83vh;
+  overflow: hidden;
+  position: relative;
+}
+
+.agent-testimonials {
+  width: 60%;
+  overflow-y: auto;
+  background-color: #DADEE7;
+  padding:  0px 12px 0px 5px;
+  box-sizing: border-box;
+  transition: width 0.5s ease; /* Smooth width transition */
+}
+
+.mapboxgl-map{
+  width: 100%;
+} 
+.agentmap-container {
+  height: 100%;
+  width: 0%; /* Initial width is 0 */
+  opacity: 0; /* Hidden by default */
+  transition: width 0.5s ease, opacity 0.5s ease; /* Smooth transition for width and opacity */
+}
+
+
+.agentmap-container.visible {
+  width: 40%; /* Expand to 40% width */
+  opacity: 1; /* Fully visible */
+}
+
+.mapboxgl-canvas{
+  width: 100% !important;
+}
+.agentcustom-marker {
+  cursor: pointer;
+  width: 4px;
+  height: 14px;
+  padding: 0px 4px;
+  border-radius: 50%;
+  border: 1px solid #fff;
+  text-align: center;
+  
+}
+

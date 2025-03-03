@@ -1,0 +1,78 @@
+/* Pagination container styles */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin: 24px 0px 20px 0px;
+    overflow: hidden;
+    width: 100%;
+}
+
+/* Pagination styles */
+.pagination {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.page-item {
+    margin: 0 5px;
+}
+
+.page-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    border-radius: 50%;
+    background-color: transparent;
+    color: #1a4862;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+    min-width: 30px;
+    min-height: 30px;
+    font-weight: 400;
+    font-size: 1rem;
+    text-align: center;
+}
+
+/* Active page item */
+.page-item.active .page-link {
+    border: 2px solid #1a4862; /* Blue border for active item */
+    background-color: #f7faff;
+    color: #1a4862;
+}
+
+/* Disabled page item */
+.page-item.disabled .page-link {
+    color: #ccc;
+    cursor: default;
+    pointer-events: none;
+    background-color: transparent;
+    border: none;
+}
+
+/* Customize the previous and next buttons */
+.page-item.previous .page-link,
+.page-item.next .page-link {
+    font-weight: 600;
+    font-size: 1rem;
+    background-color: transparent;
+    color: #555;
+    border-radius: 50%;
+}
+
+.page-item.previous .page-link:hover,
+.page-item.next .page-link:hover {
+    color: #006aff;
+}
+
+/* Adjust the break (ellipsis) style */
+.break-me .page-link {
+    background-color: transparent;
+    cursor: default;
+    color: #6c757d;
+    border: none;
+    box-shadow: none;
+}

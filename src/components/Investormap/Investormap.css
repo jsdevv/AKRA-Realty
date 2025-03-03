@@ -1,0 +1,106 @@
+.map-container {
+  position: relative;
+  width: 40%;
+  height: 84vh;
+  z-index: 10;
+  overflow: hidden;
+}
+
+.investorpopup-content {
+  height: 170px;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.custom-marker {
+  width: 14px;
+  height: 14px;
+}
+
+.custom-marker {
+  cursor: pointer;
+}
+
+/* Ensure popup image styling */
+.investormap-content img {
+  width: 100%;
+  /* Adjust as needed */
+  height: 120px;
+  /* Maintain aspect ratio */
+  object-fit: cover;
+  /* Ensure the image covers the area */
+}
+
+.investormap-details {
+  margin-top: 6px;
+  text-align: left;
+}
+
+.investorpopup-amount {
+  font-size: 1.0em;
+  /* font-weight: bold; */
+  margin: 0;
+  padding-left: 4px;
+  padding-top: 4px;
+}
+
+.investorpopup-name {
+  font-size: 0.9em;
+  color: #666;
+  margin: 0;
+  padding-left: 4px;
+  padding-top: 2px;
+}
+
+.investorpopup-image {
+  width: 220px;
+}
+
+/* Heart icon styles */
+.investorheart-icon {
+  position: absolute;
+  top: -20px;
+  /* Adjust this value to position the heart at the top of the marker */
+  animation: pulse 1s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.3);
+    opacity: 0.7;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.investorinfo-close-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 10; /* Ensure it appears above other elements */
+}
+
+.investorinfo-close-button:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}

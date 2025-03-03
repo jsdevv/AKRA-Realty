@@ -1,0 +1,270 @@
+/* Main Layout */
+.videos-layout {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 20px;
+  padding: 10px 20px 0px 20px;
+  height: 84vh;
+}
+
+/* Left Side - Scrollable Video List */
+.video-list {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: #f0f0f0;
+}
+
+.video-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.video-list::-webkit-scrollbar-thumb {
+  background: #aaa;
+  border-radius: 8px;
+}
+
+.video-list::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 8px;
+}
+
+/* Video List Container */
+.video-list-container {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.video-list-header {
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+}
+
+.video-list-header div:first-child {
+  display: flex;
+}
+
+.video-list-header div {
+  display: flex;
+  align-items: center;
+}
+
+.video-list-header h3 {
+  font-size: 14px;
+  margin: 0;
+}
+
+.video-list-header span {
+  font-size: 12px;
+  color: rgb(110, 67, 67);
+}
+
+.videofilter-icon {
+  cursor: pointer;
+  font-size: 24px;
+  color: #333;
+  transition: transform 0.2s ease-in-out;
+}
+
+.videofilter-icon:hover {
+  transform: scale(1.1);
+}
+
+/* Video Card */
+.video-card {
+  display: flex;
+  cursor: pointer;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  padding: 10px;
+}
+
+.video-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.video-thumbnail {
+  width: 150px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.video-info {
+  flex-grow: 1;
+  padding-left: 15px;
+  gap: 15px;
+}
+
+.video-title-price {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: -3px;
+}
+
+.video-title-price1 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.video-title {
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
+  color: #333;
+}
+
+.video-price {
+  font-size: 12px;
+  font-weight: 500;
+  color: #333;
+}
+
+.video-area {
+  font-size: 12px;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 0px;
+  margin: 0px 0px 4px 0px;
+}
+
+.video-count {
+  font-size: 11px;
+  color: #ffffff;
+  background-color: #2A3650;
+  padding: 4PX 6px;
+  border-radius:8px;
+}
+
+
+/* Right Side - Fixed Video Player */
+.video-display {
+  width: 95%;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin: 10px;
+  position: relative;
+}
+
+.video-container {
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.video-container h3 {
+ font-size: 16px;
+ font-weight: 500;
+ margin:0px;
+ padding-bottom: 4px;
+}
+
+.youtube-iframe iframe {
+  width: 100%;
+  height: 450px;
+}
+
+.placeholder-text {
+  color: white;
+  font-size: 18px;
+  text-align: center;
+}
+
+.property-playlist {
+  margin-top: 5px;
+}
+
+.property-video-slide {
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+.property-video-card {
+  width: 100px;
+  cursor: pointer;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.property-video-card.active {
+  border: 1px solid #034efd;
+}
+
+.property-video-card img {
+  width: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+
+.property-video-slide{
+  background-color: #ebebeb;
+}
+
+.property-video-card  p{
+  margin: 0px;
+  padding: 2px;
+  font-size: 9px;
+  font-weight: 400;
+}
+
+.property-video-thumbnail {
+  object-fit: cover;
+}
+
+.property-video-title {
+  padding: 8px;
+  font-size: 14px;
+  text-align: center;
+  color: #333;
+}
+
+.property-playlist h4{
+  padding: 5px;
+  margin: 0px;
+}
+
+
+
+/* Responsive */
+@media (max-width: 900px) {
+  .videos-layout {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
+  .video-list {
+    height: auto;
+    overflow-y: visible;
+  }
+
+  .video-display {
+    position: relative;
+  }
+
+  .youtube-iframe iframe {
+    height: 250px;
+  }
+}

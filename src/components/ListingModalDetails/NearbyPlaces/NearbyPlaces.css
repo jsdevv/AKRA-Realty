@@ -1,0 +1,98 @@
+.nearby-places {
+  padding: 20px 20px 20px 0px;
+}
+
+.nearby-places h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+/* Tabs Section */
+.np-tabs {
+  display: flex;
+  border-bottom: 2px solid #e5e5e5;
+  margin-bottom: 20px;
+}
+
+.np-tab {
+  padding: 10px 20px;
+  cursor: pointer;
+  background-color: #f9f9f9;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  color: #666;
+  transition: background-color 0.3s ease;
+}
+
+.np-tab:hover {
+  background-color: #f0f0f0;
+}
+
+.np-tab-active {
+  background-color: white;
+  color:#2c3e50;
+  border-bottom: 3px solid #2c3e50;
+}
+
+/* Content Items Section */
+.np-category-items {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.np-place-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #E0E0E0;
+  padding-bottom: 15px;
+  padding-top: 15px;
+}
+
+.np-category-items .np-place-item:last-child {
+  border-bottom: none;
+}
+
+.np-place-image {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.np-place-details {
+  flex-grow: 1;
+  margin-left: 20px;
+}
+
+.np-place-name {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.np-place-address {
+  font-size: 14px;
+  color: #888;
+}
+
+.np-place-reviews {
+  text-align: right;
+  font-size: 14px;
+}
+
+/* Star Ratings */
+.np-stars {
+  margin-top: 5px;
+}
+
+.np-star {
+  font-size: 18px;
+  color: #ccc;
+}
+
+.np-filled {
+  color: #00B5AD;
+}

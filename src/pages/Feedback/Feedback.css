@@ -1,0 +1,95 @@
+.bug-feedback-container {
+    margin: 20px;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .bug-feedback-header {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #555;
+    position: sticky;
+    top: 0;
+    background-color: white; /* Ensure background color is set for sticky effect */
+    z-index: 1; /* Ensure it stays above other content */
+  }
+
+  /* Wrap table inside a scrollable div */
+.bug-feedback-table-wrapper {
+  max-height: 65vh; /* Set a max height for scrollable content */
+  overflow-y: auto; /* Allow vertical scrolling */
+  overflow-x: hidden;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+}
+  
+  .bug-feedback-table {
+    width: 100%;
+    border-collapse: collapse;
+    /* border: 1px solid #e0e0e0; */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .bug-feedback-table thead {
+    position: sticky;
+    top: 0;
+    background-color: #f7f7f7; /* Ensure background remains visible */
+    z-index: 2; /* Ensure it stays above tbody */
+  }
+  
+  .bug-feedback-table th,
+  .bug-feedback-table td {
+    font-size: 14px;
+    padding: 15px;
+    text-align: left;
+    border: 1px solid #ddd;
+    vertical-align: middle;
+  }
+  
+  .bug-feedback-table th {
+    background-color: #f7f7f7;
+    color: #555;
+    font-weight: 600;
+  }
+  
+  .bug-feedback-table td {
+    background-color: #ffffff;
+  }
+  
+  .bug-feedback-table tr:nth-child(even) td {
+    background-color: #f9f9f9;
+  }
+  
+  .bug-feedback-table tr:hover td {
+    background-color: #eef4fc;
+  }
+  
+  /* Make tbody scrollable */
+  .bug-feedback-table tbody {
+    max-height: 65vh; /* Set your desired height */
+  }
+  
+  .bug-feedback-table thead,
+  .bug-feedback-table tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+  }
+  
+
+  .bug-feedback-search {
+    margin-bottom: 20px;
+  }
+  
+  .bug-feedback-search-input {
+    width: 30%;
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+  }
+  

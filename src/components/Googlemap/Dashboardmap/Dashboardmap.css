@@ -1,0 +1,79 @@
+ #map {
+    height: 100%;
+    width: 100%;
+  }
+  
+  .fixed-circle-marker {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #6D2323; /* Use your preferred color */
+    border: 2px solid white;
+    cursor: pointer;
+    position: absolute;
+    transform: translate(-50%, -50%);
+  }
+/* Scale down all controls uniformly */
+.gm-style .gm-control-active {
+  transform: scale(0.5); /* Uniform scale for all controls */
+  margin: 0; /* Remove any unwanted margin */
+}
+
+/* Zoom In/Out buttons scaling */
+.gm-style .gm-style-zoom {
+  transform: scale(0.7); /* Scale down zoom buttons */
+  font-size: 12px; /* Smaller font size for zoom buttons */
+  padding: 5px; /* Adjust padding for better alignment */
+}
+
+/* Style for Map and Satellite buttons (MapTypeControl) */
+.gm-style .gm-style-mtc {
+  display: flex; /* Align buttons horizontally */
+  gap: 0px; /* Ensure buttons touch each other without space */
+  transform: scale(0.7); /* Scale down the entire control */
+  margin: 0; /* Remove margin between the buttons */
+  padding: 0; /* Remove padding to bring them closer */
+}
+
+/* Map Type Control (Map/Satellite) button styling */
+.gm-style .gm-style-mtc .gm-style-button {
+  margin: 0; /* Remove margin between buttons */
+  padding: 0; /* Remove padding between buttons */
+  font-size: 12px; /* Set a consistent font size */
+  width: 40px; /* Optional: Explicitly set the width for consistent button size */
+}
+
+/* Street View (Pegman) control */
+.gm-style .gm-style-ssm {
+  transform: scale(0.7); /* Scale down Pegman */
+}
+
+/* Fullscreen button styling */
+.gm-style .gm-fullscreen-control {
+  transform: scale(0.7); /* Scale down the fullscreen button */
+}
+
+/* General button font size adjustment */
+.gm-style .gm-style-button {
+  font-size: 12px; /* Ensures smaller font size for all buttons */
+  padding: 8px ; /* Adjust padding for uniform size */
+}
+
+.dashboardclosemap {
+  position: absolute;
+    top: 21%;
+    right: 29%;
+    background-color: white;
+    padding: 2px 4px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+  transition: background-color 0.3s ease;
+}
+
+.dashboardclosemap:hover {
+  background-color: #2A3650;
+  color: #fff;
+}

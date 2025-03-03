@@ -1,0 +1,184 @@
+.stepper4{
+  display: flex;
+  gap: 10px;
+}
+.stepper4-container {
+  width: 41%;
+  margin: 10px 0px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  gap: 5px 10px; /* Reduced gap */
+  padding: 10px;
+}
+
+.stepper4-group {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  padding: 10px  5px;
+}
+
+
+
+
+.stepper4-group label {
+  font-weight: 400;
+  color: #333;
+  font-size: 14px;
+  width: 35%;
+}
+
+.stepper4-textgroup{
+  display: flex;
+  flex-direction: row;
+  gap: 25px;
+  align-items: center;
+  padding: 10px 5px ;
+}
+
+.stepper4-label1 {
+  font-weight: 400;
+  color: #333;
+  font-size: 14px;
+  width: 22%;
+}
+.stepper4-textgroup input{
+  font-size: 12px;
+}
+
+
+.custom-textfield4 {
+  width: 50% !important;
+}
+
+/* Apply padding to the custom-textfield class */
+.custom-textfield4 .MuiOutlinedInput-root {
+  width: 100%;
+  padding: 3px 0px;
+}
+
+.custom-textfield4 .MuiInputBase-input {
+  padding: 10px 14px;
+  font-size: 12px;
+  /* Adjust padding inside the input */
+}
+
+
+
+.stepper4-textarea {
+  width: 100%;
+}
+
+
+.stepper4-container .stepper4-group:last-child {
+  grid-column: span 2; /* Ensure the Notes field spans both columns */
+}
+
+@media (max-width: 768px) {
+  .stepper4-container {
+    grid-template-columns: 1fr; /* Stack the form fields on smaller screens */
+  }
+
+  .stepper4-group {
+    margin-bottom: 15px; /* Added space between fields on smaller screens */
+  }
+}
+
+.stepper4-aminites{
+  margin: 10px 0px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px; /* Rounded corners */
+  padding: 15px 20px;
+  width: 34%;
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+}
+.amenities-category{
+  display: flex;
+  flex-direction: column;
+  margin-top: 5px;
+}
+.amenities-category .amenities-category-title{
+  font-size: 13px;
+  font-weight: 600;
+}
+.amenities-options{
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 2px 0px;
+}
+.amenities-option{
+  font-size: 13px;
+}
+.amenities-option input {
+  width: 11px;
+  height: 11px;
+  cursor: pointer;
+  margin-right: 3px;
+}
+
+/* autocomplete */
+
+
+.stepper4-group .MuiAutocomplete-root {
+
+  width: 50%;
+
+}
+
+
+.stepper4-group .MuiOutlinedInput-root {
+  /* padding: 9px 2px 8px 2px !important; */
+  display: flex;
+  align-items: center;
+  min-height: 30px;
+}
+
+/* Input field styling */
+.custom-autocomplete4 .MuiOutlinedInput-root input {
+  outline: none;
+  /* padding:8px 14px !important; */
+  width: 100%;
+  height: 100%;
+  font-size: 12px;
+}
+
+/* Keep the outer border color */
+.custom-autocomplete4 .MuiOutlinedInput-notchedOutline {
+  border-color: #ccc;
+}
+
+/* Label styling */
+.custom-autocomplete4 .MuiInputLabel-root {
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: visible;
+  padding-top: 0px;
+  transform-origin: left center;
+}
+
+/* Shrink label positioning when focused */
+.custom-autocomplete4 .MuiInputLabel-shrink {
+  transform: translate(16px, -6px) scale(0.85);
+}
+
+.custom-date-picker {
+  width: 50%; /* Set width to 50% */
+  font-size: 12px;
+}
+
+.custom-date-picker .MuiInputBase-input {
+  font-size: 12px; /* Reduce font size for input text */
+}
+
+.custom-date-picker .MuiInputBase-input::placeholder {
+  font-size: 12px; /* Reduce font size for placeholder */
+}
+
+.custom-date-picker .MuiInputAdornment-root {
+  font-size: 12px; /* Adjust icon size */
+}
+
+
+

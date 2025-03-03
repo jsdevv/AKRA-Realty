@@ -1,0 +1,102 @@
+/* Login Form Container */
+.login-container {
+  border-radius: 6px;
+  width: 100%;
+  max-width: 300px;
+}
+
+/* Styling for the top <p> tag (text above the form) */
+.login-container span {
+  font-size: 14px;  /* Adjust the font size */
+  color: #2a3650;  /* Color to match your design */
+}
+
+
+/* Input Container */
+.input-container {
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.input-container input {
+  width: 100%;
+  padding: 14px 12px;
+  font-size: 12px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+.register-form-input:focus {
+  border-color: #2A3650;
+  box-shadow: 0 0 5px rgba(42, 54, 80, 0.5);
+}
+
+/* Error Messages */
+.error-msg {
+  color: #ff4d4d;
+  font-size: 12px;
+  margin-top: 5px;
+  display: block;
+}
+
+/* Submit Button */
+.login-submit {
+  width: 100%;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  background-color: #2a3650;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-submit:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+}
+
+.login-submit:hover:enabled {
+  background-color: #23304b;
+}
+
+/* Footer Section */
+.login-footer {
+  margin-top: 15px; /* Reduced margin */
+  font-size: 12; /* Smaller font size */
+  text-align: center;
+  display: flex;
+  justify-content: space-between; /* Center the links */
+  align-items: center;
+  color: #8e8e8e;
+  gap: 10px; /* Reduced space between footer links */
+}
+
+
+
+ .footer-link {
+  text-align: right;
+  font-size: 13px;
+  color: #2a3650;
+  text-decoration: none;
+  cursor: pointer;
+}
+ .footer-link:hover {
+  text-decoration: underline;
+  color: #23304b;
+  font-weight: 600;
+}
+
+/* Success Message */
+.loginsuccess-msg {
+  color: #4caf50; /* Green color for success */
+  font-size: 14px;
+  margin-bottom: 15px;
+  text-align: center;
+  font-weight: 600;
+}

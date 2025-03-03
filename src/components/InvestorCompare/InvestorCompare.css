@@ -1,0 +1,123 @@
+/* Overlay to cover the entire screen */
+.investorpopup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4); /* Dark overlay with reduced opacity */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1001;
+  }
+  
+  /* Popup container */
+ /* Popup content container */
+.investorcomparepopup-content {
+    background: #fff;
+   padding: 20px;
+    width: 75%;
+    padding:0px 20px 10px 20px;
+    border-radius: 8px;
+
+    height: 90%; /* Adjusted height */
+    position: relative;
+    overflow-y: auto;
+  }
+  
+  /* Property header container */
+  .propertypopup-header {
+    display: flex;
+    flex-direction: column; /* Stack image and text vertically */
+
+  }
+  
+  /* Property image styling */
+
+  /* Property name styling */
+  .propertypopup-header div {
+    font-size: 16px;
+    /* font-weight: 500; */
+    color: #333; /* Dark text color for readability */
+  }
+
+  .propertypopup-image{
+    max-width: 200px;
+  }
+  
+  /* Close button styling */
+  .close-button {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #0077ff; /* Zillow-like blue color */
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease;
+  }
+  
+  .close-button:hover {
+    background: #005bb5; /* Darker blue for hover effect */
+  }
+  
+  /* Table styling */
+  .comparison-table {
+    margin-top: 20px;
+    overflow-x: auto; /* Allow horizontal scroll if needed */
+  }
+  
+  .comparison-table table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+  
+  .comparison-table th,
+  .comparison-table td {
+    border: 1px solid #ddd; /* Light gray border */
+    padding: 12px 15px; /* Padding for cells */
+    text-align: left;
+  }
+
+  .comparison-table th .propertypopup-header {
+  border: none; /* Remove borders */
+}
+  
+  .comparison-table th {
+    background: #f8f8f8; /* Light gray background for headers */
+    color: #555; /* Slightly darker text for headers */
+    font-weight: 500;
+  }
+  
+  .comparison-table tr:nth-child(even) {
+    background: #f9f9f9; /* Alternating row background for readability */
+  }
+  
+  .comparison-table td {
+    color: #333; /* Dark text color for content */
+    font-size: 14px;
+  }
+  
+  /* Responsive design for smaller screens */
+  @media (max-width: 768px) {
+    .investorpopup-content {
+      width: 95%;
+      padding: 15px;
+    }
+  
+    .comparison-table th, 
+    .comparison-table td {
+      padding: 8px;
+      font-size: 12px;
+    }
+  }
+  

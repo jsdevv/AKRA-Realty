@@ -1,0 +1,109 @@
+.stepper2-content {
+  padding: 20px 0;
+  width: 85vw;
+}
+
+.stepper2-form-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Two columns */
+  gap: 20px;
+}
+
+.stepper2-box {
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  height: auto;
+  max-width: 100%;
+  border-radius: 4px;
+}
+
+.stepper2-upload-container {
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 2px dashed #ddd;
+  padding: 50px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.stepper2-upload-icon {
+  font-size: 50px;
+  color: #007bff;
+  margin-bottom: 10px;
+}
+
+.stepper2-browse-file-label {
+  font-size: 12px;
+  background-color: #007bff;
+  color: #fff;
+  border: 1px solid #007bff;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.stepper2-image-preview {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* Display 6 images per row */
+  gap: 10px;
+  justify-items: center; /* Center the images within their grid cells */
+}
+
+.stepper2-preview-item {
+  position: relative;
+}
+
+.stepper2-thumbnail {
+  width: 100%; /* Ensure it takes the full width of its container */
+  height: 120px; /* Set a fixed height to maintain uniform size */
+  object-fit: cover; /* Ensure the image covers the container without stretching */
+  border-radius: 4px;
+}
+
+.stepper2-delete-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  border: none;
+  padding: 5px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.stepper2-delete-btn:hover {
+  color: rgba(255, 0, 0, 1);
+}
+
+.stepper2-delete-icon {
+  font-size: 14px;
+}
+
+.stepper2-upload-container p {
+  font-size: 0.7rem;
+}
+@media (max-width: 768px) {
+  .stepper2-image-preview {
+    grid-template-columns: repeat(3, 1fr); /* 3 images per row on smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .stepper2-image-preview {
+    grid-template-columns: repeat(2, 1fr); /* 2 images per row on very small screens */
+  }
+}
+
+.stepper2-error-message {
+  color: red;
+  font-size: 0.8rem;
+  margin-top: 5px;
+}

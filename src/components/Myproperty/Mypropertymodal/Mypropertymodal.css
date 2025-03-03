@@ -1,0 +1,71 @@
+/* Overlay Background */
+.myproperty-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Modal Content */
+.myproperty-modal-content {
+  position: absolute;
+  bottom: 25%;
+  background: white;
+  width: 60%;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.3s ease-in-out;
+  position: relative; /* Allow absolute positioning of the close button */
+}
+
+/* Modal Header */
+.myproperty-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+}
+
+.myproperty-modal-header h4 {
+  margin: 0;
+  font-size: 13px;
+}
+
+/* Close Button */
+.myproperty-close-button {
+  position: absolute;
+  top: 10px; /* Adjust top position */
+  right: 10px; /* Adjust right position */
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: #333;
+}
+
+/* Modal Table */
+.myproperty-modal-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.myproperty-modal-table th,
+.myproperty-modal-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+.myproperty-modal-table th {
+  font-size: 12px;
+  background: #f5f5f5;
+}

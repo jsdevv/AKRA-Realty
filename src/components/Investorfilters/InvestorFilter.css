@@ -1,0 +1,117 @@
+.filter-component {
+  padding: 0px 25px 10px 25px;
+  height: 91vh;
+
+}
+
+.row {
+  margin-bottom: 14px;
+
+}
+
+.progress-bar-container {
+  font-size: 12px;
+  align-items: center;
+}
+
+.progress-bar-container label {
+  font-weight: bold;
+  display: block;
+  /* Ensure the label takes up its own line */
+  margin-bottom: 5px;
+  /* Add space below the label */
+}
+
+.slider-container {
+  padding: 15px 10px 5px 10px;
+  background-color: #f0f0f0;
+}
+
+
+.double-range-slider {
+  width: 98%;
+  height: 3px;
+  background-color: #cdd9ed !important;
+  border-radius: 5px;
+  position: relative;
+
+}
+
+.slider-thumb {
+  top: -6px;
+  height: 13px;
+  width: 13px;
+  background-color: #007bff;
+  border-radius: 50%;
+  cursor: grab;
+}
+
+.slider-track {
+  background-color: #007bff;
+  height: 100%;
+  border-radius: 3px;
+}
+
+.slider-track.slider-track-0,
+.slider-track.slider-track-1 {
+  background-color: #007bff;
+}
+
+
+.price-values {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 8px 0px 0px 0px;
+  font-size: 10px;
+  color: #333;
+}
+
+.checkboxes-row span {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.checkbox-group {
+  font-size: 10px;
+}
+
+.checkbox-group1 {
+  overflow-y: auto;
+  height: 120px;
+  font-size: 10px;
+}
+
+
+/* WebKit Browsers Scrollbar Styles */
+.checkbox-group1::-webkit-scrollbar {
+  width: 8px;
+  height: 4%;
+}
+
+.checkbox-group1::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 10px;
+}
+
+.checkbox-group1::-webkit-scrollbar-thumb {
+  background: #ccc;
+  height: 4px;
+
+}
+
+.checkbox-group1::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
+
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  padding: 3px;
+  background-color: #f0f0f0;
+}
+
+.checkbox {
+  margin-right: 5px;
+}

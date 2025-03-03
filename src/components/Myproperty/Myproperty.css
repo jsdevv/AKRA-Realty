@@ -1,0 +1,179 @@
+/* Flexbox layout for table and map */
+.dashboard-content {
+    display: flex;
+    width: 100%;
+    height: 77vh;
+
+  }
+  
+  /* Default table takes full width */
+  .agent-properties-view__table-container {
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  }
+  
+  /* Map container takes up 30% width when visible */
+  .dashboard-map-container {
+  width: 30%;
+  height: 100%;
+  display: none; 
+
+  }
+  
+  /* Adjust the table width when map is visible */
+  .dashboard-content.show-map .agent-properties-view__table-container {
+  width: 70%;
+  }
+  
+  .dashboard-content.show-map .dashboard-map-container {
+  display: block; /* Show the map when the condition is true */
+  }
+  
+  /* Modern Table Styling */
+  .agent-properties-view__table {
+  width: 100%;
+  min-width: 1000px; /* Prevent columns from shrinking too much */
+  border-collapse: collapse; /* Ensures no double borders */
+  margin-bottom: 10px; /* Reduced space below the table */
+  }
+  
+  /* Table Header */
+  .agent-properties-view__table th {
+  position: sticky;
+  top: 0;
+  background-color: #DADEE7;
+  z-index: 2;
+  padding: 10px; /* Reduced padding */
+  text-align: center;
+  border-right: 1px solid #c0c0c0;
+  font-weight: 500;
+  font-size: 11px;
+  color: #333;
+  }
+  
+  /* Table Rows */
+  .agent-properties-view__table td {
+  padding: 2px 10px; /* Reduced padding */
+  text-align: center;
+  border: 1px solid #c0c0c0;
+  font-size: 11px;
+  color: #555;
+  }
+  
+  /* Even Rows Background Color */
+  .agent-properties-view__table tr:nth-child(even) {
+  background-color: #DADEE7;
+  }
+  
+  /* Aligning Images */
+  .agent-property-table__image {
+    cursor: pointer;
+  width: 100px; /* Reduced image width */
+  height: 70px; /* Reduced image height */
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid #ddd; /* Border around image */
+  }
+  
+  /* Adjust container styling for better alignment */
+  .agent-properties-view__table-container {
+  height: 100%;
+  overflow-y: auto; /* Enable vertical scrolling */
+  overflow-x: auto; /* Enable horizontal scrolling */
+  border: 1px solid #ccc;
+  }
+  
+  .property-detail {
+    display: flex;
+    justify-content: space-between; /* Distribute space between label and value */
+    font-size: 11px; /* Reduced font size for compactness */
+    margin-bottom: 5px; /* Space between each pair */
+  }
+  
+  /* Ensure the labels are aligned to the left */
+  .property-label {
+    color: #333;
+    text-align: left; /* Align left */
+  }
+  
+  
+  /* New Column Widths */
+  .agent-properties-view__table th:nth-child(1),
+  .agent-properties-view__table td:nth-child(1) {
+  cursor: pointer;
+  width: 90px; /* Reduced width for images */
+  }
+  
+  .agent-properties-view__table th:nth-child(2),
+  .agent-properties-view__table td:nth-child(2) {
+  width: 140px; /* Reduced width for Property Name */
+  }
+  
+  .agent-properties-view__table th:nth-child(3),
+  .agent-properties-view__table td:nth-child(3) {
+  width: 80px; /* Reduced width for Status */
+  }
+  
+  .agent-properties-view__table th:nth-child(4),
+  .agent-properties-view__table td:nth-child(4) {
+  width: 90px; /* Reduced width for Location */
+  }
+  
+  .agent-properties-view__table th:nth-child(5),
+  .agent-properties-view__table td:nth-child(5) {
+  width: 70px; /* Reduced width for Area */
+  }
+  
+  .agent-properties-view__table th:nth-child(6),
+  .agent-properties-view__table td:nth-child(6) {
+  width: 90px; /* Reduced width for Bedrooms */
+  }
+  
+  .agent-properties-view__table th:nth-child(7),
+  .agent-properties-view__table td:nth-child(7) {
+  width: 90px; 
+  }
+  
+  /* .agent-properties-view__table th:nth-child(8),
+  .agent-properties-view__table td:nth-child(8) {
+  
+  width: 70px; 
+  } */
+  
+  /* .agent-properties-view__table th:nth-child(9),
+  .agent-properties-view__table td:nth-child(9) {
+    cursor: pointer;
+  width: 70px; 
+  }
+   */
+  /* .agent-properties-view__table th:nth-child(10),
+  .agent-properties-view__table td:nth-child(10) {
+  width: 90px;
+  } */
+  
+  /* .agent-properties-view__table th:nth-child(11),
+  .agent-properties-view__table td:nth-child(11) {
+  width: 90px;
+  }
+   */
+
+  /* Button Container Styling */
+  .agent-property-btn-container {
+  display: flex;
+  gap: 15px; /* Reduced gap */
+  align-items: center;
+  justify-content: center;
+  }
+  
+  .agent-property-icon {
+  font-size: 12px; /* Reduced icon size */
+  cursor: pointer;
+  transition: color 0.3s ease-in-out;
+  }
+  
+  .agent-property-icon:hover {
+  color: #2A3650; /* Change to desired hover color */
+  }
+  
+  

@@ -1,0 +1,91 @@
+/* Dropdown menu styles */
+.navbartopdropdown-menu {
+  position: absolute;
+  top: 52px;
+  right: 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  z-index: 999;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  width: auto; /* Ensure width adjusts based on content */
+  max-width: 280px; /* Optional: maximum width for consistency */
+}
+
+/* Tabs container */
+.navbartopdropdown-tabs {
+  display: flex;
+  justify-content: space-around; /* Even space between tabs */
+  align-items: center; /* Center items vertically */
+  margin-bottom: 10px;
+  padding-bottom: 5px; /* Add some space below */
+  border-bottom: 2px solid #f1f1f1; /* Subtle border at the bottom */
+}
+
+/* Individual tab styles */
+.navbartopdropdown-item {
+  color: #2a3650;
+  flex: 1; /* Equal width for each tab */
+  text-align: center; /* Center text within the tab */
+  padding: 12px 0; /* Add vertical padding for better touch areas */
+  cursor: pointer;
+  font-size: 14px; /* Adjusted font size for clarity */
+  transition: background-color 0.3s, color 0.3s, font-weight 0.3s; /* Smooth transition for hover and active states */
+}
+
+/* Hover effect for tabs */
+.navbartopdropdown-item:hover {
+  background-color: #f1f1f1; /* Subtle hover effect */
+  color: #2a3650; /* Keep text color consistent on hover */
+}
+
+/* Active tab styling */
+.navbartopdropdown-item.active {
+  font-weight: bold;
+  color: #2a3650; /* Keep the active tab color consistent */
+  border-bottom: 3px solid #2a3650; /* Bold bottom border to highlight the active tab */
+  background-color: #f1f1f1; /* Slight background change for active tab */
+}
+
+/* User icon styling */
+.navbartop-icon {
+  cursor: pointer;
+}
+
+.back-to-login-btn {
+  display: block;
+  padding: 10px 15px;
+  color: #2a3650;
+  border: none;
+  background-color: white;
+  cursor: pointer;
+}
+
+.back-to-login-btn:hover {
+  font-weight: bold;
+ text-decoration: underline;
+}
+
+.navbaritem-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.navbaritem-container p {
+  margin: 0;
+  padding: 10px 15px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #2a3650;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Hover effect for the items */
+.navbaritem-container p:hover {
+  background-color: #f1f1f1;
+  color: #1a1a1a;
+  font-weight: 600;
+}

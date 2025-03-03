@@ -1,0 +1,113 @@
+.agents-properties-table-container {
+  display: flex;
+  margin: 5px 0px 0px 0px;
+  position: relative;
+  width: 100%;
+}
+
+.rwd-table {
+  overflow-y: scroll;
+  width: 100%;
+  border-collapse: collapse;
+  border: 2px solid #ccc;
+  transition: width 0.5s ease-in-out; /* Smooth resizing */
+}
+
+.agents-properties-table {
+  width: 100%;
+  max-height: 600px; /* Limit table height to make it scrollable */
+
+}
+
+.rwd-table th, .rwd-table td {
+  padding: 10px;
+  border: 1px solid #ccc;
+  text-align: left;
+  font-size: 12px;
+}
+
+.rwd-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.contact-btn, .view-number-btn {
+  font-size: 10px;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.contact-btn:hover, .view-number-btn:hover {
+  background-color: #2A3650;
+  border-color: #2A3650;
+}
+
+.contact-btn {
+  background-color: #2A3650;
+  color: #fff;
+}
+
+.view-number-btn {
+  background-color: #2A3650;
+  color: #fff;
+}
+
+.contact-btn:hover {
+  color: #2A3650;
+  background-color: #ffffff;
+}
+
+.view-number-btn:hover {
+  background-color: #f9f9f9;
+  color: #2A3650;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+
+.agents-properties-table.expanded {
+  width: 66%;
+  overflow: hidden; /* Prevent table from overflowing */
+}
+
+#agentmap {
+  width: 100%;
+  height: 100%;
+}
+
+.agentpropertymap-container{
+  position: fixed;
+  /* top: 0; */
+  right: -100%; /* Initially hidden off-screen */
+  width: 35%;
+  height: 100%;
+  background-color: #fff;
+  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
+  z-index: 9999;
+  transition: right 0.5s ease-in-out;
+}
+
+.agentpropertymap-container.visible {
+  right: 0; /* Make map visible */
+}
+
+.agents-properties-table-container.expanded {
+  width: 65%; /* Adjust table width when map is shown */
+  overflow-x: auto; /* Allow horizontal scroll if necessary */
+}
+
+.price-cell {
+  display: inline-flex;
+  align-items: center;
+}
+
+.rupee-icon {
+  margin-right: 4px; /* Adjust spacing between the icon and the value */
+  font-size: 1.0rem; /* Adjust the icon size if needed */
+}

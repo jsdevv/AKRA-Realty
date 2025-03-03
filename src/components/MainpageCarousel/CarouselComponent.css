@@ -1,0 +1,87 @@
+/* Main Carousel Wrapper */
+.carousel-wrapper {
+    height: auto;
+    padding: 10px 20px 20px 20px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+/* Carousel Heading */
+.carousel-heading {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 20px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+/* Carousel Container */
+.carousel-box {
+    display: flex;
+    gap: 15px;
+}
+
+/* Carousel Items */
+.carousel-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* Center content vertically */
+    width: 250px; /* Fixed width for consistent size */
+    height: 180px; /* Fixed height for consistent size */
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 4px 12px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+}
+
+/* Hover Effects */
+.carousel-item:hover {
+    transform: scale(1.05) translateY(-5px);
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 8px 16px;
+}
+
+/* Carousel Icons */
+.carousel-icon {
+    font-size: 2.5rem;
+    color: #2A3650; 
+    margin-bottom: 10px;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+/* Carousel Text */
+.carousel-text {
+    font-size: 1rem;
+    color: #333;
+    font-weight: 500;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .carousel-item {
+        width: 200px;
+        height: auto;
+    }
+
+    .carousel-heading {
+        font-size: 1.25rem;
+    }
+}
+
+/* Custom Dots Styling (if using carousel library) */
+.custom-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    /* background: ${iconColor}; */
+    /* border: 2px solid ${iconColor}; */
+    opacity: 0.8;
+    transition: opacity 0.3s ease, background 0.3s ease;
+}
+
+.custom-dot:hover {
+    background: #0055a4;
+    opacity: 1;
+}

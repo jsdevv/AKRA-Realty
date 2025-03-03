@@ -1,0 +1,63 @@
+/* CustomerSupport.css */
+
+.customer-support-section-unique {
+    background-image: url('../../assets/dedicated2.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    color: white;
+    overflow: hidden;
+  }
+  
+  .overlay-unique {
+    background-color: rgba(0, 0, 0, 0.5); /* Dark overlay to make text stand out */
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+  
+  .support-content-unique {
+    position: relative;
+    top:18%;
+    z-index: 2;
+    text-align: start;
+
+  }
+  
+  .support-title-unique {
+    position: relative;
+    left: 2%;
+    font-size: 2.2rem;
+    margin-bottom: 1rem;
+
+  }
+  
+  .support-description-unique {
+    position: relative;
+    left: 2%;
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  
+  @media (max-width: 768px) {
+    .customer-support-section-unique {
+      height: 400px;
+    }
+  
+    .support-title-unique {
+      font-size: 2.5rem;
+    }
+  
+    .support-description-unique {
+      font-size: 1rem;
+    }
+  
+  }
+  

@@ -1,0 +1,303 @@
+/* Container Styling */
+.favorites-container {
+    position: relative;
+    top:20px;
+    max-width: 1200px;
+    margin: 0px auto;
+    padding:5px 20px 20px 20px; /* Added padding to the top for better spacing */
+    background-color: #f4f4f4; /* Light gray background for the entire layout */
+    border-radius: 8px; /* Optional: Rounded corners for container */
+}
+
+/* Header Styling */
+.favorites-header {
+    font-size: 18px; /* Increased size for better visibility */
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Empty State Styling */
+.favorites-empty {
+    text-align: center;
+    font-size: 16px; /* Increased font size for better readability */
+    color: #555;
+    padding: 20px 0;
+}
+
+/* Grid Layout */
+.favorites-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+/* Card Styling */
+.favorites-card {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease-in-out;
+    position: relative;
+    max-height: 450px; /* Limit height for overflow handling */
+}
+.favorites-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Image Container */
+.favorites-image-container {
+    position: relative;
+    padding-top: 66.66%; /* 3:2 aspect ratio */
+    overflow: hidden;
+}
+
+.favorites-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-bottom: 1px solid #e6e6e6;
+}
+
+/* Details Section */
+.favorites-details {
+    padding: 15px 15px 5px 15px;
+}
+
+.favoritestop-container{
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Title Text */
+.favorites-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 4px;
+    display: block;
+    white-space: nowrap; /* Prevent text from wrapping */
+    overflow: hidden; /* Hide overflowed text */
+    text-overflow: ellipsis; /* Add ellipsis for overflowed text */
+    line-height: 1.4;  /* Prevent text from wrapping */
+   
+ /* Add ellipsis for overflowed text */
+}
+
+/* Address Section */
+.favorites-address-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 5px; /* Adjust spacing if needed */
+}
+
+.favorites-address {
+    font-size: 11px;
+    color: #777;
+    margin-bottom: 12px;
+    flex: 1; /* Ensure the address takes available space */
+}
+
+.details-button {
+    background-color: #2A3650; /* Primary color */
+    color: white;
+    padding: 6px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 11px;
+    letter-spacing: 1px;
+    margin-left: 20px; /* Space between the address and button */
+    transition: background-color 0.3s ease;
+}
+
+.details-button:hover {
+    background-color: #1e2a38; /* Darker shade on hover */
+}
+
+.details-button:focus {
+    outline: none;
+}
+
+.favcompare-checkbox {
+    position: relative;
+    font-size: 11px; /* Reduced font size for "Compare" */
+    margin-left: 10px; 
+    display: flex;
+    align-items: baseline;
+    cursor: pointer;    
+}
+
+.favcompare-checkbox label{
+    position: relative;
+    bottom: 20%;
+}
+
+.favcompare-checkbox input[type="checkbox"] {
+    cursor: pointer;
+    vertical-align: middle;
+    margin-left: 5px; /* Space between the "Compare" text and the checkbox */
+}
+
+
+/* Remove button styling */
+.favorites-remove-button {
+    background: none;
+    border: none; /* Remove border */
+    color: #333; /* Icon color */
+    cursor: pointer;
+    font-size: 16px; /* Adjust size of the icon */
+    display: flex;
+    align-items: center; /* Center align icon */
+    justify-content: center;
+    margin-left: 6px;
+    padding: 0; /* Remove extra padding */
+    transition: color 0.3s ease; /* Smooth color transition */
+}
+
+.favorites-remove-button:hover {
+    color: #d9534f; /* Change to a red color on hover */
+}
+
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .favorites-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* 4 items per row on medium screens */
+    }
+}
+
+@media (max-width: 768px) {
+    .favorites-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* 2 items per row on small screens */
+    }
+
+    .favorites-header {
+        font-size: 20px;
+    }
+
+    .favorites-title {
+        font-size: 16px;
+    }
+
+    .favorites-address {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .favorites-grid {
+        grid-template-columns: 1fr; /* 1 item per row on very small screens */
+    }
+}
+
+
+.compare-label {
+    font-size: 0.8em; /* Reduce font size */
+    margin-left: 5px; /* Space between checkbox and label */
+}
+
+.favcompare-button-container {
+    position: fixed;
+    bottom: 0;
+    right: 0; /* Align to the right */
+    display: flex;
+    justify-content: center;
+    align-items: flex-end; /* Align to the right side */
+    padding: 10px 15px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 0px;
+    border-bottom-left-radius: 8px;
+    width: auto; /* Adjust the width as needed */
+}
+
+.favcompare-button-container p {
+    font-size: 15px;
+    padding: 0px 10px 0px 10px;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.favcompare-button {
+    background-color: #2A3650;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 16px;
+}
+
+.favcompare-button:hover {
+    background-color: #1e2a38; /* Darker shade on hover */
+}
+
+.favcompare-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.favcompare-button {
+    background-color: #2A3650; /* Bootstrap primary color */
+    color: white; /* Button text color */
+    padding: 10px 20px; /* Padding for a better click area */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth background transition */
+    font-size: 16px; /* Font size */
+}
+
+.favcompare-button:hover {
+    background-color: #2A3650; /* Darker shade on hover */
+}
+
+.favcompare-button:disabled {
+    background-color: #ccc; /* Gray background when disabled */
+    cursor: not-allowed; /* Not-allowed cursor */
+}
+
+.shortlist-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #333;
+    font-size: 1rem;
+}
+
+.shortlist-icon {
+    position: absolute;
+    top: 10px; /* Adjust this value to fine-tune the distance from the top */
+    right: 10px; /* Adjust this value to fine-tune the distance from the right */
+    z-index: 2; /* Ensure it stays above the image */
+}
+
+.shortlist-icon {
+    font-size: 1.5rem;
+    color: #ccc;
+}
+
+.shortlist-icon.highlighted {
+    color: #FFD700;
+}
+
+.shortlist-button.shortlisted {
+    color: #FFD700;
+    font-weight: bold;
+}
+
+

@@ -1,0 +1,78 @@
+.stepper3-content {
+  display: flex;
+  flex-direction: row;
+  /* Changes to row layout */
+  gap: 10px;
+  padding: 10px 10px 10px 0px;
+  height: 50vh;
+}
+
+.stepper3-form-container {
+  width: 45%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  gap: 5px 10px; /* Reduced gap */
+  padding: 10px;
+}
+
+.stepper3-form-group {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  align-items: center;
+  padding: 10px  20px;
+}
+
+.stepper3-form-group label {
+  font-weight: 400;
+  color: #333;
+  font-size: 14px;
+  width: 20%;
+  margin-right: 2px;
+}
+
+
+
+
+.stepper3-map-container {
+  width: 50%;
+}
+
+.stepper3-map-view {
+  position: relative;
+  bottom: 39px;
+  width: 66%;
+  height: 50vh;
+  /* Set a fixed height for the map container */
+}
+
+
+.custom-textfield3 {
+  width: 50% !important;
+}
+
+/* Apply padding to the custom-textfield class */
+.custom-textfield3 .MuiOutlinedInput-root {
+  width: 90%;
+  padding: 3px 0px;
+}
+
+.custom-textfield3 .MuiInputBase-input {
+  padding: 10px 14px;
+  font-size: 12px;
+  /* Adjust padding inside the input */
+}
+
+.address-search-container{
+  position: relative;
+  z-index: 1000;
+  width: 20%;
+  top:2%;
+  left: 2%;
+  background-color: #f8f8f8;
+ 
+}
+#address-search{
+  font-size: 12px;
+  width: 100%;
+  height: 6px;
+}
