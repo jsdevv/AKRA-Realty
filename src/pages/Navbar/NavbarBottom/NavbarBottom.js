@@ -480,7 +480,6 @@ const NavbarBottom = ({
         })
       );
       toast.success("Alert set successfully!");
-      console.log("Alert Set Successfully");
     };
     
     

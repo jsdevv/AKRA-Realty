@@ -77,7 +77,7 @@ const DashboardFavorites = () => {
                                     <th>Amount</th>
                                     <th>Type</th>
                                     <th>Status</th>
-                                    <th>Location</th>
+                                    <th>Area</th>
                                     <th>Details</th>
                                     <th>Shortlist</th>
                                     <th>Compare</th>
@@ -101,9 +101,7 @@ const DashboardFavorites = () => {
                                         <th>Amount</th>
                                         <th>Type</th>
                                         <th>Status</th>
-                                        <th>Location</th>
-
-
+                                        <th>Area</th>
                                         <th>Details</th>
                                         <th>Shortlist</th>
                                         <th>Compare</th>
@@ -158,7 +156,7 @@ const DashboardFavorites = () => {
                                             <td><FaRupeeSign style={{ fontSize: '9px' }} /> {property.Amount}</td>
                                             <td>{property.PropertyType}</td>
                                             <td>{property.PropertyStatus}</td>
-                                            <td>{property.PropertyArea}</td>
+                                            <td>{property.SqFt}</td>
 
 
                                             <td>

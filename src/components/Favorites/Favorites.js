@@ -7,6 +7,9 @@ import { FaStar } from 'react-icons/fa'; // Star icon
 import { clearSelectedProperty, setSelectedProperty } from '../../Redux/Slices/propertySlice';
 import { useDispatch, useSelector } from 'react-redux';
 import ListingModal from '../ListingModal/ListingModal';
+import defaultimg1 from "../../images/Akriti1.jpg"
+import defaultimg2 from "../../images/Akriti2.jpg"
+import Slider from 'react-slick/lib/slider';
 
 const Favorites = () => {
     const bearerToken = useSelector((state) => state.auth.bearerToken);
@@ -18,6 +21,15 @@ const Favorites = () => {
 
     // Reorder favorites based on shortlist status
     const sortedFavorites = [...favorites].sort((a, b) => b.shortlisted - a.shortlisted);
+
+    const propertyUrls = sortedFavorites?.ProjectImageUrls || sortedFavorites?.PropertyImageUrls;
+    const imageUrls = propertyUrls ? propertyUrls.split(',').map(url => url.trim()).filter(Boolean) : [];
+    const imagesToShow = imageUrls.length > 0 ? imageUrls : [defaultimg1, defaultimg2];
+
+console.log(imagesToShow);
+
+
+    console.log(sortedFavorites,"sortedFavorites");
 
     const handleCompareSelect = (propertyID) => {
         setSelectedFavoritescompare((prev) =>
@@ -51,6 +63,15 @@ const Favorites = () => {
         dispatch(clearSelectedProperty());
     }, [dispatch]);
 
+    const settings = {
+        // dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        arrows: true,
+      };
+
     return (
         <>
             <div className="favorites-container">
@@ -61,17 +82,33 @@ const Favorites = () => {
                     <div>
                         <div className="favorites-grid">
                             {sortedFavorites.map((property) => {
-                                const imageURL = property.ImageNames
-                                    ? require(`../../images/${property.ImageNames}`)
-                                    : 'path/to/placeholder-image.jpg';
+                                    const propertyUrls = property.ProjectImageUrls || property.PropertyImageUrls;
+                                    const imageUrls = propertyUrls ? propertyUrls.split(',').map(url => url.trim()).filter(Boolean) : [];
+                                    const imagesToShow = imageUrls.length > 0 ? imageUrls : [defaultimg1, defaultimg2];
                                 return (
                                     <div key={property.PropertyID} className="favorites-card">
+                                     
+
                                         <div className="favorites-image-container">
-                                            <img
-                                                src={imageURL}
-                                                alt={`Property ${property.PropertyID}`}
-                                                className="favorites-image"
-                                            />
+                                            <Slider {...settings}>
+                                                                       {imagesToShow.map((url, index) => (
+                                                                         <div key={index} 
+                                                                    >
+                                                                           <img
+                                                                             src={url}
+                                                                             alt={`Slide ${index + 1}`}
+                                                                             className="favorites-image"
+                                                                             loading="lazy"
+                                                                             style={{
+                                                                               maxWidth: "100%",
+                                                                               maxHeight: "200px",
+                                                                               objectFit: "cover",
+                                                                             }}
+                                                                           />
+                                                                         </div>
+                                                                       ))}
+                                                                       
+                                                                     </Slider>
                                         </div>
                                         <div className="favorites-details">
                                             <div className="favoritestop-container">

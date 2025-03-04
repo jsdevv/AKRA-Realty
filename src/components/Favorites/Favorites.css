@@ -50,20 +50,18 @@
 
 /* Image Container */
 .favorites-image-container {
-    position: relative;
-    padding-top: 66.66%; /* 3:2 aspect ratio */
+    width: 100%;
+    height: 200px;
     overflow: hidden;
 }
 
-.favorites-image {
-    position: absolute;
-    top: 0;
-    left: 0;
+.favorites-image-container img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    border-bottom: 1px solid #e6e6e6;
+    object-fit: cover; /* Ensures the image covers the container while maintaining aspect ratio */
+    border-radius: 8px; /* Optional: Adds rounded corners */
 }
+
 
 /* Details Section */
 .favorites-details {
