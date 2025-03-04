@@ -7,8 +7,8 @@ import { FaStar } from 'react-icons/fa'; // Star icon
 import { clearSelectedProperty, setSelectedProperty } from '../../Redux/Slices/propertySlice';
 import { useDispatch, useSelector } from 'react-redux';
 import ListingModal from '../ListingModal/ListingModal';
-import defaultimg1 from "../../images/Akriti1.jpg"
-import defaultimg2 from "../../images/Akriti2.jpg"
+import defaultimg1 from "../../images/Apartment102.jpeg"
+import defaultimg2 from "../../images/Apartment103.jpeg"
 import Slider from 'react-slick/lib/slider';
 
 const Favorites = () => {

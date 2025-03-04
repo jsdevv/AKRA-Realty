@@ -8,10 +8,9 @@ import Requestinfo from '../ListingspopupForms/Requestinfo/Requestinfo';
 import Nearbyplacemap from '../Googlemap/Nearbyplacemap/Nearbyplacemap';
 import ShareProperty from '../ShareProperty/ShareProperty';
 import 'react-datepicker/dist/react-datepicker.css';
-import './ListingModalDetails.css';
-import defaultimg1 from "../../images/Akriti1.jpg"
 import ListingModal from '../ListingModal/ListingModal';
 import PropertyGrid from './PropertyGrid';
+import './ListingModalDetails.css';
 
 const ListingModalDetails = ({ selectedProperty, propertyCardData, propertyType }) => {
   console.log(selectedProperty,"selectedProperty");

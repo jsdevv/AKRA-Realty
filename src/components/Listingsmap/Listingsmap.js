@@ -15,7 +15,7 @@ import {
 import { fetchPropertyViews, fetchProjectViews } from "../../utils/fetchPropertyViews";
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
-import defaultimg from "../../images/MEGALEIO2.png"
+import defaultimg from "../../images/Apartment103.jpeg"
 import Slider from "react-slick";
 
 

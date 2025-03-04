@@ -8,8 +8,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import ListingModal from '../ListingModal/ListingModal';
 import './DashboardFavorites.css';
 import DashboardFavmap from '../Googlemap/DashboardFavmap/DashboardFavmap';
-import defaultimg from "../../images/Akriti1.jpg"
-import defaultimg1 from "../../images/Akriti2.jpg"
+import defaultimg from "../../images/Apartment102.jpeg"
+import defaultimg1 from "../../images/Apartment103.jpeg"
 import Slider from 'react-slick/lib/slider';
 
 
