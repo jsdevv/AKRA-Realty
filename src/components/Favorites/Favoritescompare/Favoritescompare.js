@@ -13,7 +13,7 @@ const Favoritescompare = ({ properties, onClose }) => {
       Header: 'Overview',
       accessor: 'ImageNames',
       Cell: ({ row }) => {
-        const { PropertyImageUrls, ProjectImageUrls, PropertyName,PropertyCardLine2,PropertyCardLine3, PropertyArea, PropertyCity, PropertyZipCode } = row.original;
+        const { PropertyImageUrls, ProjectImageUrls, PropertyName,PropertyCardLine2,PropertyCardLine3 } = row.original;
         const imageUrls = PropertyImageUrls?.split(',').map((url) => url.trim()) || ProjectImageUrls?.split(',').map((url) => url.trim()) || [];
         const imageSrc = imageUrls.length > 0 ? imageUrls[0] : defaultimg;
         

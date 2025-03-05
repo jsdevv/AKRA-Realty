@@ -1,0 +1,103 @@
+/* Image Upload Box */
+.image-upload-box {
+    padding: 15px;
+    border: 2px dashed #aaa;
+    border-radius: 10px;
+    background-color: #f4f4f4;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+/* Custom File Input */
+.image-upload-box input[type="file"] {
+    display: none;
+}
+
+.image-upload-box::after {
+    content: "Click to upload images (Max: 12)";
+    display: block;
+    font-size: 14px;
+    color: #555;
+    margin-top: 10px;
+}
+
+/* Image Preview Grid */
+.projectimage-preview {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 5px;
+    margin-top: 10px;
+}
+
+/* Ensure parent container is relative */
+.image-preview-item {
+    position: relative; /* Add this */
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    /* overflow: hidden; */
+    transition: transform 0.3s ease;
+}
+
+/* Delete Button Styling - Modern Look */
+.projectremove-icon {
+    position: absolute !important;
+    top: 5px; 
+    right: 5px;
+    z-index: 10;
+    font-size: 12px !important;
+    color: #fff !important;
+    background-color: rgba(0, 0, 0, 0.6) !important; /* Dark transparent background */
+    border-radius: 50% !important;
+    padding: 6px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+}
+
+/* Ensure delete button is visible and modern hover effect */
+.projectremove-icon:hover {
+    background-color: rgba(255, 0, 0, 0.8) !important;
+    transform: scale(1.0);
+    box-shadow: 0 6px 12px rgba(255, 0, 0, 0.4);
+}
+
+
+.image-preview-item:hover {
+    transform: scale(1.05);
+}
+
+/* Image Styling */
+.image-preview-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Error Message */
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .image-preview {
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    }
+
+    .image-preview-item {
+        height: 80px;
+    }
+}
+
+@media (max-width: 480px) {
+    .image-upload-box::after {
+        font-size: 12px;
+    }
+}

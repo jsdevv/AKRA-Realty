@@ -40,9 +40,7 @@ const mainservices = [
 const Services = () => {
    
     return (
-        <>
-         
-
+        <>     
             <div className="services-wrapper">
                 <h1 className="services-title">Services Offered</h1>
     

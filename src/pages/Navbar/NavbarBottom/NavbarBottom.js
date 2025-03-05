@@ -1,8 +1,29 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { FaSearch, FaTimes, FaHome, MdBusiness, HiCurrencyRupee, IoChevronDown } from '../../../assets/icons/Icons';
-import { fetchPropertyStatusOptions, fetchPropertyHomeType, fetchCustomPropertyTypes, fetchPremiumbuilders } from '../../../API/api';
-import { fetchPremiumListingsThunk, fetchPropertyAlert, setListingFilters, setPriceFilter, setSelectedBuilder, setSelectedCenterOfMap, setSelectedcustomStatus, setSelectedHomeTypes, setSelectedProperty, setSelectedPropertyStatus, toggleShowPremiumListings } from '../../../Redux/Slices/propertySlice';
+import { FaSearch, 
+         FaTimes, 
+         FaHome, 
+         MdBusiness, 
+         HiCurrencyRupee, 
+         IoChevronDown 
+        } from '../../../assets/icons/Icons';
+import { fetchPropertyStatusOptions, 
+         fetchPropertyHomeType, 
+         fetchCustomPropertyTypes, 
+         fetchPremiumbuilders 
+        } from '../../../API/api';
+import { fetchPremiumListingsThunk, 
+         fetchPropertyAlert, 
+         setListingFilters, 
+         setPriceFilter, 
+         setSelectedBuilder, 
+         setSelectedCenterOfMap, 
+         setSelectedcustomStatus, 
+         setSelectedHomeTypes, 
+         setSelectedProperty, 
+         setSelectedPropertyStatus, 
+         toggleShowPremiumListings 
+        } from '../../../Redux/Slices/propertySlice';
 import Autosuggest from 'react-autosuggest';
 import './NavbarBottom.css';
 import FiltersComponent from '../../../components/FiltersComponent/FiltersComponent';
@@ -456,17 +477,14 @@ const NavbarBottom = ({
       return `${minPrice}-${maxPrice}`;
   };
 
-    const handleSetAlert = () => {
-
+    const handleSetAlert = (event) => {
+      event.preventDefault()
       const priceRangeStr = getPriceRangeString();
-
       const selectedLabels = selectedTypes.map(
         (value) => homeTypeOptions.find((option) => option.value === value)?.label
     ).filter(Boolean);
 
     const selectedLabelsString = selectedLabels.join(", ");
-
-      console.log(priceRangeStr,"priceRangeStr");
 
       dispatch(
         fetchPropertyAlert({
@@ -663,9 +681,10 @@ const NavbarBottom = ({
             )}
           </div>
 
-          <button type="button" className="save-search-button" onClick={handleSetAlert}>
-            Set Alert
-          </button>
+             <button className="save-search-button" onClick={handleSetAlert}>
+              Set Alert
+             </button>
+
         </div>
         <div className="premium-toggle-container">
         {showPremiumListings && (

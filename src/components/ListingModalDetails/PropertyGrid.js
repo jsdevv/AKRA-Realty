@@ -48,7 +48,7 @@ const PropertyGrid = ({ groupedByBedroomsArray,selectedBedrooms,setSelectedPrope
             .flatMap(group => 
                 group.properties.map(property => ({
                     Bedrooms: Number(group.Bedrooms),
-                    Bathrooms: Number(property.PropertyBathrooms) || Number(0),
+                    PropertyBathrooms: Number(property.PropertyBathrooms) || Number(0),
                     SqFt: property.SqFt ? parseInt(property.SqFt.replace(/\D/g, ""), 10) || 0 : 0,
                     PropertyType: property.PropertyType,
                 
@@ -108,7 +108,7 @@ const PropertyGrid = ({ groupedByBedroomsArray,selectedBedrooms,setSelectedPrope
         },
         {
             headerName: "Bath", 
-            field: "Bathrooms", 
+            field: "PropertyBathrooms", 
             flex: 0.6, 
             filter: "agSetColumnFilter", 
             headerClass: "custom-header" 

@@ -803,6 +803,35 @@ export const uploadImages = async (imagePropertyId, imageFile, bearerToken) => {
   }
 };
 
+export const uploadprojectImages = async (projectid, imageFile, bearerToken,extension) => {
+  const uploadUrl = `https://imsdev.akrais.com:8444/AKRARealityAPI/api/projects/${projectid}/images`;
+
+  const formDataObj = new FormData();
+  formDataObj.append("image", imageFile);  // Ensure you're passing the actual file object, not metadata
+  formDataObj.append("extension", extension); 
+
+  try {
+    const response = await fetch(uploadUrl, {
+      method: "POST",
+      headers: {
+        'Authorization': `Bearer ${bearerToken}`,
+      },
+      body: formDataObj,
+    });
+
+    if (!response.ok) {
+      throw new Error("Image upload failed");
+    }
+
+    const result = await response.json();
+    console.log("Images uploaded successfully:", result);
+    return result;
+  } catch (error) {
+    console.error("Error uploading images:", error);
+    throw error;
+  }
+};
+
 //videos
 
 export const fetchpropertyVideos = async (bearerToken) => {

@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { TextField, Button, Grid, Box, IconButton, Autocomplete, CircularProgress, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
-import { RiDeleteBin5Line } from 'react-icons/ri';
+import { TextField, Button, Grid, Box, Autocomplete, CircularProgress } from '@mui/material';
+
 import './AddProject.css';
 import AddProjectmap from './AddProjectmap';
 import { Form, Formik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchcompanynameData } from '../../Redux/Slices/addListingsSlice';
 import { fetchPropertyHomeTypeThunk, fetchPropertyStatusOptionsThunk } from '../../Redux/Slices/propertySlice';
-import { fetchAddProject } from '../../API/api';
+import { fetchAddProject, uploadprojectImages } from '../../API/api';
 import * as Yup from 'yup';
 import { amenitiesData } from '../steppers/stepper4/amniData';
+import AddProjectImg from '../AddProjectImg/AddProjectImg';
+import { ToastContainer,toast  } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 const AddProject = () => {
   const bearerToken = useSelector((state) => state.auth.bearerToken);
@@ -17,10 +20,10 @@ const AddProject = () => {
   const propertyTypes = useSelector((state) => state.properties.homeTypeOptions) || [];
   const propertyStatus = useSelector((state) => state.properties.propertyStatusOptions) || [];
   const projectStatusOptions = ['Ongoing', 'Completed'];
-
+  const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(false);
-  const [selectedCompany, setSelectedCompany] = useState(null);
+  const [propertyImages, setPropertyImages] = useState([]);
   const initialValues = {
     companyName: '',
     CompanyID: '',
@@ -41,11 +44,15 @@ const AddProject = () => {
     subLocality: '',
     description: '',
     Latitude: '',
-    Longitude: '',
-    images: []
+    Longitude: ''
   };
 
   const [formData, setFormData] = useState(initialValues);
+  const [projectimgerror,setProjectimgerror] = useState("");
+
+  console.log(projectimgerror, "formikerror");
+
+  console.log(propertyImages,"images");
 
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   const domainOnlyRegex = /^@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -105,10 +112,45 @@ const AddProject = () => {
       .required("Zipcode is required"),
     State: Yup.string().required("State is required"),
     Locality: Yup.string().required("Locality is required"),
-    // geolocation: Yup.number().required("Geolocation is required"),
-    // images: Yup.array().min(1, "At least one image is required"),
+    subLocality: Yup.string().required("Sub Locality is required"),
+    Latitude: Yup.string().required("Geolocation is required"),
+   Longitude: Yup.string().required("Geolocation is required"),
   });
-  const dispatch = useDispatch();
+
+
+  const uploadPropertyImages = async (projectid) => {
+    if (!projectid || propertyImages.length === 0) {
+      console.warn("No project ID or images to upload.");
+      return;
+    }
+  
+    console.log(projectid, "Extracted Project ID");
+  
+    try {
+      const allowedExtensions = ["jpg", "jpeg", "png"]; // Allowed formats
+  
+      const imageUploadPromises = propertyImages.map((image) => {
+        const extension = image.name.split('.').pop().toLowerCase(); // Extract file extension
+  
+        if (!allowedExtensions.includes(extension)) {
+          console.warn(`Skipping file ${image.name}: Unsupported format (${extension}).`);
+          return Promise.resolve(); // Skip invalid images
+        }
+  
+        return uploadprojectImages(projectid, image, bearerToken, extension);
+      });
+  
+      await Promise.all(imageUploadPromises);
+  
+      setPropertyImages([]); // Clear images after successful upload
+      setProjectimgerror("");
+      localStorage.removeItem("uploadedImages"); // Remove from localStorage
+    } catch (error) {
+      console.error("Image upload failed:", error);
+    }
+  };
+  
+    
 
   useEffect(() => {
     if (bearerToken) {
@@ -126,18 +168,6 @@ const AddProject = () => {
       dispatch(fetchcompanynameData(bearerToken)); // Fetch only when empty
     }
   }, [bearerToken, dispatch]);
-
-
-
-  const handleImageChange = (e) => {
-    const files = e.target.files;
-    setFormData(prevData => ({ ...prevData, images: [...prevData.images, ...files] }));
-  };
-
-  const handleImageRemove = (index) => {
-    const updatedImages = formData.images.filter((_, i) => i !== index);
-    setFormData(prevData => ({ ...prevData, images: updatedImages }));
-  };
 
   const handleStatusChange = (event, newValue, setFieldValue) => {
     setFieldValue('ProjectStatus', newValue);
@@ -186,28 +216,72 @@ const AddProject = () => {
     setFieldValue("CompanyID", selectedCompanyID); // Ensure CompanyID is set in Formik state
   };
 
-
-
-
   const handleSubmit = async (values, { resetForm }) => {
+    if (propertyImages.length < 2) {
+      setProjectimgerror("At least 2 images are required.");
+      return;
+    } else {
+      setProjectimgerror(""); 
+    }
+    
     console.log(values, "values");
-    setLoading(true); // Set loading state to true when submission starts
+    setLoading(true);
     try {
-      await fetchAddProject(values, bearerToken); // Call the API or submission function
-      resetForm(); // Reset the form after successful submission
-      setFormData(initialValues); // Ensure the form data is reset to initial values
+      const response = await fetchAddProject(values, bearerToken);
+      console.log(response, "API Response");
+  
+      const processMessage = response?.processMessage; 
+      if (!processMessage) {
+        console.error("processMessage not found in API response", response);
+        return;
+      }
+  
+      const projectid = extractProjectId(processMessage);
+   
+  
+      if (projectid) {
+        uploadPropertyImages(projectid);
+        resetForm();
+        setFormData(initialValues);
+
+
+      // Show success popup
+      toast.success("Project added successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      }
+
     } catch (error) {
+
+      toast.error("Failed to add project. Please try again.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
       console.error("Error submitting form:", error);
     } finally {
-      setLoading(false); // Set loading state to false after submission
+      setLoading(false);
     }
   };
+  
 
-
-
-
+  const extractProjectId = (message) => {
+    const match = message.match(/ProjectID\s*=\s*(\d+)/);
+    return match ? parseInt(match[1], 10) : null;
+  };
+  
+  
   return (
     <div className="add-project-container__main">
+       <ToastContainer />
       <h2 className="add-project-title">Add Project</h2>
       <Formik
         initialValues={initialValues}
@@ -373,7 +447,7 @@ const AddProject = () => {
 
                   <TextField
                     fullWidth
-                    label="Secondary Mobile"
+                    label="Secondary Mobile *"
                     className='autocomplete-projectroot'
                     name="SecondaryMobileNumber"
                     value={values.SecondaryMobileNumber}
@@ -549,8 +623,9 @@ const AddProject = () => {
                     required
                     sx={{ '& .MuiInputLabel-root': { fontSize: '0.875rem' } }}
                     placeholder="Enter latitude, longitude"
-                    error={touched.geolocation && Boolean(errors.geolocation)}
-                    helperText={touched.geolocation && errors.geolocation}
+                    error={(touched.Latitude && Boolean(errors.Latitude)) || (touched.Longitude && Boolean(errors.Longitude))}
+                    helperText={(touched.Latitude && errors.Latitude) || (touched.Longitude && errors.Longitude)}
+
                     InputProps={{
                       sx: {
                         padding: '5px', // Reduces padding inside the input
@@ -595,12 +670,13 @@ const AddProject = () => {
 
                   <TextField
                     fullWidth
-                    label="Sub Locality"
+                    label="Sub Locality *"
                     name="subLocality"
                     className='autocomplete-projectroot'
                     value={values.subLocality}
                     onChange={handleChange}
-
+                    error={touched.subLocality && Boolean(errors.subLocality)}
+                    helperText={touched.subLocality && errors.subLocality}
                     sx={{ '& .MuiInputLabel-root': { fontSize: '0.875rem' } }}
                     InputProps={{
                       sx: {
@@ -659,30 +735,16 @@ const AddProject = () => {
                 ))}
               </div>
             </Grid>
-
-
-            <Grid item xs={12} sm={6} className="project-right2-container">
-              <Box className="image-upload-box">
-                <input
-                  type="file"
-                  multiple
-                  onChange={handleImageChange}
-                  className="image-upload-input"
-                />
-                <div className="image-preview">
-                  {formData.images.length > 0 &&
-                    formData.images.map((image, index) => (
-                      <div key={index} className="image-preview-item">
-                        <img src={URL.createObjectURL(image)} alt={`image-${index}`} />
-                        <IconButton onClick={() => handleImageRemove(index)} className="projectremove-icon">
-                          <RiDeleteBin5Line />
-                        </IconButton>
-                      </div>
-                    ))}
-                </div>
-              </Box>
-
-            </Grid>
+    
+                  <Grid item xs={12} sm={6} className="project-right2-container">
+                  <AddProjectImg 
+                    propertyImages={propertyImages} 
+                    setPropertyImages={setPropertyImages}   
+                    projectimgerror={projectimgerror}
+                    setProjectimgerror={setProjectimgerror}
+                     />
+                  </Grid>
+          
             <Grid className='addproject-container'>
               <Button variant="contained" type="submit" className="addproject-btn">
                 {loading || isSubmitting ? <CircularProgress size={24} /> : 'Submit Project'}
@@ -693,6 +755,8 @@ const AddProject = () => {
 
         }}
       </Formik>
+
+
 
     </div>
   );

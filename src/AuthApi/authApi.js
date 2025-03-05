@@ -40,7 +40,7 @@ export const forgotPasswordAPI = async (email) => {
 
   export const formRegistrationAPI = async (firstName, lastName, email, phoneNumber,role,countryCode) => {
     try {
-      const response = await fetch(`${BASE_URL}/api/users/register`, {
+      const response = await fetch(`${BASE_URL}/api/users/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -24,6 +24,7 @@ const Listings = () => {
   const { favorites, toggleFavorite } = useFavorites();
   const [showModal, setShowModal] = useState(false);
   const [isFiltering, setIsFiltering] = useState(false);
+  console.log(isFiltering,"filter");
   const dispatch = useDispatch();
   const {
     properties,
@@ -75,7 +76,6 @@ const Listings = () => {
 
   const handlePropertyClick = useCallback(
     (property) => {
-      console.log(typeof  property.PropertyID,"property");
       dispatch(setSelectedProperty(property));
       setShowModal(true);
     },
@@ -144,7 +144,7 @@ const Listings = () => {
               available
             </p>
           </div>
-          {isFiltering ? ( // Show spinner only during filtering
+          {isFiltering ? ( 
             <div className="spinnerContainer">
               <MoonLoader color="#3498db" size={70} />
             </div>
