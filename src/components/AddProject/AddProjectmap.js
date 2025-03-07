@@ -1,17 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {  useEffect, useRef } from 'react';
 import { APIProvider, Map, Marker } from '@vis.gl/react-google-maps';
 import "./AddProjectmap.css";
 
-const AddProjectmap = ({ formData,  setFieldValue }) => {
+const AddProjectmap = ({ formData,  setFieldValue, setTouched,inputRef,geolocation, setGeolocation }) => {
   const mapRef = useRef(null);
-  const inputRef = useRef(null);
+
   const autocompleteRef = useRef(null);
   const API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
-
-  const [geolocation, setGeolocation] = useState({
-    lat: formData?.Latitude || 17.4119,
-    lng: formData?.Longitude || 78.4677,
-  });
 
   useEffect(() => {
     if (formData?.Latitude && formData?.Longitude) {
@@ -33,11 +28,17 @@ const AddProjectmap = ({ formData,  setFieldValue }) => {
   const updateLocationFields = (lat, lng) => {
     setFieldValue('Latitude', lat.toString());
     setFieldValue('Longitude', lng.toString());
+    setTouched("Latitude", true);
   };
 
   const handleMapClick = (event) => {
-    const latLng = event.detail?.latLng;
 
+    if (event.detail?.placeId) {
+      event.stop(); // Prevent default behavior (e.g., showing Google Maps info)
+      return;
+    }
+    const latLng = event.detail?.latLng;
+  
     if (latLng) {
       const { lat, lng } = latLng;
       setGeolocation({ lat, lng });
@@ -90,7 +91,7 @@ const AddProjectmap = ({ formData,  setFieldValue }) => {
           options={{
             mapTypeControl: true,
             zoomControl: true,
-            streetViewControl: false,
+            streetViewControl: true,
             fullscreenControl: true,
           }}
           mapId="5e34ee2a0a0595d8"

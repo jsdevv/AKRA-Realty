@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { TextField, Button, Grid, Box, Autocomplete, CircularProgress } from '@mui/material';
 
 import './AddProject.css';
@@ -21,6 +21,8 @@ const AddProject = () => {
   const propertyStatus = useSelector((state) => state.properties.propertyStatusOptions) || [];
   const projectStatusOptions = ['Ongoing', 'Completed'];
   const dispatch = useDispatch();
+  const [geolocation, setGeolocation] = useState({ lat: 17.4119, lng: 78.4677 });
+    const inputRef = useRef(null);
 
   const [loading, setLoading] = useState(false);
   const [propertyImages, setPropertyImages] = useState([]);
@@ -114,7 +116,6 @@ const AddProject = () => {
     Locality: Yup.string().required("Locality is required"),
     subLocality: Yup.string().required("Sub Locality is required"),
     Latitude: Yup.string().required("Geolocation is required"),
-   Longitude: Yup.string().required("Geolocation is required"),
   });
 
 
@@ -194,7 +195,7 @@ const AddProject = () => {
   const handleAmenitiesChange = (e, setFieldValue, values, amenity) => {
     const { checked } = e.target;
 
-    let updatedAmenities = values.PropertyAmenities || '';
+    let updatedAmenities = values.Amenities || '';
 
     if (checked) {
       updatedAmenities = updatedAmenities ? `${updatedAmenities}, ${amenity}` : amenity;
@@ -203,7 +204,7 @@ const AddProject = () => {
     }
 
     console.log(updatedAmenities, "updated");
-    setFieldValue("PropertyAmenities", updatedAmenities);
+    setFieldValue("Amenities", updatedAmenities);
   };
 
   const handleCompanyChange = (event, newValue, setFieldValue) => {
@@ -255,6 +256,10 @@ const AddProject = () => {
         draggable: true,
       });
       }
+      if (inputRef.current) {
+        inputRef.current.value = ""; 
+      }
+      setGeolocation({ lat: 17.4119, lng: 78.4677 });
 
     } catch (error) {
 
@@ -289,7 +294,7 @@ const AddProject = () => {
         enableReinitialize
         onSubmit={handleSubmit}
       >
-        {({ isSubmitting, resetForm, touched, values, errors, setFieldValue, handleChange }) => {
+        {({ isSubmitting, resetForm, touched, values, errors, setFieldValue,setTouched, handleChange }) => {
 
           console.log(errors, "error");
           return (<Form className="add-project-grid">
@@ -623,8 +628,8 @@ const AddProject = () => {
                     required
                     sx={{ '& .MuiInputLabel-root': { fontSize: '0.875rem' } }}
                     placeholder="Enter latitude, longitude"
-                    error={(touched.Latitude && Boolean(errors.Latitude)) || (touched.Longitude && Boolean(errors.Longitude))}
-                    helperText={(touched.Latitude && errors.Latitude) || (touched.Longitude && errors.Longitude)}
+                    error={(touched.Latitude && Boolean(errors.Latitude))}
+                    helperText={(touched.Latitude && errors.Latitude)}
 
                     InputProps={{
                       sx: {
@@ -708,7 +713,15 @@ const AddProject = () => {
             </Grid>
             <Grid item xs={12} sm={6} className="project-right1-container">
               <Box className="projectmap-box">
-                <AddProjectmap formData={formData} updateGeolocation={handleGeolocationChange} setFieldValue={setFieldValue} />
+                <AddProjectmap 
+                   formData={formData} 
+                   updateGeolocation={handleGeolocationChange} 
+                   setFieldValue={setFieldValue}
+                   setTouched={setTouched} 
+                   inputRef={inputRef}
+                   geolocation={geolocation} 
+                   setGeolocation={setGeolocation} 
+                    />
               </Box>
 
             </Grid>
@@ -722,9 +735,9 @@ const AddProject = () => {
                         <label key={amenity.AmenitiesID} className="amenities-option">
                           <input
                             type="checkbox"
-                            name="PropertyAmenities"
+                            name="Amenities"
                             value={amenity.Amenities}
-                            checked={values.PropertyAmenities?.includes(amenity.Amenities) ?? false}
+                            checked={values.Amenities?.includes(amenity.Amenities) ?? false}
                             onChange={(e) => handleAmenitiesChange(e, setFieldValue, values, amenity.Amenities)}
                           />
                           {amenity.Amenities}

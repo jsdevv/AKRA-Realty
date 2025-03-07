@@ -1,18 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { IconButton } from "@mui/material";
-import { RiDeleteBin6Line } from "react-icons/ri";
+import { RiDeleteBin6Line, RiUploadCloudLine } from "react-icons/ri";
 import "./AddProjectImg.css"
 
 const MAX_IMAGES = 12;
 
+
+
 const AddProjectImg = ({ propertyImages, setPropertyImages, projectimgerror, setProjectimgerror }) => {
-   console.log(projectimgerror, "imjjjjj");
+  const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/jpg"];
   const [imageURLs, setImageURLs] = useState([]);
   const [error, setError] = useState("");
 
   // Handle new image selection
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
+
+    const validImages = files.filter((file) => ALLOWED_IMAGE_TYPES.includes(file.type));
+
+    if (validImages.length === 0) {
+      setError("Only image files (JPG, JPEG, PNG) are allowed.");
+      return;
+    }
+
     if (propertyImages.length >= MAX_IMAGES) {
       setError(`You can only upload up to ${MAX_IMAGES} images.`);
       return;
@@ -62,13 +72,24 @@ const AddProjectImg = ({ propertyImages, setPropertyImages, projectimgerror, set
   return (
     <div className="image-upload-box">
       {(error || projectimgerror) && <p className="error-message">{error || projectimgerror}</p>}
-      <input
+       
+
+      {/* Modern Upload Icon */}
+      <label htmlFor="fileInput" className="upload-icon-label">
+        <IconButton component="span" className="upload-icon">
+          <RiUploadCloudLine size={25} />
+        </IconButton>
+        <input
         type="file"
+        id="fileInput"
         multiple
         onChange={handleImageChange}
         className="image-upload-input"
-        disabled={propertyImages.length >= MAX_IMAGES} // Disable input if max reached
+        disabled={propertyImages.length >= MAX_IMAGES}
+        hidden
       />
+      </label>
+
       <div className="projectimage-preview">
         {propertyImages.map((image, index) => (
           <div key={index} className="image-preview-item">

@@ -36,7 +36,7 @@ const Agentsproperties = ({ agentsproperties }) => {
       const searchLowerCase = searchAgentProperty ? searchAgentProperty.toLowerCase() : ''
       const matchesSearch =
         searchLowerCase === '' ||
-        (property.PropertyArea && property.PropertyArea.toLowerCase().includes(searchLowerCase)) ||
+        (property.Locality && property.Locality.toLowerCase().includes(searchLowerCase)) ||
         (property.PropertyType && property.PropertyType.toLowerCase().includes(searchLowerCase)) ||
         (property.PropertyStatus && property.PropertyStatus.toLowerCase().includes(searchLowerCase)) ||
         (property.Amount && property.Amount.toLowerCase().includes(searchLowerCase)) ||
@@ -78,7 +78,7 @@ const Agentsproperties = ({ agentsproperties }) => {
           //   lng: parseFloat(selectedLocation.PropertyLongitude) || 77.5946,
           // },
           map,
-          title: selectedLocation.PropertyArea || 'Property Location',
+          title: selectedLocation.Locality || 'Property Location',
         });
 
         // Optional: Add a circle around the marker
@@ -138,7 +138,7 @@ const Agentsproperties = ({ agentsproperties }) => {
       },
       {
         Header: 'Location',
-        accessor: 'PropertyArea',
+        accessor: 'Locality',
         Cell: ({ value }) => value,
       },
       {
@@ -165,9 +165,9 @@ const Agentsproperties = ({ agentsproperties }) => {
           const sendWhatsAppMessage = async () => {
             const companyName = "AKRA Realty";
             const propertyType = row.original.PropertyType;
-            const propertyArea = row.original.PropertyArea;
+            const Locality = row.original.Locality;
 
-            const message = `${companyName} agent will contact shortly regarding this ${propertyType} located at ${propertyArea}.`;
+            const message = `${companyName} agent will contact shortly regarding this ${propertyType} located at ${Locality}.`;
             const encodedMessage = encodeURIComponent(message);
 
             for (const userNumber of userNumbers) {
@@ -207,7 +207,7 @@ const Agentsproperties = ({ agentsproperties }) => {
     {
       columns,
       data: filteredProperties,
-      initialState: { sortBy: [{ id: 'PropertyArea', desc: false }] }, // Initial sorting set to "A to Z"
+      initialState: { sortBy: [{ id: 'Locality', desc: false }] }, // Initial sorting set to "A to Z"
     },
     useSortBy
   );

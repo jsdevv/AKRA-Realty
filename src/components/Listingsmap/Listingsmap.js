@@ -577,7 +577,6 @@ const imagesToShow = imageUrls.length > 0 ? imageUrls : [defaultimg];
     if (selectedProperty) {
       const marker = propertyMarkerMap.current.get(selectedProperty.PropertyID);
       const relatedUnits = groupedProperties[`${selectedProperty.PropertyLatitude}_${selectedProperty.PropertyLongitude}`];
-      console.log(marker.position,)
       // bring marker to center
       mapRef.current.panTo(marker.position);
       showInfoWindow(

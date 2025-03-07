@@ -444,7 +444,7 @@ export const fetchagentproperties = async (bearerToken) => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            RequestParamType: 'PrivateListings',
+            RequestParamType: 'PrivateListings1',
           }),
         }
       );

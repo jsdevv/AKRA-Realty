@@ -71,6 +71,11 @@
     transform: scale(1.05);
 }
 
+.image-upload-input {
+    display: none;
+  }
+  
+
 /* Image Styling */
 .image-preview-item img {
     width: 100%;
