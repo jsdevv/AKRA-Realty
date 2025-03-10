@@ -1,54 +1,60 @@
-import React, {  useEffect, useRef } from 'react';
-import { APIProvider, Map, Marker } from '@vis.gl/react-google-maps';
+import React, { useEffect, useRef, useState } from "react";
+import { APIProvider, Map, Marker } from "@vis.gl/react-google-maps";
 import "./AddProjectmap.css";
 
-const AddProjectmap = ({ formData,  setFieldValue, setTouched,inputRef,geolocation, setGeolocation }) => {
+const AddProjectmap = ({ formData, setFieldValue, setTouched, inputRef, geolocation, setGeolocation }) => {
   const mapRef = useRef(null);
-
+  const [mapInstance, setMapInstance] = useState(null);
   const autocompleteRef = useRef(null);
   const API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
+  // Update Marker and Map Center based on FormData
   useEffect(() => {
     if (formData?.Latitude && formData?.Longitude) {
-      setGeolocation({
-        lat: formData.Latitude,
-        lng: formData.Longitude,
-      });
+      const lat = parseFloat(formData.Latitude);
+      const lng = parseFloat(formData.Longitude);
+      const newLocation = { lat, lng };
+
+      setGeolocation(newLocation);
+
+      if (mapInstance && formData?.Latitude && formData?.Longitude) {
+        mapInstance.panTo(newLocation);
+      }
+      
     }
-  }, [formData]);
+  }, [formData.Latitude, formData.Longitude, mapInstance]);
 
   useEffect(() => {
     if (window.google && inputRef.current) {
-      // Initialize Google Places Autocomplete
       autocompleteRef.current = new window.google.maps.places.Autocomplete(inputRef.current);
-      autocompleteRef.current.addListener('place_changed', handlePlaceSelected);
+      autocompleteRef.current.addListener("place_changed", handlePlaceSelected);
     }
-  }, []);
+  }, [inputRef]);
 
   const updateLocationFields = (lat, lng) => {
-    setFieldValue('Latitude', lat.toString());
-    setFieldValue('Longitude', lng.toString());
+    setFieldValue("Latitude", lat.toString());
+    setFieldValue("Longitude", lng.toString());
     setTouched("Latitude", true);
+    setTouched("Longitude", true);
   };
 
   const handleMapClick = (event) => {
-
     if (event.detail?.placeId) {
-      event.stop(); // Prevent default behavior (e.g., showing Google Maps info)
+      event.stop();
       return;
     }
+
     const latLng = event.detail?.latLng;
-  
     if (latLng) {
       const { lat, lng } = latLng;
-      setGeolocation({ lat, lng });
+      const newLocation = { lat, lng };
+
+      setGeolocation(newLocation);
       updateLocationFields(lat, lng);
 
-      if (mapRef.current) {
-        mapRef.current.panTo({ lat, lng });
+      if (mapInstance) {
+        mapInstance.panTo(newLocation);
       }
-    } else {
-      console.error("Invalid latLng object in event:", event);
     }
   };
 
@@ -57,12 +63,13 @@ const AddProjectmap = ({ formData,  setFieldValue, setTouched,inputRef,geolocati
     if (place?.geometry?.location) {
       const lat = place.geometry.location.lat();
       const lng = place.geometry.location.lng();
+      const newLocation = { lat, lng };
 
-      setGeolocation({ lat, lng });
+      setGeolocation(newLocation);
       updateLocationFields(lat, lng);
 
-      if (mapRef.current) {
-        mapRef.current.panTo({ lat, lng });
+      if (mapInstance) {
+        mapInstance.panTo(newLocation);
       }
     }
   };
@@ -72,21 +79,16 @@ const AddProjectmap = ({ formData,  setFieldValue, setTouched,inputRef,geolocati
       <APIProvider apiKey={API_KEY}>
         {/* Search Input for Places */}
         <div className="search-box">
-          <input
-            type="text"
-            ref={inputRef}
-            placeholder="Search for places..."
-            className="search-input"
-          />
+          <input type="text" ref={inputRef} placeholder="Search for places..." className="search-input" />
         </div>
 
         {/* Map with Marker */}
         <Map
-          center={geolocation}
+          center={geolocation} // Set the center to geolocation
           onClick={handleMapClick}
-          ref={mapRef}
+          onLoad={(map) => setMapInstance(map)}
           style={{ width: "100%", height: "460px" }}
-          defaultZoom={12}
+          zoom={12}
           gestureHandling="greedy"
           options={{
             mapTypeControl: true,

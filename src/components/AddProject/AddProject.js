@@ -714,7 +714,7 @@ const AddProject = () => {
             <Grid item xs={12} sm={6} className="project-right1-container">
               <Box className="projectmap-box">
                 <AddProjectmap 
-                   formData={formData} 
+                   formData={values} 
                    updateGeolocation={handleGeolocationChange} 
                    setFieldValue={setFieldValue}
                    setTouched={setTouched} 

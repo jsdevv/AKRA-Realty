@@ -36,8 +36,19 @@ const RegisterForm = () => {
       role: '',
     },
     validationSchema: Yup.object({
-      firstName: Yup.string().required('First Name is required'),
-      lastName: Yup.string().required('Last Name is required'),
+      firstName: Yup.string()
+      .required('First Name is required')
+      .test('no-only-spaces', 'First Name cannot be empty or spaces only', (value) => value && value.trim().length > 0)
+      .matches(/^[A-Za-z]+(?: [A-Za-z]+)*$/, 'First Name can only contain alphabets and spaces')
+      .min(2, 'First Name must be at least 2 characters')
+      .max(50, 'First Name must be at most 50 characters'),
+  
+    lastName: Yup.string()
+      .required('Last Name is required')
+      .test('no-only-spaces', 'Last Name cannot be empty or spaces only', (value) => value && value.trim().length > 0)
+      .matches(/^[A-Za-z]+(?: [A-Za-z]+)*$/, 'Last Name can only contain alphabets and spaces')
+      .min(2, 'Last Name must be at least 2 characters')
+      .max(50, 'Last Name must be at most 50 characters'),
       email: Yup.string().email('Invalid email address').required('Email is required'),
       phoneNumber: Yup.string()
         .matches(/^[0-9]{10}$/, 'Phone Number must be 10 digits')
