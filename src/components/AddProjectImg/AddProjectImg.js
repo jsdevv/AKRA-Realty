@@ -70,7 +70,7 @@ const AddProjectImg = ({ propertyImages, setPropertyImages, projectimgerror, set
   }, [propertyImages]);
 
   return (
-    <div className="image-upload-box">
+    <div className="projectimage-upload-box">
       {(error || projectimgerror) && <p className="error-message">{error || projectimgerror}</p>}
        
 

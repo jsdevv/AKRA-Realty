@@ -1,20 +1,31 @@
 /* Image Upload Box */
-.image-upload-box {
+.projectimage-upload-box {
     padding: 15px;
     border: 2px dashed #aaa;
     border-radius: 10px;
     background-color: #f4f4f4;
     text-align: center;
+    align-items: center;
     transition: all 0.3s ease;
     cursor: pointer;
 }
 
+.upload-icon-label{
+    font-size: 12px;
+    background-color: #f4f4f4;
+    color: #fff;
+    padding: 8px 16px;
+
+    cursor: pointer;
+    display: inline-block;
+}
+
 /* Custom File Input */
-.image-upload-box input[type="file"] {
+.projectimage-upload-box input[type="file"] {
     display: none;
 }
 
-.image-upload-box::after {
+.projectimage-upload-box::after {
     content: "Click to upload images (Max: 12)";
     display: block;
     font-size: 14px;

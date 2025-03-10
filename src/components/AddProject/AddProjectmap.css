@@ -9,8 +9,8 @@
 
 .geolocation-container .search-box {
   position: absolute;
-  top: 24%;
-  left: 74%;
+  top: 23%;
+  left: 86%;
   transform: translateX(-50%);
   z-index: 10;
   width: 300px;
@@ -18,8 +18,8 @@
 
 .geolocation-container .search-input {
   width: 58%;
-  padding: 10px 15px;
-  font-size: 14px;
+  padding: 10px;
+  font-size: 12px;
   border: 1px solid #ccc;
   border-radius: 4px;
 }

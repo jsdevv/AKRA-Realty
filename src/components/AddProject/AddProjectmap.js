@@ -86,7 +86,7 @@ const AddProjectmap = ({ formData,  setFieldValue, setTouched,inputRef,geolocati
           onClick={handleMapClick}
           ref={mapRef}
           style={{ width: "100%", height: "460px" }}
-          defaultZoom={10}
+          defaultZoom={12}
           gestureHandling="greedy"
           options={{
             mapTypeControl: true,
