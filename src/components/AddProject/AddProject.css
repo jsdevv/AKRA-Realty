@@ -13,10 +13,11 @@
 
 /* Form Grid */
 .add-project-grid {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
   width: 100%;
-  flex-wrap: wrap;
-  gap: 10px;
+  gap: 5px;
+ 
 }
 
 /* Left Container */
@@ -28,21 +29,20 @@
 
 /* Right Container */
 .project-right-container {
-
-  padding: 25px;
+  padding: 0px 25px 25px 25px;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   border-radius: 6px;
 }
 
 .project-right1-container {
-  width: 34%;
+  width: 90%;
   border-radius: 4px;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   border-radius: 6px;
 }
 .project-right2-container {
-  width: 36%;
-  padding: 25px;
+  width: 100%;
+  margin-top: 15px !important;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   border-radius: 6px;
 }
@@ -97,11 +97,7 @@
   width: 100%;
   height: 100%;
 }
-.addproject-container{
-  position: absolute;
-  bottom:4%;
-  margin-left: 86%;
-}
+
 .autocomplete-root .MuiOutlinedInput-root input {
   outline: none;
   padding: 5px 0px 8px 8px !important;
@@ -119,24 +115,26 @@
 }
 
 .amenities-container {
-  width: 50%;
+  width: 100%;
+  margin-top: 5px !important;
 }
 
 .amenities-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 columns per row */
-  gap: 10px; /* Space between columns */
+  grid-template-columns: repeat(2, 1fr); /* 3 columns per row */
+  gap: 0px; /* Space between columns */
+  border: 2px dotted #ccc;
+  border-radius: 6px;
+  padding: 4px;
 }
 
 .amenities-group {
-  padding: 10px;
+  padding:2px 10px;
   border-radius: 8px;
-  background-color: #f9f9f9;
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
 
 .amenities-title {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   margin: 0px 0px 2px 0px;
 }
@@ -151,9 +149,44 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 14px;
+  font-size: 12px;
+}
+
+.projectsubmit-btn {
+  position: absolute;
+  top:94%;
+  right: 4%;
+  display: flex;
+  justify-content: flex-end; /* Aligns button to the right */
+  width: 100%; /* Ensures it takes full width */
+  padding-right: 10px; /* Optional spacing from the right */
 }
 
 
+/* Styles specific to AddProject Autocomplete */
+.add-project-container__main .autocomplete-projectroot .MuiOutlinedInput-root {
+  font-size: 12px !important;
+  padding: 4px !important;
+}
 
+/* Reduce font size for text inside input field */
+.add-project-container__main .autocomplete-projectroot .MuiAutocomplete-input {
+  font-size: 12px !important;
+}
+
+/* Reduce font size for dropdown options */
+.add-project-container__main .autocomplete-projectroot .MuiAutocomplete-listbox {
+  font-size: 12px !important;
+}
+
+/* Reduce input height */
+.add-project-container__main .autocomplete-projectroot .MuiInputBase-root {
+  min-height: 36px !important;
+}
+
+/* Adjust dropdown item padding */
+.add-project-container__main .autocomplete-projectroot .MuiAutocomplete-option {
+  font-size: 12px !important;
+  padding: 6px 10px !important;
+}
 

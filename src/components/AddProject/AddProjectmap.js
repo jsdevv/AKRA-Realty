@@ -87,7 +87,7 @@ const AddProjectmap = ({ formData, setFieldValue, setTouched, inputRef, geolocat
           center={geolocation} // Set the center to geolocation
           onClick={handleMapClick}
           onLoad={(map) => setMapInstance(map)}
-          style={{ width: "100%", height: "460px" }}
+          style={{ width: "100%", height: "360px" }}
           zoom={12}
           gestureHandling="greedy"
           options={{

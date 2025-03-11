@@ -41,7 +41,7 @@ const ConditionalNavbarBottom = ({
   handleSearchSubmit
 }) => {
   const location = useLocation();
-  const shouldDisplayNavbarBottom = ['/','/home','/owner','/listedagents','/addlistings', '/forgot-password','/passwordreset', '/register', '/Notification', '/feedback', '/favorites', '/agents', '/services', '/investors', '/sell'].includes(location.pathname);
+  const shouldDisplayNavbarBottom = ['/','/home','/owner', '/addproject', '/listedagents','/addlistings', '/forgot-password','/passwordreset', '/register', '/Notification', '/feedback', '/favorites', '/agents', '/services', '/investors', '/sell'].includes(location.pathname);
 
   return !shouldDisplayNavbarBottom ?
     <NavbarBottom
@@ -138,7 +138,6 @@ const App = () => {
           />
           <Routes>
 
-       
             <Route
               path="/"
               element={
@@ -154,8 +153,6 @@ const App = () => {
                   setSearchInput={setSearchInput}
                   handleSearchmainpageChange={handleSearchmainpageChange}
                 />
-
-
               }
             />
             <Route

@@ -71,7 +71,7 @@ const AddProjectImg = ({ propertyImages, setPropertyImages, projectimgerror, set
 
   return (
     <div className="projectimage-upload-box">
-      {(error || projectimgerror) && <p className="error-message">{error || projectimgerror}</p>}
+      {(error || projectimgerror) && <p className="project-errormsg">{error || projectimgerror}</p>}
        
 
       {/* Modern Upload Icon */}

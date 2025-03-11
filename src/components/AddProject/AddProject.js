@@ -1,7 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { TextField, Button, Grid, Box, Autocomplete, CircularProgress } from '@mui/material';
-
-import './AddProject.css';
 import AddProjectmap from './AddProjectmap';
 import { Form, Formik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,8 +9,9 @@ import { fetchAddProject, uploadprojectImages } from '../../API/api';
 import * as Yup from 'yup';
 import { amenitiesData } from '../steppers/stepper4/amniData';
 import AddProjectImg from '../AddProjectImg/AddProjectImg';
-import { ToastContainer,toast  } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import './AddProject.css';
 
 const AddProject = () => {
   const bearerToken = useSelector((state) => state.auth.bearerToken);
@@ -22,7 +21,7 @@ const AddProject = () => {
   const projectStatusOptions = ['Ongoing', 'Completed'];
   const dispatch = useDispatch();
   const [geolocation, setGeolocation] = useState({ lat: 17.4119, lng: 78.4677 });
-    const inputRef = useRef(null);
+  const inputRef = useRef(null);
 
   const [loading, setLoading] = useState(false);
   const [propertyImages, setPropertyImages] = useState([]);
@@ -50,11 +49,11 @@ const AddProject = () => {
   };
 
   const [formData, setFormData] = useState(initialValues);
-  const [projectimgerror,setProjectimgerror] = useState("");
+  const [projectimgerror, setProjectimgerror] = useState("");
 
   console.log(projectimgerror, "formikerror");
 
-  console.log(propertyImages,"images");
+  console.log(propertyImages, "images");
 
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   const domainOnlyRegex = /^@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -124,25 +123,25 @@ const AddProject = () => {
       console.warn("No project ID or images to upload.");
       return;
     }
-  
+
     console.log(projectid, "Extracted Project ID");
-  
+
     try {
       const allowedExtensions = ["jpg", "jpeg", "png"]; // Allowed formats
-  
+
       const imageUploadPromises = propertyImages.map((image) => {
         const extension = image.name.split('.').pop().toLowerCase(); // Extract file extension
-  
+
         if (!allowedExtensions.includes(extension)) {
           console.warn(`Skipping file ${image.name}: Unsupported format (${extension}).`);
           return Promise.resolve(); // Skip invalid images
         }
-  
+
         return uploadprojectImages(projectid, image, bearerToken, extension);
       });
-  
+
       await Promise.all(imageUploadPromises);
-  
+
       setPropertyImages([]); // Clear images after successful upload
       setProjectimgerror("");
       localStorage.removeItem("uploadedImages"); // Remove from localStorage
@@ -150,8 +149,6 @@ const AddProject = () => {
       console.error("Image upload failed:", error);
     }
   };
-  
-    
 
   useEffect(() => {
     if (bearerToken) {
@@ -200,7 +197,7 @@ const AddProject = () => {
     if (checked) {
       updatedAmenities = updatedAmenities ? `${updatedAmenities}, ${amenity}` : amenity;
     } else {
-     updatedAmenities = updatedAmenities.replace(new RegExp(`(?:^|, )${amenity}(?=,|$)`, 'g'), '');
+      updatedAmenities = updatedAmenities.replace(new RegExp(`(?:^|, )${amenity}(?=,|$)`, 'g'), '');
     }
 
     console.log(updatedAmenities, "updated");
@@ -222,42 +219,42 @@ const AddProject = () => {
       setProjectimgerror("At least 2 images are required.");
       return;
     } else {
-      setProjectimgerror(""); 
+      setProjectimgerror("");
     }
-    
+
     console.log(values, "values");
     setLoading(true);
     try {
       const response = await fetchAddProject(values, bearerToken);
       console.log(response, "API Response");
-  
-      const processMessage = response?.processMessage; 
+
+      const processMessage = response?.processMessage;
       if (!processMessage) {
         console.error("processMessage not found in API response", response);
         return;
       }
-  
+
       const projectid = extractProjectId(processMessage);
-   
-  
+
+
       if (projectid) {
         uploadPropertyImages(projectid);
         resetForm();
         setFormData(initialValues);
 
 
-      // Show success popup
-      toast.success("Project added successfully!", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
+        // Show success popup
+        toast.success("Project added successfully!", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
       }
       if (inputRef.current) {
-        inputRef.current.value = ""; 
+        inputRef.current.value = "";
       }
       setGeolocation({ lat: 17.4119, lng: 78.4677 });
 
@@ -276,17 +273,15 @@ const AddProject = () => {
       setLoading(false);
     }
   };
-  
 
   const extractProjectId = (message) => {
     const match = message.match(/ProjectID\s*=\s*(\d+)/);
     return match ? parseInt(match[1], 10) : null;
   };
-  
-  
+
   return (
     <div className="add-project-container__main">
-       <ToastContainer />
+      <ToastContainer />
       <h2 className="add-project-title">Add Project</h2>
       <Formik
         initialValues={initialValues}
@@ -294,7 +289,7 @@ const AddProject = () => {
         enableReinitialize
         onSubmit={handleSubmit}
       >
-        {({ isSubmitting, resetForm, touched, values, errors, setFieldValue,setTouched, handleChange }) => {
+        {({ isSubmitting, resetForm, touched, values, errors, setFieldValue, setTouched, handleChange }) => {
 
           console.log(errors, "error");
           return (<Form className="add-project-grid">
@@ -345,14 +340,14 @@ const AddProject = () => {
                 <Grid item xs={12} sm={6}>
                   <Autocomplete
                     fullWidth
-                    className="autocomplete-projectroot1"
+                    className='autocomplete-projectroot'
                     options={projectStatusOptions}
                     value={values.ProjectStatus || ''}
                     onChange={(event, newValue) => handleStatusChange(event, newValue, setFieldValue)}
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label="Project Status"
+                        label="Status"
                         error={touched.ProjectStatus && Boolean(errors.ProjectStatus)}
                         helperText={touched.ProjectStatus && errors.ProjectStatus}
                       />
@@ -361,7 +356,7 @@ const AddProject = () => {
                 </Grid>
                 <Grid item xs={12} sm={6} >
                   <Autocomplete
-                    className='autocomplete-projectroot1'
+                    className='autocomplete-projectroot'
                     name="PropertyType"
                     options={propertyTypes}
                     value={propertyTypes.find(option => option.value === values.PropertyTypeID) || null}
@@ -371,9 +366,8 @@ const AddProject = () => {
                     }}
                     getOptionLabel={(option) => option.label || ""}
                     isOptionEqualToValue={(option, value) => option.value === value?.value}
-                    renderInput={(params) => <TextField {...params} label="Property Type" />}
+                    renderInput={(params) => <TextField {...params} label="Type" />}
                   />
-
 
                 </Grid>
               </Grid>
@@ -384,10 +378,20 @@ const AddProject = () => {
                   <TextField
                     className='autocomplete-projectroot'
                     fullWidth
-                    label="Email *"
+                    placeholder="Email *"
                     name="Email"
                     value={values.Email}
                     onChange={handleChange}
+                    InputProps={{
+                      sx: {
+                        padding: '5px', // Reduces padding inside the input
+                      },
+                    }}
+                    inputProps={{
+                      style: {
+                        padding: '8px', // Customizes the inner input text padding
+                      },
+                    }}
 
                     sx={{ '& .MuiInputLabel-root': { fontSize: '0.875rem' } }}
                     error={touched.Email && Boolean(errors.Email)}
@@ -400,7 +404,7 @@ const AddProject = () => {
                   <TextField
                     fullWidth
                     className='autocomplete-projectroot'
-                    label="Age Of Project *"
+                    placeholder="Age Of Project *"
                     name="AgeOfProject"
                     value={values.AgeOfProject}
                     onChange={handleChange}
@@ -427,7 +431,7 @@ const AddProject = () => {
 
                   <TextField
                     fullWidth
-                    label="Mobile Number *"
+                    placeholder="Mobile Number *"
                     className='autocomplete-projectroot'
                     name="MobileNumber"
                     value={values.MobileNumber}
@@ -452,7 +456,7 @@ const AddProject = () => {
 
                   <TextField
                     fullWidth
-                    label="Secondary Mobile *"
+                    placeholder="Secondary Mobile *"
                     className='autocomplete-projectroot'
                     name="SecondaryMobileNumber"
                     value={values.SecondaryMobileNumber}
@@ -479,7 +483,7 @@ const AddProject = () => {
 
                   <TextField
                     fullWidth
-                    label="Address1 *"
+                    placeholder="Address1 *"
                     name="Address1"
                     className='autocomplete-projectroot'
                     value={values.Address1}
@@ -504,7 +508,7 @@ const AddProject = () => {
 
                   <TextField
                     fullWidth
-                    label="Address2"
+                    placeholder="Address2"
                     name="Address2"
                     className='autocomplete-projectroot'
                     value={values.Address2}
@@ -525,19 +529,11 @@ const AddProject = () => {
                 </Grid>
               </Grid>
 
-
-
-            </Grid>
-
-            {/* Right Container */}
-            <Grid item xs={12} sm={6} className="project-right-container">
-
-              <Grid container spacing={2}>
+              <Grid container spacing={2} sx={{ mt: 1 }}>
                 <Grid item xs={12} sm={6}>
-
                   <TextField
                     fullWidth
-                    label="City *"
+                    placeholder="City *"
                     name="City"
                     value={values.City}
                     onChange={handleChange}
@@ -558,10 +554,9 @@ const AddProject = () => {
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-
                   <TextField
                     fullWidth
-                    label="State *"
+                    placeholder="State *"
                     name="State"
                     value={values.State}
                     onChange={handleChange}
@@ -588,7 +583,7 @@ const AddProject = () => {
 
                   <TextField
                     fullWidth
-                    label="Zipcode *"
+                    placeholder="Zipcode *"
                     name="Zipcode"
                     value={values.Zipcode}
                     onChange={handleChange}
@@ -646,11 +641,16 @@ const AddProject = () => {
 
               </Grid>
 
+            </Grid>
+
+            {/* Right Container */}
+            <Grid item xs={12} sm={6} className="project-right-container">
+
               <Grid container spacing={2} sx={{ mt: 1 }}>
                 <Grid item xs={12} sm={6}>
                   <TextField
                     fullWidth
-                    label="Locality *"
+                    placeholder="Locality *"
                     name="Locality"
                     className='autocomplete-projectroot'
                     value={values.Locality}
@@ -675,7 +675,7 @@ const AddProject = () => {
 
                   <TextField
                     fullWidth
-                    label="Sub Locality *"
+                    placeholder="Sub Locality *"
                     name="subLocality"
                     className='autocomplete-projectroot'
                     value={values.subLocality}
@@ -695,9 +695,8 @@ const AddProject = () => {
                     }}
                   />
                 </Grid>
+
               </Grid>
-
-
               <TextField sx={{ mt: 2 }}
                 fullWidth
                 label="Description"
@@ -706,70 +705,61 @@ const AddProject = () => {
                 onChange={handleChange}
                 className='autocomplete-projectroot'
                 multiline
-                rows={8}
-
+                rows={5}
               />
-
+              <Grid item xs={12} sm={6} className="amenities-container">
+                <div className="amenities-grid">
+                  {amenitiesData.map((category) => (
+                    <div key={category.category} className="amenities-group">
+                      <h4 className="amenities-title">{category.category}: </h4>
+                      <div className="amenities-options">
+                        {category.subcategories.map((amenity) => (
+                          <label key={amenity.AmenitiesID} className="amenities-option">
+                            <input
+                              type="checkbox"
+                              name="Amenities"
+                              value={amenity.Amenities}
+                              checked={values.Amenities?.includes(amenity.Amenities) ?? false}
+                              onChange={(e) => handleAmenitiesChange(e, setFieldValue, values, amenity.Amenities)}
+                            />
+                            {amenity.Amenities}
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </Grid>
             </Grid>
             <Grid item xs={12} sm={6} className="project-right1-container">
               <Box className="projectmap-box">
-                <AddProjectmap 
-                   formData={values} 
-                   updateGeolocation={handleGeolocationChange} 
-                   setFieldValue={setFieldValue}
-                   setTouched={setTouched} 
-                   inputRef={inputRef}
-                   geolocation={geolocation} 
-                   setGeolocation={setGeolocation} 
-                    />
+                <AddProjectmap
+                  formData={values}
+                  updateGeolocation={handleGeolocationChange}
+                  setFieldValue={setFieldValue}
+                  setTouched={setTouched}
+                  inputRef={inputRef}
+                  geolocation={geolocation}
+                  setGeolocation={setGeolocation}
+                />
+                <AddProjectImg
+                  propertyImages={propertyImages}
+                  setPropertyImages={setPropertyImages}
+                  projectimgerror={projectimgerror}
+                  setProjectimgerror={setProjectimgerror}
+                />
               </Box>
-
             </Grid>
-            <Grid item xs={12} sm={6} className="amenities-container">
-              <div className="amenities-grid">
-                {amenitiesData.map((category) => (
-                  <div key={category.category} className="amenities-group">
-                    <h4 className="amenities-title">{category.category}: </h4>
-                    <div className="amenities-options">
-                      {category.subcategories.map((amenity) => (
-                        <label key={amenity.AmenitiesID} className="amenities-option">
-                          <input
-                            type="checkbox"
-                            name="Amenities"
-                            value={amenity.Amenities}
-                            checked={values.Amenities?.includes(amenity.Amenities) ?? false}
-                            onChange={(e) => handleAmenitiesChange(e, setFieldValue, values, amenity.Amenities)}
-                          />
-                          {amenity.Amenities}
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </Grid>
-    
-                  <Grid item xs={12} sm={6} className="project-right2-container">
-                  <AddProjectImg 
-                    propertyImages={propertyImages} 
-                    setPropertyImages={setPropertyImages}   
-                    projectimgerror={projectimgerror}
-                    setProjectimgerror={setProjectimgerror}
-                     />
-                  </Grid>
-          
-            <Grid className='addproject-container'>
+            <Box className="projectsubmit-btn">
               <Button variant="contained" type="submit" className="addproject-btn">
                 {loading || isSubmitting ? <CircularProgress size={24} /> : 'Submit Project'}
-              </Button>
-            </Grid>
+             </Button>
+            </Box>
 
           </Form>)
 
         }}
       </Formik>
-
-
 
     </div>
   );

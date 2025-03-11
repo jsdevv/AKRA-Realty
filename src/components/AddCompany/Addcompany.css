@@ -42,7 +42,7 @@
   
   
   /* Image Upload Section */
-  .image-upload-box {
+  /* .image-upload-box {
     padding: 10px;
     border: 2px dashed #ccc;
     border-radius: 5px;
@@ -52,8 +52,8 @@
   .image-upload-input {
     display: none;
   }
-  
-  .image-upload-box input[type="file"] {
+   */
+  /* .image-upload-box input[type="file"] {
     display: block;
     margin-bottom: 10px;
   }
@@ -69,15 +69,15 @@
     position: relative;
     width: 80px;
     height: 80px;
-  }
+  } */
   
-  .image-preview-item img {
+  /* .image-preview-item img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     border-radius: 5px;
   }
-  
+   */
   .companyremove-icon {
     position: absolute;
     font-size: 12px;
