@@ -2,64 +2,85 @@ import React, { useEffect, useRef, useState } from "react";
 import { APIProvider, Map, Marker } from "@vis.gl/react-google-maps";
 import "./AddProjectmap.css";
 
+const DEFAULT_CENTER = { lat: 17.4431794, lng: 78.461534 };
+const DEFAULT_ZOOM = 10;
+const INTERACTION_ZOOM = 14; // Zoom in on interactions
+
 const AddProjectmap = ({ formData, setFieldValue, setTouched, inputRef, geolocation, setGeolocation }) => {
-  const mapRef = useRef(null);
   const [mapInstance, setMapInstance] = useState(null);
   const autocompleteRef = useRef(null);
+  const localInputRef = useRef(null);
   const API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
-  // Update Marker and Map Center based on FormData
   useEffect(() => {
     if (formData?.Latitude && formData?.Longitude) {
       const lat = parseFloat(formData.Latitude);
       const lng = parseFloat(formData.Longitude);
       const newLocation = { lat, lng };
 
-      setGeolocation(newLocation);
-
-      if (mapInstance && formData?.Latitude && formData?.Longitude) {
-        mapInstance.panTo(newLocation);
+      if (geolocation.lat !== lat || geolocation.lng !== lng) {
+        setGeolocation(newLocation);
+        if (mapInstance) {
+          mapInstance.panTo(newLocation);
+          mapInstance.setZoom(INTERACTION_ZOOM); // Zoom in when form data is set
+        }
       }
-      
+    } else {
+      setGeolocation(DEFAULT_CENTER);
     }
-  }, [formData.Latitude, formData.Longitude, mapInstance]);
+  }, [formData.Latitude, formData.Longitude]);
 
   useEffect(() => {
-    if (window.google && inputRef.current) {
-      autocompleteRef.current = new window.google.maps.places.Autocomplete(inputRef.current);
+    const inputElement = inputRef?.current || localInputRef.current;
+
+    if (window.google && inputElement) {
+      autocompleteRef.current = new window.google.maps.places.Autocomplete(inputElement);
       autocompleteRef.current.addListener("place_changed", handlePlaceSelected);
     }
-  }, [inputRef]);
+
+    return () => {
+      if (autocompleteRef.current) {
+        window.google.maps.event.clearInstanceListeners(autocompleteRef.current);
+        autocompleteRef.current = null;
+      }
+    };
+  }, []);
 
   const updateLocationFields = (lat, lng) => {
     setFieldValue("Latitude", lat.toString());
     setFieldValue("Longitude", lng.toString());
-    setTouched("Latitude", true);
-    setTouched("Longitude", true);
+    setTouched?.("Latitude", true);
+    setTouched?.("Longitude", true);
   };
 
   const handleMapClick = (event) => {
-    if (event.detail?.placeId) {
-      event.stop();
-      return;
-    }
-
     const latLng = event.detail?.latLng;
     if (latLng) {
-      const { lat, lng } = latLng;
+      const lat = latLng.lat;
+      const lng = latLng.lng;
       const newLocation = { lat, lng };
 
       setGeolocation(newLocation);
       updateLocationFields(lat, lng);
-
       if (mapInstance) {
         mapInstance.panTo(newLocation);
+        mapInstance.setZoom(INTERACTION_ZOOM); // Zoom in on click
       }
+
+      // Reverse Geocode to Update Input Field
+      const geocoder = new window.google.maps.Geocoder();
+      geocoder.geocode({ location: newLocation }, (results, status) => {
+        if (status === "OK" && results[0]) {
+          if (inputRef?.current || localInputRef.current) {
+            (inputRef?.current || localInputRef.current).value = results[0].formatted_address;
+          }
+        }
+      });
     }
   };
 
   const handlePlaceSelected = () => {
-    const place = autocompleteRef.current.getPlace();
+    const place = autocompleteRef.current?.getPlace();
     if (place?.geometry?.location) {
       const lat = place.geometry.location.lat();
       const lng = place.geometry.location.lng();
@@ -67,9 +88,9 @@ const AddProjectmap = ({ formData, setFieldValue, setTouched, inputRef, geolocat
 
       setGeolocation(newLocation);
       updateLocationFields(lat, lng);
-
       if (mapInstance) {
         mapInstance.panTo(newLocation);
+        mapInstance.setZoom(INTERACTION_ZOOM); // Zoom in on search selection
       }
     }
   };
@@ -77,19 +98,20 @@ const AddProjectmap = ({ formData, setFieldValue, setTouched, inputRef, geolocat
   return (
     <div className="geolocation-container">
       <APIProvider apiKey={API_KEY}>
-        {/* Search Input for Places */}
         <div className="search-box">
-          <input type="text" ref={inputRef} placeholder="Search for places..." className="search-input" />
+          <input type="text" ref={inputRef || localInputRef} placeholder="Search for places..." className="search-input" />
         </div>
 
-        {/* Map with Marker */}
         <Map
-          center={geolocation} // Set the center to geolocation
+          center={geolocation}
           onClick={handleMapClick}
-          onLoad={(map) => setMapInstance(map)}
+          onLoad={(map) => {
+            setMapInstance(map);
+            map.setZoom(DEFAULT_ZOOM); // Initial zoom level
+          }}
           style={{ width: "100%", height: "360px" }}
-          zoom={12}
-          gestureHandling="greedy"
+          zoom={DEFAULT_ZOOM}
+           gestureHandling="greedy"
           options={{
             mapTypeControl: true,
             zoomControl: true,

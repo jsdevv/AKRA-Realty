@@ -45,6 +45,25 @@
   flex-wrap: wrap;
   gap: 8px;
 }
+.listing-container{
+  display: flex;
+  justify-content: space-between;
+}
+
+.listing-container .listcount{
+  position: relative;
+  top:6px;
+  font-weight: 500;
+  height: 16px;
+  background-color: #e0e0e0;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+.listing-container .listcount:hover{
+  background-color: #2A3650;
+  color: white;
+}
+
 .slide-wrapper{
     /* width: 275px; */
     padding: 0;

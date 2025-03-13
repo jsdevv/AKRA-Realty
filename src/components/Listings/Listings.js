@@ -24,7 +24,6 @@ const Listings = () => {
   const { favorites, toggleFavorite } = useFavorites();
   const [showModal, setShowModal] = useState(false);
   const [isFiltering, setIsFiltering] = useState(false);
-  console.log(isFiltering,"filter");
   const dispatch = useDispatch();
   const {
     properties,
@@ -76,6 +75,7 @@ const Listings = () => {
 
   const handlePropertyClick = useCallback(
     (property) => {
+      console.log(property, "selproperty");
       dispatch(setSelectedProperty(property));
       setShowModal(true);
     },
@@ -113,6 +113,7 @@ const Listings = () => {
     () => Object.values(groupedProperties).slice(offset, offset + itemsPerPage),
     [groupedProperties, offset, itemsPerPage]
   );
+
   const convertToNumber = (value) => {
     let num = parseFloat(value);
     if (value.includes("Cr")) {
@@ -144,7 +145,7 @@ const Listings = () => {
               available
             </p>
           </div>
-          {isFiltering ? ( 
+          {isFiltering ? (
             <div className="spinnerContainer">
               <MoonLoader color="#3498db" size={70} />
             </div>
@@ -152,11 +153,12 @@ const Listings = () => {
             <div>
               <div className="propertyList">
                 {currentItems.map((property) => {
+
                   const propertyUnit = property.UnitTypeDetails[0];
-          
+
                   const propertyUrls = propertyUnit.ProjectImageUrls ?? propertyUnit.PropertyImageUrls;
-                     const imageUrls = propertyUrls? propertyUrls.split(',').map(url => url.trim()) : [];
-     
+                  const imageUrls = propertyUrls ? propertyUrls.split(',').map(url => url.trim()) : [];
+
                   const imagesToShow = imageUrls.length > 0 ? imageUrls : [defaultimg1, defaultimg2];
                   const propertyName = propertyUnit.PropertyName;
                   const minMax = property.Amount.reduce(
@@ -198,9 +200,9 @@ const Listings = () => {
                     }
                   );
 
-                  const propertyAmount = minMax.min.value !== minMax.max.value ? `₹ ${minMax.min.original} - ₹ ${minMax.max.original}`: `₹ ${minMax.min.original}`;
-                  const propertyBathrooms = minMaxBedrooms.min.value !== minMaxBedrooms.max.value ? `${minMaxBedrooms.min.original} - ${minMaxBedrooms.max.original} BHK`: `${minMaxBedrooms.min.original} BHK`;
-                  const propertySqft = minMaxSqft.min.value !== minMaxSqft.max.value ? `${minMaxSqft.min.value} - ${minMaxSqft.max.original}`: `${minMaxSqft.min.original}`;
+                  const propertyAmount = minMax.min.value !== minMax.max.value ? `₹ ${minMax.min.original} - ₹ ${minMax.max.original}` : `₹ ${minMax.min.original}`;
+                  const propertyBathrooms = minMaxBedrooms.min.value !== minMaxBedrooms.max.value ? `${minMaxBedrooms.min.original} - ${minMaxBedrooms.max.original} BHK` : `${minMaxBedrooms.min.original} BHK`;
+                  const propertySqft = minMaxSqft.min.value !== minMaxSqft.max.value ? `${minMaxSqft.min.value} - ${minMaxSqft.max.original}` : `${minMaxSqft.min.original}`;
                   const settings = {
                     // dots: true,
                     infinite: true,
@@ -209,8 +211,8 @@ const Listings = () => {
                     slidesToScroll: 1,
                     arrows: true,
                   };
-                  const propertyDetails = [propertyUnit.PropertyType, propertyBathrooms, propertySqft].filter(x=>x).join(" | ");
-                  const line3 = propertyUnit.PropertyCardLine3.split('|').map(x=>x.trim()).filter(x=>x).join(" | ");
+                  const propertyDetails = [propertyUnit.PropertyType, propertyBathrooms, propertySqft].filter(x => x).join(" | ");
+                  const line3 = propertyUnit.PropertyCardLine3.split('|').map(x => x.trim()).filter(x => x).join(" | ");
                   return (
                     <div
                       key={propertyUnit.PropertyID}
@@ -218,11 +220,10 @@ const Listings = () => {
                       tabIndex="0"
                       aria-label={`View details of ${propertyName}`}
                     >
-                      {/* <MdOutlineFavorite
+                      {/* Favorite Icon Added Above Image */}
+                      <MdOutlineFavorite
                         className={
-                          favorites.some(
-                            (fav) => fav.PropertyID === property.PropertyID
-                          )
+                          favorites.some((fav) => fav.PropertyID === property.PropertyID)
                             ? "favoriteIcon favorited"
                             : "favoriteIcon"
                         }
@@ -235,19 +236,17 @@ const Listings = () => {
                           (fav) => fav.PropertyID === property.PropertyID
                         )}
                         aria-label={
-                          favorites.some(
-                            (fav) => fav.PropertyID === property.PropertyID
-                          )
+                          favorites.some((fav) => fav.PropertyID === property.PropertyID)
                             ? "Remove from favorites"
                             : "Add to favorites"
                         }
-                      /> */}
+                      />
                       <div className="propertyImages">
                         <div className="slide-wrapper">
                           <Slider {...settings}>
                             {imagesToShow.map((url, index) => (
-                              <div key={index} 
-                              onClick={() => handlePropertymodalopen(propertyUnit)}>
+                              <div key={index}
+                                onClick={() => handlePropertymodalopen(propertyUnit)}>
                                 <img
                                   src={url}
                                   alt={`Slide ${index + 1}`}
@@ -261,17 +260,21 @@ const Listings = () => {
                                 />
                               </div>
                             ))}
-                            
+
                           </Slider>
                         </div>
                       </div>
-                      <div className="propertyDetails" 
-                      onClick={() => handlePropertymodalopen(propertyUnit)}>
-                        <h3>
-                          {propertyName}
-                          <br/>
-                          {propertyAmount}
-                        </h3>
+                      <div className="propertyDetails"
+                        onClick={() => handlePropertymodalopen(propertyUnit)}>
+                        <div className="listing-container">
+                          <h3>
+                            {propertyName}
+                            <br />
+                            {propertyAmount} {" "} {" "}
+                          </h3>
+                          <span className="listcount">{property.PropertyCount} Units</span>
+                        </div>
+
                         <p>{propertyDetails} {line3 && <><br />{line3}</>}</p>
                       </div>
                     </div>
@@ -287,7 +290,7 @@ const Listings = () => {
           )}
           {showModal && selectedProperty && (
             <ListingModal
-            propertyType="Project"
+              propertyType="Project"
               selectedProperty={selectedProperty}
               onClose={handleCloseModal}
               bearerToken={bearerToken}

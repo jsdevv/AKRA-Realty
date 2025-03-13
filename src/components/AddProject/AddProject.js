@@ -3,7 +3,7 @@ import { TextField, Button, Grid, Box, Autocomplete, CircularProgress } from '@m
 import AddProjectmap from './AddProjectmap';
 import { Form, Formik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchcompanynameData } from '../../Redux/Slices/addListingsSlice';
+import { fetchcompanynameData, fetchprojectnameData } from '../../Redux/Slices/addListingsSlice';
 import { fetchPropertyHomeTypeThunk, fetchPropertyStatusOptionsThunk } from '../../Redux/Slices/propertySlice';
 import { fetchAddProject, uploadprojectImages } from '../../API/api';
 import * as Yup from 'yup';
@@ -13,14 +13,17 @@ import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import './AddProject.css';
 
+const DEFAULT_CENTER = { lat: 17.385, lng: 78.4867 };
+
 const AddProject = () => {
   const bearerToken = useSelector((state) => state.auth.bearerToken);
   const companyData = useSelector((state) => state.listings.companyData) || [];
+  const projectData = useSelector((state) => state.listings.projectData) || [];
   const propertyTypes = useSelector((state) => state.properties.homeTypeOptions) || [];
   const propertyStatus = useSelector((state) => state.properties.propertyStatusOptions) || [];
   const projectStatusOptions = ['Ongoing', 'Completed'];
   const dispatch = useDispatch();
-  const [geolocation, setGeolocation] = useState({ lat: 17.4119, lng: 78.4677 });
+  const [geolocation, setGeolocation] = useState(DEFAULT_CENTER);
   const inputRef = useRef(null);
 
   const [loading, setLoading] = useState(false);
@@ -62,10 +65,22 @@ const AddProject = () => {
   const consecutiveDigitsRegex = /(.)\1{5,}/;
   const indianZipRegex = /^[1-9][0-9]{5}$/;
 
+  
+  useEffect(() => {
+    if (bearerToken) {
+      dispatch(fetchprojectnameData(bearerToken)); // Fetch projects only when a company is selected
+    }
+  }, [bearerToken, dispatch]);
+
+
   const validationSchema = Yup.object().shape({
     companyName: Yup.string().required("Company Name is required"),
     CompanyID: Yup.string().required("Company ID is required"),
-    ProjectName: Yup.string().required("Project Name is required"),
+    ProjectName: Yup.string()
+    .required("Project Name is required")
+    .test("unique-project", "Project name already exists", (value) => {
+      return !projectData.some((project) => project.ProjectName.toLowerCase() === value?.toLowerCase());
+    }),
     PropertyType: Yup.string().required("Property Type is required"),
     PropertyTypeID: Yup.string().required("Property Type ID is required"),
     ProjectStatus: Yup.string().required("Project Status is required"),
@@ -580,6 +595,61 @@ const AddProject = () => {
 
               <Grid container spacing={2} sx={{ mt: 1 }}>
                 <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    placeholder="Locality *"
+                    name="Locality"
+                    className='autocomplete-projectroot'
+                    value={values.Locality}
+                    onChange={handleChange}
+
+                    sx={{ '& .MuiInputLabel-root': { fontSize: '0.875rem' } }}
+                    error={touched.Locality && Boolean(errors.Locality)}
+                    helperText={touched.Locality && errors.Locality}
+                    InputProps={{
+                      sx: {
+                        padding: '5px', // Reduces padding inside the input
+                      },
+                    }}
+                    inputProps={{
+                      style: {
+                        padding: '8px', // Customizes the inner input text padding
+                      },
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+
+                  <TextField
+                    fullWidth
+                    placeholder="Sub Locality *"
+                    name="subLocality"
+                    className='autocomplete-projectroot'
+                    value={values.subLocality}
+                    onChange={handleChange}
+                    error={touched.subLocality && Boolean(errors.subLocality)}
+                    helperText={touched.subLocality && errors.subLocality}
+                    sx={{ '& .MuiInputLabel-root': { fontSize: '0.875rem' } }}
+                    InputProps={{
+                      sx: {
+                        padding: '5px', // Reduces padding inside the input
+                      },
+                    }}
+                    inputProps={{
+                      style: {
+                        padding: '8px', // Customizes the inner input text padding
+                      },
+                    }}
+                  />
+                </Grid>
+              </Grid>
+
+            </Grid>
+
+            {/* Right Container */}
+            <Grid item xs={12} sm={6} className="project-right-container">
+            <Grid container spacing={2} sx={{ mt: 1 }}>
+                <Grid item xs={12} sm={6}>
 
                   <TextField
                     fullWidth
@@ -638,65 +708,8 @@ const AddProject = () => {
                     }}
                   />
                 </Grid>
-
               </Grid>
-
-            </Grid>
-
-            {/* Right Container */}
-            <Grid item xs={12} sm={6} className="project-right-container">
-
-              <Grid container spacing={2} sx={{ mt: 1 }}>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    placeholder="Locality *"
-                    name="Locality"
-                    className='autocomplete-projectroot'
-                    value={values.Locality}
-                    onChange={handleChange}
-
-                    sx={{ '& .MuiInputLabel-root': { fontSize: '0.875rem' } }}
-                    error={touched.Locality && Boolean(errors.Locality)}
-                    helperText={touched.Locality && errors.Locality}
-                    InputProps={{
-                      sx: {
-                        padding: '5px', // Reduces padding inside the input
-                      },
-                    }}
-                    inputProps={{
-                      style: {
-                        padding: '8px', // Customizes the inner input text padding
-                      },
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-
-                  <TextField
-                    fullWidth
-                    placeholder="Sub Locality *"
-                    name="subLocality"
-                    className='autocomplete-projectroot'
-                    value={values.subLocality}
-                    onChange={handleChange}
-                    error={touched.subLocality && Boolean(errors.subLocality)}
-                    helperText={touched.subLocality && errors.subLocality}
-                    sx={{ '& .MuiInputLabel-root': { fontSize: '0.875rem' } }}
-                    InputProps={{
-                      sx: {
-                        padding: '5px', // Reduces padding inside the input
-                      },
-                    }}
-                    inputProps={{
-                      style: {
-                        padding: '8px', // Customizes the inner input text padding
-                      },
-                    }}
-                  />
-                </Grid>
-
-              </Grid>
+          
               <TextField sx={{ mt: 2 }}
                 fullWidth
                 label="Description"

@@ -15,9 +15,9 @@ import {
 import { fetchPropertyViews, fetchProjectViews } from "../../utils/fetchPropertyViews";
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
-import defaultimg from "../../images/Apartment103.jpeg"
+import defaultimg1 from "../../images/Apartment102.jpeg"
+import defaultimg2 from "../../images/Apartment103.jpeg"
 import Slider from "react-slick";
-
 
 const statusStyles = {
   "For Sale": { bgColor: "#A3000B", color: "white" },
@@ -99,7 +99,6 @@ const Listingsmap = ({ handlePropertyClick, bearerToken }) => {
       
     });
  
-    // console.log(position,"position");
    
     mapRef.current = map;
 
@@ -232,6 +231,8 @@ const Listingsmap = ({ handlePropertyClick, bearerToken }) => {
         infoWindowRef.current.close();
       }
 
+      console.log(property,"clickedd");
+
       // Construct the HTML content using template literals
       const imageUrls = property.PropertyImageUrls
       ? property.PropertyImageUrls.split(',').map(url => url.trim())
@@ -240,7 +241,7 @@ const Listingsmap = ({ handlePropertyClick, bearerToken }) => {
         : [];
     
 
-const imagesToShow = imageUrls.length > 0 ? imageUrls : [defaultimg];
+const imagesToShow = imageUrls.length > 0 ? imageUrls : [defaultimg1, defaultimg2];
 
       if(!relatedUnits){
         relatedUnits = {
@@ -273,7 +274,7 @@ const imagesToShow = imageUrls.length > 0 ? imageUrls : [defaultimg];
     const propertyAmount = minMax.min.value !== minMax.max.value ? `₹ ${minMax.min.original} - ₹ ${minMax.max.original}`: `₹ ${property.Amount}`;
     const propertyName = relatedUnits.Amount.length > 1 ? property.PropertyName.split("(")[0] : property.PropertyName;
 
-    const aditionalInfo = relatedUnits.Amount.length > 1 ? '': `| ${property.PropertyBedrooms} | ${property.SqFt}`
+    const aditionalInfo = relatedUnits.Amount.length > 1 ? '': `| ${property.SqFt}`
       const infoWindowContent = `
       <div class="mappopup-content" data-property-id="${property.PropertyID}">
        <button class="mappopup-close-button">X</button>
