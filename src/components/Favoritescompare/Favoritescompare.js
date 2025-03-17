@@ -1,8 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import { FaTimes, FaShareAlt } from 'react-icons/fa';
 import './Favoritescompare.css';
-import ShareProperty from '../../ShareProperty/ShareProperty';
-import defaultimg from "../../../images/Apartment102.jpeg"
+import ShareProperty from '../ShareProperty/ShareProperty';
+import defaultimg from "../../images/Apartment102.jpeg"
 
 const Favoritescompare = ({ properties, onClose }) => {
   console.log(properties,"table");

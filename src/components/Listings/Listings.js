@@ -8,8 +8,6 @@ import {
   fetchPremiumListingsThunk,
   setListingFilters,
 } from "../../Redux/Slices/propertySlice";
-import { MdOutlineFavorite } from "react-icons/md";
-import { useFavorites } from "../../context/FavoritesContext";
 import Pagination from "../Pagination/Pagination";
 import { MoonLoader } from "react-spinners";
 import ListingModal from "../ListingModal/ListingModal";
@@ -18,10 +16,10 @@ import Slider from "react-slick/lib/slider";
 import defaultimg1 from "../../images/Apartment102.jpeg"
 import defaultimg2 from "../../images/Apartment103.jpeg"
 import "./Listings.css";
+import FavoriteIcon from "../FavoriteIcon/FavoriteIcon";
 
 const Listings = () => {
   const bearerToken = useSelector((state) => state.auth.bearerToken);
-  const { favorites, toggleFavorite } = useFavorites();
   const [showModal, setShowModal] = useState(false);
   const [isFiltering, setIsFiltering] = useState(false);
   const dispatch = useDispatch();
@@ -75,7 +73,6 @@ const Listings = () => {
 
   const handlePropertyClick = useCallback(
     (property) => {
-      console.log(property, "selproperty");
       dispatch(setSelectedProperty(property));
       setShowModal(true);
     },
@@ -221,26 +218,10 @@ const Listings = () => {
                       aria-label={`View details of ${propertyName}`}
                     >
                       {/* Favorite Icon Added Above Image */}
-                      <MdOutlineFavorite
-                        className={
-                          favorites.some((fav) => fav.PropertyID === property.PropertyID)
-                            ? "favoriteIcon favorited"
-                            : "favoriteIcon"
-                        }
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleFavorite(property);
-                        }}
-                        role="button"
-                        aria-pressed={favorites.some(
-                          (fav) => fav.PropertyID === property.PropertyID
-                        )}
-                        aria-label={
-                          favorites.some((fav) => fav.PropertyID === property.PropertyID)
-                            ? "Remove from favorites"
-                            : "Add to favorites"
-                        }
-                      />
+                      <FavoriteIcon
+                       groupproperty={property}
+                       PropertyCount={property.PropertyCount} 
+                        />
                       <div className="propertyImages">
                         <div className="slide-wrapper">
                           <Slider {...settings}>

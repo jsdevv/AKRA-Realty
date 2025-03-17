@@ -3,7 +3,6 @@ import { Route, Routes, Navigate, useLocation, useNavigate } from 'react-router-
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { FavoritesProvider } from './context/FavoritesContext';
 import LoginForm from "../src/pages/Authpage/Login/LoginForm"
-import Favorites from './components/Favorites/Favorites';
 import NavbarTop from './pages/Navbar/NavbarTop/NavbarTop';
 import Mainpage from './pages/Landingpage/Mainpage';
 import Agent from './pages/Agent/Agent';
@@ -21,12 +20,12 @@ import ForgotPassword from './pages/Authpage/ForgotPassword/ForgotPassword';
 import RegisterForm from './pages/Authpage/RegisterForm/RegisterForm';
 import ResetPasswordForm from './pages/Authpage/ResetPasswordForm/ResetPasswordForm';
 import AddListings from './components/AddListings/AddListings';
-import AgentTable from './components/AgentTable/AgentTable';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Owner from './components/Owner/Owner';
 import AddProject from './components/AddProject/AddProject';
 import Addcompany from './components/AddCompany/AddCompany';
 import Videos from './pages/Videos/Videos';
+import Favorites from './pages/Favorites/Favorites';
 
 
 

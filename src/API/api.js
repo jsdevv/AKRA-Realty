@@ -2,6 +2,8 @@ const API_URL = 'https://imsdev.akrais.com:8444/AKRARealityAPI/api/data';
 
 const AddData_API = 'https://imsdev.akrais.com:8444/AKRARealityAPI/api/adddata';
 
+const DeleteData_API = 'https://imsdev.akrais.com:8444/AKRARealityAPI/api/deletedata';
+
 const EditData_API = 'https://imsdev.akrais.com:8444/AKRARealityAPI/api/updatedata';
 
 
@@ -226,6 +228,120 @@ export const fetchPropertiesDetails = async (token, propertyID) => {
     throw error;
   }
 };
+
+export const fetchAddpropertyFavorties  = async (bearerToken, payload) => {
+  try {
+    const response = await fetch(AddData_API, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${bearerToken}`,
+      },
+      body: JSON.stringify({
+        RequestParamType: 'AddFavourites',
+        json: payload,
+      }),
+    });
+
+    if (!response.ok) {
+      // If the response is not successful, throw an error with the response status
+      const errorMessage = await response.text();
+      throw new Error(errorMessage || 'Failed to add favorites. Please try again.');
+    }
+
+    const data = await response.json();
+    return data; // Return the response data
+
+  } catch (error) {
+    console.error('Error in set alert:', error);
+    throw new Error(error.message || 'Failed to add alert.');
+  }
+};
+
+
+export const fetchDeleteFavorties  = async (bearerToken, payload) => {
+  try {
+    const response = await fetch(DeleteData_API, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${bearerToken}`,
+      },
+      body: JSON.stringify({
+        RequestParamType: 'DeleteProjectFavorites',
+        json: payload,
+      }),
+    });
+
+    if (!response.ok) {
+      // If the response is not successful, throw an error with the response status
+      const errorMessage = await response.text();
+      throw new Error(errorMessage || 'Failed to add favorites. Please try again.');
+    }
+
+    const data = await response.json();
+    return data; // Return the response data
+
+  } catch (error) {
+    console.error('Error in set alert:', error);
+    throw new Error(error.message || 'Failed to add alert.');
+  }
+};
+
+export const fetchFavoritesAPI = async (token) => {
+  try {
+      const response = await fetch(API_URL, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+              RequestParamType: 'GetProjectFavourites'
+          })
+      });
+
+      if (!response.ok) {
+          throw new Error('Failed to fetch data');
+      }
+
+      const data = await response.json();
+      return data; // Assuming data is an array of objects with PropertyStatus field
+  } catch (error) {
+      console.error('Error fetching property status options:', error);
+      throw error; // Rethrow the error to handle it in the component
+  }
+};
+
+export const fetchAddprojectFavorties  = async (bearerToken, payload) => {
+  try {
+    const response = await fetch(AddData_API, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${bearerToken}`,
+      },
+      body: JSON.stringify({
+        RequestParamType: 'AddProjectFavorites',
+        json: payload,
+      }),
+    });
+
+    if (!response.ok) {
+      // If the response is not successful, throw an error with the response status
+      const errorMessage = await response.text();
+      throw new Error(errorMessage || 'Failed to add favorites. Please try again.');
+    }
+
+    const data = await response.json();
+    return data; // Return the response data
+
+  } catch (error) {
+    console.error('Error in set alert:', error);
+    throw new Error(error.message || 'Failed to add alert.');
+  }
+};
+
 
 export const fetchDashboardPropertyDetails = async (bearerToken) => {
   try {

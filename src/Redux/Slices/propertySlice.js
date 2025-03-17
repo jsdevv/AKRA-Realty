@@ -6,7 +6,8 @@ import { fetchListings,
          fetchPremiumListings, 
          fetchPropertyView,  
          fetchProjectView,
-         fetchPropertyAlertAPI          
+         fetchPropertyAlertAPI,          
+         fetchFavoritesAPI
         } from '../../API/api';
   import { toast } from "react-toastify";
   import "react-toastify/dist/ReactToastify.css"; 
@@ -122,6 +123,19 @@ function isPointInBounds(point, bounds) {
   );
 }
 
+// Async thunk for fetching favorites
+export const fetchFavorites = createAsyncThunk(
+  'favorites/fetchFavorites',
+  async (bearerToken, { rejectWithValue }) => {
+      try {
+          const data = await fetchFavoritesAPI(bearerToken);
+          return data; // Ensure data is returned as an array
+      } catch (error) {
+          return rejectWithValue(error.message);
+      }
+  }
+);
+
 const propertySlice = createSlice({
   name: 'properties',
   initialState: {
@@ -149,6 +163,7 @@ const propertySlice = createSlice({
     mapPolygonBounds: null,
     selectedAgentProperty: null,
     selectedCenterOfMap: null,
+    favoriteitems: [],
   },
   reducers: {
     setSelectedBuilder: (state, action) => {
@@ -388,7 +403,20 @@ const propertySlice = createSlice({
       .addCase(sendProjectView.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
-      });
+      })
+      .addCase(fetchFavorites.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+    })
+    .addCase(fetchFavorites.fulfilled, (state, action) => {
+        state.loading = false;
+        console.log("Fetched favoriteitems:", action.payload);
+        state.favoriteitems = action.payload;
+    })
+    .addCase(fetchFavorites.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+    });
   },
 });
 

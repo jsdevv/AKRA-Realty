@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import Favoritescompare from '../Favorites/Favoritescompare/Favoritescompare';
+import Favoritescompare from '../Favoritescompare/Favoritescompare';
 import { useFavorites } from '../../context/FavoritesContext';
 import { FiTrash } from 'react-icons/fi';
 import { FaMapMarkerAlt, FaRupeeSign, FaStar } from 'react-icons/fa'; // Star icon

@@ -30,6 +30,8 @@ const AddListings = () => {
   const dispatch = useDispatch();
   const { status, error } = useSelector((state) => state.listings);
   const [propertyImages, setPropertyImages] = useState([]); 
+  const [isFormResetting, setIsFormResetting] = useState(false);
+  const [showImageCountError, setShowImageCountError] = useState(false);
 
   const initialValues = {
     CompanyID: EditPropertyData.CompanyID  ||  '95',
@@ -74,6 +76,13 @@ const AddListings = () => {
     PropertyAmenities: EditPropertyData.PropertyAmenities || ''
   };
 
+  const resetFormToDefault = () => {
+    setIsFormResetting(true);
+    setTimeout(() => {
+      setIsFormResetting(false);
+    })
+  }
+
   useEffect(() => {
     // If you need to reset the form when the EditPropertyData changes
     if (EditPropertyData && Object.keys(EditPropertyData).length > 0) {
@@ -95,7 +104,8 @@ const AddListings = () => {
     const errors = await validateForm();
 
     if (currentStep === 2 && propertyImages.length < 2) {
-      alert("Please upload at least two images.");
+      //alert("Please upload at least two images.");
+      setShowImageCountError(true);
       return;
     }
   
@@ -119,7 +129,14 @@ const AddListings = () => {
     }
   };
 
-  const handleStepClick = (stepNumber) => {
+  const handleStepClick = (stepNumber, errors) => {
+    if(currentStep === 1 && errors && Object.keys(errors).length > 0) {
+      return;
+    }
+    if(currentStep === 2 && stepNumber > 2 && propertyImages.length < 2) {
+      setShowImageCountError(true);
+      return;
+    }
     setCurrentStep(stepNumber);
   };
 
@@ -162,6 +179,7 @@ const AddListings = () => {
         resetForm();
         setPropertyImages([]); 
         setCurrentStep(1);
+        resetFormToDefault();
         await localforage.removeItem('uploadedImages');
       } else {
         throw new Error("Property ID not found in the response.");
@@ -178,11 +196,21 @@ const AddListings = () => {
 
   const handleClosePopup = () => {
     setShowPopup(false);
+    setShowImageCountError(false);
   };
 
   return (
     <div className="add-listings-container">
-      <div className="header-row">
+      
+      <Formik
+        initialValues={initialValues}
+        validationSchema={getValidationSchema()}
+        onSubmit={handleSubmit}
+        enableReinitialize
+      >
+        {({ values, handleChange,  errors,touched,handleBlur,validateForm , resetForm }) => (
+          <>
+          <div className="header-row">
         {/* <h4>Add new property</h4> */}
         <div className="steps-header">
           {stepNames.map((name, index) => {
@@ -198,7 +226,7 @@ const AddListings = () => {
               <div
                 key={stepNumber}
                 className={stepClass}
-                onClick={() => handleStepClick(stepNumber)}
+                onClick={() => handleStepClick(stepNumber, errors)}
               >
                 {currentStep > stepNumber ? (
                   <FaCheck className="check-icon" />
@@ -211,21 +239,16 @@ const AddListings = () => {
           })}
         </div>
       </div>
-      <Formik
-        initialValues={initialValues}
-        validationSchema={getValidationSchema()}
-        onSubmit={handleSubmit}
-        enableReinitialize
-      >
-        {({ values, handleChange,  errors,touched,handleBlur,validateForm , resetForm }) => (
-
-          <Form>
+      <div>
+          { !isFormResetting && <Form>
             {currentStep === 1 && <Stepper1 bearerToken={bearerToken} errors={errors} touched={touched} handleBlur={handleBlur} formData={values} handleChange={handleChange} />}
-            {<div className={ currentStep === 2 ? '' : 'hide-media-step'}><Stepper2 bearerToken={bearerToken}  errors={errors}    onImageSelected={onImageSelected} /></div> }
+            {<div className={ currentStep === 2 ? '' : 'hide-media-step'}><Stepper2 bearerToken={bearerToken}  errors={errors} onImageSelected={onImageSelected} /></div> }
             {currentStep === 3 && <Stepper3 bearerToken={bearerToken} formData={values}  handleChange={handleChange} errors={errors} touched={touched} handleBlur={handleBlur} />}
             {currentStep === 4 && <Stepper4 bearerToken={bearerToken} formData={values} handleChange={handleChange} errors={errors} touched={touched} handleBlur={handleBlur} />}
      
-            <div className="form-navigation">
+            
+          </Form>}
+          <div className="form-navigation">
               {currentStep > 1 && (
                 <button type="button" className="prev-button" onClick={handlePrev}>
                   <GoArrowLeft /> Prev Step
@@ -236,12 +259,19 @@ const AddListings = () => {
                   Next Step <GoArrowRight />
                 </button>
               ) : (
-                <button type="submit" className="submit-button" disabled={status === 'loading'}>
+                <button type="button" className="submit-button" disabled={status === 'loading'} 
+                onClick={() => {
+                  validateForm().then((errors) => {
+                    if (Object.keys(errors).length === 0) {
+                      handleSubmit(values, { resetForm });
+                    }
+                  });
+                }}>
                   {status === 'loading' ? 'Submitting...' : 'Submit'}
                 </button>
               )}
             </div>
-          </Form>
+          </div></>
         )}
       </Formik>
 
@@ -251,6 +281,17 @@ const AddListings = () => {
           <div className="popup-content">
             <h3>Property Added Successfully!</h3>
             <p>Your listing has been successfully added. You can now view it in your listings.</p>
+            <button className="close-button" onClick={handleClosePopup}>
+              <IoClose /> Close
+            </button>
+          </div>
+        </div>
+      )}
+
+    {showImageCountError && (
+        <div className="popup-overlay show">
+          <div className="popup-content">
+            <p>Please upload at least two images.</p>
             <button className="close-button" onClick={handleClosePopup}>
               <IoClose /> Close
             </button>

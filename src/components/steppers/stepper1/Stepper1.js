@@ -49,6 +49,19 @@ const Stepper1 = () => {
   }, [bearerToken, dispatch, propertyTypes, propertyStatus]);
 
   useEffect(() => {
+    if(propertyTypes.length > 0){
+      setFieldValue("PropertyType", propertyTypes[0].label, false);
+      setFieldValue("PropertyTypeID", propertyTypes[0].value, false);
+    }
+  }, [propertyTypes, setFieldValue]);
+
+  useEffect(() => {
+    if(propertyStatus.length > 0){
+      setFieldValue("PropertyStatus", propertyStatus[0].value, false);
+    }
+  }, [propertyStatus, setFieldValue]);
+
+  useEffect(() => {
     if (bearerToken && companyData.length === 0) {
       dispatch(fetchcompanynameData(bearerToken)); // Fetch only when empty
     }
@@ -63,6 +76,7 @@ const Stepper1 = () => {
 
   const handleCompanyChange = (event, newValue) => {
     setSelectedCompany(newValue);
+    clearPropertyFields(['PropertyCity', 'PropertyAddress1', 'PropertyZipCode', 'PropertyLatitude', 'PropertyLongitude', 'Locality']);
 
     // Find the selected company based on CompanyName
     const selectedCompanyData = companyData.find((company) => company.CompanyName === newValue);
@@ -87,10 +101,14 @@ const Stepper1 = () => {
 
   const handleProjectChange = (event, newValue) => {
     setSelectedProject(newValue || "");
-    const projectID = newValue ? projectData.find(project => project.ProjectName === newValue)?.ProjectID : null;
+    const selectedProject = projectData.find(project => project.ProjectName === newValue);
+    const projectID = newValue ? selectedProject?.ProjectID : null;
     setFieldValue("ProjectID", projectID);
-
-
+    setFieldValue("ProjectName", selectedProject.ProjectName);
+    
+    if(selectedProject.Amenities){
+      setFieldValue("PropertyAmenities", selectedProject.Amenities) 
+    }
 
     // Always update PropertyName to ProjectName and remove spaces
     if (newValue) {
@@ -98,6 +116,12 @@ const Stepper1 = () => {
       setFieldValue("PropertyName", propertyName);
     }
   };
+
+  const clearPropertyFields = (fileds) => {
+    fileds.forEach((field) => {
+      setFieldValue(field, '');
+    });
+  }
 
 
   const handleCheckboxChange = (e, setFieldValue, values) => {
@@ -232,10 +256,10 @@ const Stepper1 = () => {
             <div className="step-formgroup">
 
               <label>Property Type<span className="required">*</span>:    </label>
-              <Autocomplete
+              { propertyTypes.length && <Autocomplete
                 className="autocomplete-root"
                 name="PropertyType"
-                value={propertyTypes.find(option => option.value === values.PropertyType) || propertyTypes[0]}
+                value={propertyTypes.find(option => option.value === values.PropertyTypeID) || propertyTypes[0]}
                 onChange={(event, newValue) => {
                   // Set the label instead of value in the field value
                   setFieldValue("PropertyType", newValue ? newValue.label : propertyTypes[0].label);
@@ -246,6 +270,7 @@ const Stepper1 = () => {
                 isOptionEqualToValue={(option, value) => option.label === value?.label} // Compare label instead of value
                 renderInput={(params) => <TextField {...params} placeholder="Select Property Type" />}
               />
+            }
             </div>
           </div>
           <div className="box">
@@ -492,7 +517,7 @@ const Stepper1 = () => {
           <div className="box">
             <div className="step-formgroup">
               <label>Property Status<span className="required">*</span>:    </label>
-              <Autocomplete
+              { propertyStatus.length > 0 && <Autocomplete
                 className="autocomplete-root"
                 name="PropertyStatus"
                 value={
@@ -509,6 +534,7 @@ const Stepper1 = () => {
                 renderInput={(params) => <TextField {...params} placeholder="Property Status" />}
                 required
               />
+            }
             </div>
           </div>
           <div className="box">

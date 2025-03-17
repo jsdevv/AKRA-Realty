@@ -1,20 +1,20 @@
 import './Favorites.css';
-import React, { useCallback, useState } from 'react';
-import Favoritescompare from '../Favorites/Favoritescompare/Favoritescompare';
+import React, { useCallback, useEffect, useState } from 'react';
+import Favoritescompare from '../../components/Favoritescompare/Favoritescompare';
 import { useFavorites } from '../../context/FavoritesContext';
 import { FiTrash } from 'react-icons/fi';
 import { FaStar } from 'react-icons/fa'; // Star icon
-import { clearSelectedProperty, setSelectedProperty } from '../../Redux/Slices/propertySlice';
+import { clearSelectedProperty, fetchFavorites, setSelectedProperty } from '../../Redux/Slices/propertySlice';
 import { useDispatch, useSelector } from 'react-redux';
-import ListingModal from '../ListingModal/ListingModal';
 import defaultimg1 from "../../images/Apartment102.jpeg"
 import defaultimg2 from "../../images/Apartment103.jpeg"
 import Slider from 'react-slick/lib/slider';
+import ListingModal from '../../components/ListingModal/ListingModal';
 
 const Favorites = () => {
     const bearerToken = useSelector((state) => state.auth.bearerToken);
     const { favorites, removeFavorite, toggleShortlist } = useFavorites(); // Add updateFavorite
-    const { selectedProperty } = useSelector((state) => state.properties);
+    const { selectedProperty, favoriteitems } = useSelector((state) => state.properties);
     const [selectedFavoritecompare, setSelectedFavoritescompare] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const dispatch = useDispatch();
@@ -26,10 +26,15 @@ const Favorites = () => {
     const imageUrls = propertyUrls ? propertyUrls.split(',').map(url => url.trim()).filter(Boolean) : [];
     const imagesToShow = imageUrls.length > 0 ? imageUrls : [defaultimg1, defaultimg2];
 
-console.log(imagesToShow);
+useEffect(() => {
+    if (bearerToken) {
+        dispatch(fetchFavorites(bearerToken));
+    }
+}, [dispatch, bearerToken]);
 
+console.log(favoriteitems,"favoriteitems");
 
-    console.log(sortedFavorites,"sortedFavorites");
+    // console.log(sortedFavorites,"sortedFavorites");
 
     const handleCompareSelect = (propertyID) => {
         setSelectedFavoritescompare((prev) =>

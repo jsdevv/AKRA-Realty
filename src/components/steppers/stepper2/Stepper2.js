@@ -1,4 +1,4 @@
-import React, {useState } from 'react';
+import React, {useRef, useState } from 'react';
 import { MdOutlineCloudUpload, MdDelete } from "react-icons/md";
 import "./Stepper2.css";
 //import localforage from 'localforage';
@@ -7,6 +7,7 @@ const Stepper2 = ({ onImageSelected }) => {
   const [images, setImages] = useState([]);
   const [filesToUpload, setFilesToUpload] = useState([]); 
   const [fileError, setFileError] = useState(false);
+  const fileInputRef = useRef(null);
   const MAX_IMAGES = 12;
 
   const handleImageUpload = async (event) => {
@@ -56,6 +57,13 @@ const Stepper2 = ({ onImageSelected }) => {
       };
       reader.readAsDataURL(file);
     });
+    resetFileInput();
+  };
+
+  const resetFileInput = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
   // Remove image
@@ -89,6 +97,7 @@ const Stepper2 = ({ onImageSelected }) => {
               Browse Files
             </label>
             <input
+            ref={fileInputRef}
               id="fileInput"
               type="file"
               accept="image/jpeg, image/png"

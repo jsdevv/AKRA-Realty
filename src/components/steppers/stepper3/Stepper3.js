@@ -19,6 +19,7 @@ const Stepper3 = ({formData}) => {
   const marker = useRef(null);
   const autocomplete = useRef(null);
   const { values, handleChange,setFieldValue } = useFormikContext();
+  const [selectedLocation, setSelectedLocation] = useState(null);
 
   useEffect(() => {
     if (
@@ -41,7 +42,7 @@ const Stepper3 = ({formData}) => {
       if (selectedProject.Latitude && selectedProject.Longitude) {
          const lat = selectedProject.Latitude;
          const lng = selectedProject.Longitude;
-
+        setSelectedLocation( `${lat}, ${lng}`);
         if (marker.current) {
           marker.current.setPosition({ lat, lng });
           const map = marker.current.getMap();
@@ -79,8 +80,18 @@ const Stepper3 = ({formData}) => {
   }, [mapLoaded, dispatch, bearerToken]);
 
   const initializeMap = useCallback(() => {
+
+    const markerPosition = {
+      lat: 17.411939407890586,
+      lng: 78.46773935732759
+    };
+    if(selectedProject?.Latitude && selectedProject?.Longitude){
+      markerPosition.lat = selectedProject.Latitude * 1;
+      markerPosition.lng = selectedProject.Longitude * 1;
+    }
+    setSelectedLocation(`${markerPosition.lat}, ${markerPosition.lng}`);
     const map = new window.google.maps.Map(addlistingmapRef.current, {
-      center: { lat: 17.411939407890586, lng: 78.46773935732759 },
+      center: markerPosition,
       zoom: 12,
       styles: mapStyle,
     });
@@ -150,7 +161,7 @@ const Stepper3 = ({formData}) => {
   const updateLocationFields = (lat, lng) => {
     handleChange({ target: { name: 'PropertyLatitude', value: lat.toString() } });
     handleChange({ target: { name: 'PropertyLongitude', value: lng.toString() } });
-
+    setSelectedLocation(`${lat}, ${lng}`);
     dispatch(AddlistingFormData({ PropertyLatitude: lat, PropertyLongitude: lng }));
   };
 
@@ -166,9 +177,15 @@ const Stepper3 = ({formData}) => {
   const handleGeolocationInputChange = (e) => {
     const { value } = e.target;
     const [lat, lng] = value.split(',').map((val) => parseFloat(val.trim()));
-    if (lat && lng) {
+    setSelectedLocation(value);
+    if(lat){
       handleChange({ target: { name: 'PropertyLatitude', value: lat.toString() } });
+    }
+    if(lng){
       handleChange({ target: { name: 'PropertyLongitude', value: lng.toString() } });
+    }
+
+    if (lat && lng) {
       updateLocationFields(lat, lng);
       moveMarker(lat, lng, marker.current?.getMap());
 
@@ -312,7 +329,7 @@ const Stepper3 = ({formData}) => {
             placeholder="Enter Latitude, Longitude"
             type="text"
             name="Geolocation"
-            value={`${values.PropertyLatitude}, ${values.PropertyLongitude}`}  // Combine latitude and longitude as a string
+            value={selectedLocation}  // Combine latitude and longitude as a string
             onChange={handleGeolocationInputChange}
           />
         </div>
