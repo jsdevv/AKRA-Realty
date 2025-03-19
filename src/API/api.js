@@ -238,7 +238,7 @@ export const fetchAddpropertyFavorties  = async (bearerToken, payload) => {
         'Authorization': `Bearer ${bearerToken}`,
       },
       body: JSON.stringify({
-        RequestParamType: 'AddFavourites',
+        RequestParamType: 'AddPropertyFavorites',
         json: payload,
       }),
     });
@@ -259,7 +259,7 @@ export const fetchAddpropertyFavorties  = async (bearerToken, payload) => {
 };
 
 
-export const fetchDeleteFavorties  = async (bearerToken, payload) => {
+export const fetchDeleteProjectFavorties  = async (bearerToken, payload) => {
   try {
     const response = await fetch(DeleteData_API, {
       method: 'POST',
@@ -287,8 +287,36 @@ export const fetchDeleteFavorties  = async (bearerToken, payload) => {
     throw new Error(error.message || 'Failed to add alert.');
   }
 };
+export const fetchDeletePropertyFavorties  = async (bearerToken, payload) => {
+  try {
+    const response = await fetch(DeleteData_API, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${bearerToken}`,
+      },
+      body: JSON.stringify({
+        RequestParamType: 'DeletePropertyFavorites',
+        json: payload,
+      }),
+    });
 
-export const fetchFavoritesAPI = async (token) => {
+    if (!response.ok) {
+      // If the response is not successful, throw an error with the response status
+      const errorMessage = await response.text();
+      throw new Error(errorMessage || 'Failed to add favorites. Please try again.');
+    }
+
+    const data = await response.json();
+    return data; // Return the response data
+
+  } catch (error) {
+    console.error('Error in set alert:', error);
+    throw new Error(error.message || 'Failed to add alert.');
+  }
+};
+
+export const fetchProjectFavorites = async (token) => {
   try {
       const response = await fetch(API_URL, {
           method: 'POST',
@@ -297,7 +325,32 @@ export const fetchFavoritesAPI = async (token) => {
               'Authorization': `Bearer ${token}`
           },
           body: JSON.stringify({
-              RequestParamType: 'GetProjectFavourites'
+              RequestParamType: 'GetProjectFavouritesTest'
+          })
+      });
+
+      if (!response.ok) {
+          throw new Error('Failed to fetch data');
+      }
+
+      const data = await response.json();
+      return data; // Assuming data is an array of objects with PropertyStatus field
+  } catch (error) {
+      console.error('Error fetching property status options:', error);
+      throw error; // Rethrow the error to handle it in the component
+  }
+};
+
+export const fetchPropertyFavorites = async (token) => {
+  try {
+      const response = await fetch(API_URL, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+              RequestParamType: 'GetPropertyFavourites'
           })
       });
 

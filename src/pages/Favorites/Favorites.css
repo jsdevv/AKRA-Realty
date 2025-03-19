@@ -9,12 +9,37 @@
     border-radius: 8px; /* Optional: Rounded corners for container */
 }
 
-/* Header Styling */
-.favorites-header {
-    font-size: 18px; /* Increased size for better visibility */
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 20px;
+
+.favorites-tabs {
+    display: flex;
+    gap: 4px;
+    border-radius: 10px;
+    background-color: #dadadb;
+    padding: 5px;
+    margin: 15px 0px;
+    width:240px;
+}
+
+.favtab-button {
+    padding: 8px;
+    border: none;
+    background: transparent;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    border-radius: 4px;
+}
+
+.favtab-button:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.favtab-button.active {
+    background: white;
+    color: #2A3650;
+    border-radius: 4px;
+    transition: background 0.3s ease-in-out;
 }
 
 /* Empty State Styling */

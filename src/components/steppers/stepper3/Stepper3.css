@@ -64,7 +64,7 @@
 
 .address-search-container{
   position: relative;
-  z-index: 1000;
+  z-index: 1;
   width: 20%;
   top:2%;
   left: 2%;

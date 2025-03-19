@@ -64,8 +64,8 @@ const Stepper4 = () => {
             placeholder='Plot No'
             id="plotno"
             type="text"
-            name="plotno"
-            value={values.plotno}
+            name="PlotNo"
+            value={values.PlotNo}
             onChange={handleFieldChange}
 
           />

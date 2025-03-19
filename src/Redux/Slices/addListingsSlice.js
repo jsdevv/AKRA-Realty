@@ -102,7 +102,7 @@ const addListingsSlice = createSlice({
     PropertyLatitude: '',
     PropertyLongitude: '', 
     district:'',
-    plotno:'', 
+    PlotNo:'', 
     PropertyFloorNumber:'',
     Bedrooms: '',
     PropertyBathrooms: '',

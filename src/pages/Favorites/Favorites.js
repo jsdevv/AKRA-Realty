@@ -4,37 +4,36 @@ import Favoritescompare from '../../components/Favoritescompare/Favoritescompare
 import { useFavorites } from '../../context/FavoritesContext';
 import { FiTrash } from 'react-icons/fi';
 import { FaStar } from 'react-icons/fa'; // Star icon
-import { clearSelectedProperty, fetchFavorites, setSelectedProperty } from '../../Redux/Slices/propertySlice';
+import {
+    clearSelectedProperty,
+    fetchGetprojectFavorites,
+    fetchGetpropertyFavorites,
+    setSelectedProperty
+} from '../../Redux/Slices/propertySlice';
 import { useDispatch, useSelector } from 'react-redux';
 import defaultimg1 from "../../images/Apartment102.jpeg"
 import defaultimg2 from "../../images/Apartment103.jpeg"
 import Slider from 'react-slick/lib/slider';
 import ListingModal from '../../components/ListingModal/ListingModal';
+import { fetchDeleteProjectFavorties, fetchDeletePropertyFavorties } from '../../API/api';
+import { toast, ToastContainer } from 'react-toastify';
 
 const Favorites = () => {
     const bearerToken = useSelector((state) => state.auth.bearerToken);
+     const { Id } = useSelector((state) => state.auth.userDetails || {});
     const { favorites, removeFavorite, toggleShortlist } = useFavorites(); // Add updateFavorite
-    const { selectedProperty, favoriteitems } = useSelector((state) => state.properties);
+    const { selectedProperty, Projectfavorites, Propertyfavorites } = useSelector((state) => state.properties);
     const [selectedFavoritecompare, setSelectedFavoritescompare] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [activeTab, setActiveTab] = useState('project');
     const dispatch = useDispatch();
 
-    // Reorder favorites based on shortlist status
-    const sortedFavorites = [...favorites].sort((a, b) => b.shortlisted - a.shortlisted);
-
-    const propertyUrls = sortedFavorites?.ProjectImageUrls || sortedFavorites?.PropertyImageUrls;
-    const imageUrls = propertyUrls ? propertyUrls.split(',').map(url => url.trim()).filter(Boolean) : [];
-    const imagesToShow = imageUrls.length > 0 ? imageUrls : [defaultimg1, defaultimg2];
-
-useEffect(() => {
-    if (bearerToken) {
-        dispatch(fetchFavorites(bearerToken));
-    }
-}, [dispatch, bearerToken]);
-
-console.log(favoriteitems,"favoriteitems");
-
-    // console.log(sortedFavorites,"sortedFavorites");
+    useEffect(() => {
+        if (bearerToken && Id) {
+            const fetchFavorites = activeTab === 'project' ? fetchGetprojectFavorites : fetchGetpropertyFavorites;
+            dispatch(fetchFavorites(bearerToken));
+        }
+    }, [bearerToken, activeTab,Id, dispatch]);
 
     const handleCompareSelect = (propertyID) => {
         setSelectedFavoritescompare((prev) =>
@@ -75,45 +74,101 @@ console.log(favoriteitems,"favoriteitems");
         slidesToShow: 1,
         slidesToScroll: 1,
         arrows: true,
-      };
+    };
 
+    const filteredFavorites = activeTab === 'project' ? Projectfavorites : Propertyfavorites;
+    const sortedFavorites = filteredFavorites ? [...filteredFavorites].sort((a, b) => b.shortlisted - a.shortlisted) : [];
+    const propertyUrls = sortedFavorites?.ProjectImageUrls || sortedFavorites?.PropertyImageUrls;
+    const imageUrls = propertyUrls ? propertyUrls.split(',').map(url => url.trim()).filter(Boolean) : [];
+    const imagesToShow = imageUrls.length > 0 ? imageUrls : [defaultimg1, defaultimg2];
+
+    const handleRemoveFavorite = async (property) => {
+ 
+
+        console.log(favorites,"favorites");
+        
+        removeFavorite(property.PropertyID ); 
+        const payload = activeTab === 'project' ? { ProjectID: property.ProjectID } : { PropertyID: property.PropertyID };
+
+        try {
+            let response;
+            if (activeTab === 'property') {
+                response = await fetchDeletePropertyFavorties(bearerToken, { ...payload, UserID: Id });
+            } else {
+                response = await fetchDeleteProjectFavorties(bearerToken, { ...payload, UserID: Id });
+            }
+    
+             if (response?.ProcessCode === 0) {
+                const successMessage = response?.processMessage?.includes("SUCCESS")
+                ? response.processMessage.replace(/^SUCCESS:\s*/, "").trim()
+                : "Action completed successfully.";
+                toast.success(successMessage , { position: "top-right" });
+            }            
+        } catch (error) {
+            console.error("Error removing favorite:", error);
+            toast.error("Something went wrong! Please try again.", { position: "top-right" });
+        }
+
+        if (activeTab === 'property') {
+            dispatch(fetchGetpropertyFavorites(bearerToken));  // Fetch updated favorites list
+        } else {
+            dispatch(fetchGetprojectFavorites(bearerToken));  // Fetch updated favorites list
+        }
+    };
+    
     return (
         <>
             <div className="favorites-container">
-                <h2 className="favorites-header">My Favorites</h2>
+               <ToastContainer autoClose={3000} />
+            
+                    <div className="favorites-tabs">
+                        <button
+                            className={`favtab-button ${activeTab === 'project' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('project')}
+                        >
+                            Project Favorites
+                        </button>
+                        <button
+                            className={`favtab-button ${activeTab === 'property' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('property')}
+                        >
+                            Property Favorites
+                        </button>
+                    </div>
+     
                 {sortedFavorites.length === 0 ? (
-                    <p className="favorites-empty">You haven't saved any homes yet.</p>
+                    <p className="favorites-empty">You haven't saved any favorites yet.</p>
                 ) : (
                     <div>
                         <div className="favorites-grid">
                             {sortedFavorites.map((property) => {
-                                    const propertyUrls = property.ProjectImageUrls || property.PropertyImageUrls;
-                                    const imageUrls = propertyUrls ? propertyUrls.split(',').map(url => url.trim()).filter(Boolean) : [];
-                                    const imagesToShow = imageUrls.length > 0 ? imageUrls : [defaultimg1, defaultimg2];
+                                const propertyUrls = property.ProjectImageUrls || property.PropertyImageUrls;
+                                const imageUrls = propertyUrls ? propertyUrls.split(',').map(url => url.trim()).filter(Boolean) : [];
+                                const imagesToShow = imageUrls.length > 0 ? imageUrls : [defaultimg1, defaultimg2];
                                 return (
                                     <div key={property.PropertyID} className="favorites-card">
-                                     
+
 
                                         <div className="favorites-image-container">
                                             <Slider {...settings}>
-                                                                       {imagesToShow.map((url, index) => (
-                                                                         <div key={index} 
-                                                                    >
-                                                                           <img
-                                                                             src={url}
-                                                                             alt={`Slide ${index + 1}`}
-                                                                             className="favorites-image"
-                                                                             loading="lazy"
-                                                                             style={{
-                                                                               maxWidth: "100%",
-                                                                               maxHeight: "200px",
-                                                                               objectFit: "cover",
-                                                                             }}
-                                                                           />
-                                                                         </div>
-                                                                       ))}
-                                                                       
-                                                                     </Slider>
+                                                {imagesToShow.map((url, index) => (
+                                                    <div key={index}
+                                                    >
+                                                        <img
+                                                            src={url}
+                                                            alt={`Slide ${index + 1}`}
+                                                            className="favorites-image"
+                                                            loading="lazy"
+                                                            style={{
+                                                                maxWidth: "100%",
+                                                                maxHeight: "200px",
+                                                                objectFit: "cover",
+                                                            }}
+                                                        />
+                                                    </div>
+                                                ))}
+
+                                            </Slider>
                                         </div>
                                         <div className="favorites-details">
                                             <div className="favoritestop-container">
@@ -132,7 +187,7 @@ console.log(favoriteitems,"favoriteitems");
                                                     </label>
                                                     <button
                                                         className="favorites-remove-button"
-                                                        onClick={() => removeFavorite(property.PropertyID)}
+                                                        onClick={() => handleRemoveFavorite(property)}
                                                         aria-label="Remove from favorites"
                                                     >
                                                         <FiTrash />
@@ -141,9 +196,14 @@ console.log(favoriteitems,"favoriteitems");
                                             </div>
                                             <div className="favorites-address-container">
                                                 <div className="favorites-address">
-                                                    {property.PropertyType} | {property.PropertyBedrooms} |{' '}
-                                                    {property.SqFt}<br />
-                                                    {property.PropertyArea} | {property.PropertyCity}
+                                                    {activeTab === 'property' ? (
+                                                        <span>₹ {property.Amount}</span> // Keep property prices as they are
+                                                    ) : (
+                                                        <span>
+                                                            ₹ {property.MinPrice} - ₹ {property.MaxPrice}
+                                                        </span> // Add Rupee symbol for projects
+                                                    )} <br />
+                                                    {property.PropertyCardLine3}
                                                 </div>
                                                 <button
                                                     className="details-button"
@@ -156,18 +216,16 @@ console.log(favoriteitems,"favoriteitems");
                                             {/* Shortlist Button */}
                                             <div className="shortlist-button-container">
                                                 <button
-                                                    className={`shortlist-button ${
-                                                        property.shortlisted ? 'shortlisted' : ''
-                                                    }`}
+                                                    className={`shortlist-button ${property.shortlisted ? 'shortlisted' : ''
+                                                        }`}
                                                     onClick={() => toggleShortlist(property.PropertyID)}
                                                     aria-label="Shortlist property"
                                                 >
                                                     <FaStar
-                                                        className={`shortlist-icon ${
-                                                            property.shortlisted ? 'highlighted' : ''
-                                                        }`}
+                                                        className={`shortlist-icon ${property.shortlisted ? 'highlighted' : ''
+                                                            }`}
                                                     />
-                                
+
                                                 </button>
                                             </div>
                                         </div>
@@ -200,6 +258,7 @@ console.log(favoriteitems,"favoriteitems");
             )}
             {selectedProperty && (
                 <ListingModal
+                    propertyType="Project"
                     selectedProperty={selectedProperty}
                     onClose={handleCloseModal}
                     bearerToken={bearerToken}

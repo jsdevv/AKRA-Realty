@@ -64,7 +64,7 @@ const AddListings = () => {
     PropertyLatitude: EditPropertyData.PropertyLatitude || '',
     PropertyLongitude: EditPropertyData.PropertyLongitude || '',
     district: EditPropertyData.district || '',
-    plotno: EditPropertyData.plotno || '',
+    PlotNo: EditPropertyData.plotno || '',
     PropertyFloorNumber: EditPropertyData.PropertyFloorNumber || '',
     Bedrooms: EditPropertyData.Bedrooms || '',
     PropertyBathrooms: EditPropertyData.PropertyBathrooms || '',
@@ -129,11 +129,12 @@ const AddListings = () => {
     }
   };
 
-  const handleStepClick = (stepNumber, errors) => {
+  const handleStepClick = async (stepNumber, validateForm) => {
+    const errors = await validateForm();
     if(currentStep === 1 && errors && Object.keys(errors).length > 0) {
       return;
     }
-    if(currentStep === 2 && stepNumber > 2 && propertyImages.length < 2) {
+    if(currentStep <= 2 && stepNumber > 2 && propertyImages.length < 2) {
       setShowImageCountError(true);
       return;
     }
@@ -155,7 +156,7 @@ const AddListings = () => {
         localStorage.removeItem('uploadedImages'); // Remove from localStorage
   
         // Optionally, you can show a success message here if desired
-        setShowPopup(true);
+        // setShowPopup(true);
   
       } catch (error) {
         console.error("Image upload failed:", error);
@@ -167,6 +168,8 @@ const AddListings = () => {
   const handleSubmit = async (values, { resetForm }) => {
     // console.log(values,"values");
     try {
+      values.PropertyLatitude = values.PropertyLatitude || '17.411939407890586';
+      values.PropertyLongitude = values.PropertyLongitude || '78.46773935732759';
       const response = await dispatch(submitAddListings({ bearerToken, formData: values }));
  
       // Extract PropertyID from the response message
@@ -205,7 +208,7 @@ const AddListings = () => {
       <Formik
         initialValues={initialValues}
         validationSchema={getValidationSchema()}
-        onSubmit={handleSubmit}
+        //onSubmit={handleSubmit}
         enableReinitialize
       >
         {({ values, handleChange,  errors,touched,handleBlur,validateForm , resetForm }) => (
@@ -226,7 +229,7 @@ const AddListings = () => {
               <div
                 key={stepNumber}
                 className={stepClass}
-                onClick={() => handleStepClick(stepNumber, errors)}
+                onClick={() => handleStepClick(stepNumber, validateForm)}
               >
                 {currentStep > stepNumber ? (
                   <FaCheck className="check-icon" />

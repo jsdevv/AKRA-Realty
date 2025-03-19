@@ -93,7 +93,12 @@ const Stepper3 = ({formData}) => {
     const map = new window.google.maps.Map(addlistingmapRef.current, {
       center: markerPosition,
       zoom: 12,
+      clickableIcons: false,
       styles: mapStyle,
+      mapTypeControlOptions: {
+        style: window.google.maps.MapTypeControlStyle.SMALL,
+        position: window.google.maps.ControlPosition.TOP_RIGHT,
+      }
     });
 
     marker.current = new window.google.maps.Marker({
@@ -163,6 +168,53 @@ const Stepper3 = ({formData}) => {
     handleChange({ target: { name: 'PropertyLongitude', value: lng.toString() } });
     setSelectedLocation(`${lat}, ${lng}`);
     dispatch(AddlistingFormData({ PropertyLatitude: lat, PropertyLongitude: lng }));
+    getAddressFromGeolocation(lat, lng);
+  };
+
+  const getAddressFromGeolocation = async (lat, lng) => {
+    const response = await fetch(
+      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${API_KEY}`
+    );
+    const data = await response.json();
+    if (data.results.length > 0) {
+      const addressComponents = data.results.reduce((max, result) => 
+        result.address_components.length > max.address_components.length ? result : max
+      ).address_components;
+      const address = addressComponents.reduce((acc, component) => {
+        if (component.types.includes('street_number')) {
+          return { ...acc, street_number: component.long_name };
+        }
+        if (component.types.includes('route')) {
+          return { ...acc, route: component.long_name };
+        }
+        if (component.types.includes('sublocality_level_1')) {
+          return { ...acc, locality: component.long_name };
+        }
+        if (component.types.includes('locality')) {
+          return { ...acc, city: component.long_name };
+        }
+        if (component.types.includes('sublocality_level_2')) {
+          return { ...acc, sublocality: component.long_name };
+        }
+        if (component.types.includes('administrative_area_level_1')) {
+          return { ...acc, state: component.long_name };
+        }
+        if (component.types.includes('postal_code')) {
+          return { ...acc, postal_code: component.long_name };
+        }
+        if (component.types.includes('administrative_area_level_3')) {
+          return { ...acc, district: component.long_name };
+        }
+        return acc;
+      }, {});
+      setFieldValue('PropertyCity', address.city || '');
+      setFieldValue('PropertyZipCode', address.postal_code || '');
+      setFieldValue('PropertyState', address.state || '');
+      setFieldValue('Locality', address.locality || '');
+      setFieldValue('SubLocality', address.sublocality || '');
+      setFieldValue('district', address.district || '');
+
+    }
   };
 
   const handleManualInputChange = (e) => {
@@ -176,7 +228,11 @@ const Stepper3 = ({formData}) => {
 
   const handleGeolocationInputChange = (e) => {
     const { value } = e.target;
-    const [lat, lng] = value.split(',').map((val) => parseFloat(val.trim()));
+    if(value.endsWith('.')){
+      setSelectedLocation(value);
+      return;
+    }
+    let [lat, lng] = value.split(',').map((val) => parseFloat(val.trim()));
     setSelectedLocation(value);
     if(lat){
       handleChange({ target: { name: 'PropertyLatitude', value: lat.toString() } });
@@ -185,13 +241,19 @@ const Stepper3 = ({formData}) => {
       handleChange({ target: { name: 'PropertyLongitude', value: lng.toString() } });
     }
 
+    
+
     if (lat && lng) {
       updateLocationFields(lat, lng);
-      moveMarker(lat, lng, marker.current?.getMap());
-
       // Dispatch the updated geolocation to Redux store
       dispatch(AddlistingFormData({ PropertyLatitude: lat, PropertyLongitude: lng }));
+    } 
+    
+    if( !lat || !lng){
+      lat = 17.411939407890586;
+      lng = 78.46773935732759;
     }
+    moveMarker(lat, lng, marker.current?.getMap());
   };
 
   return (

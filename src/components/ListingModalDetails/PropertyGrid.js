@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css"; 
@@ -10,10 +10,22 @@ import {
 import { MultiFilterModule,SetFilterModule } from 'ag-grid-enterprise'; 
 import { LiaRupeeSignSolid } from "react-icons/lia";
 import "./PropertyGrid.css"
+import { FaHeart, FaStar } from "react-icons/fa";
+import { useFavorites } from "../../context/FavoritesContext";
 
 ModuleRegistry.registerModules([AllCommunityModule,MultiFilterModule,SetFilterModule ]);
 
 const PropertyGrid = ({ groupedByBedroomsArray,selectedBedrooms,setSelectedPropertyForDetailHandler }) => {
+    const { favorites, toggleFavorite } = useFavorites();
+    const [featured, setFeatured] = useState({});
+
+    // Toggle featured
+    const toggleFeatured = (propertyId) => {
+        setFeatured((prev) => ({
+            ...prev,
+            [propertyId]: !prev[propertyId],
+        }));
+    };
 
     // Filter and clean the grouped array
     const cleanedGroupedByBedroomsArray = useMemo(() => {
@@ -22,10 +34,6 @@ const PropertyGrid = ({ groupedByBedroomsArray,selectedBedrooms,setSelectedPrope
             Number(group.Bedrooms) !== 0 && group.properties.every(property => Number(property.Bedrooms) === Number(group.Bedrooms))
         );
     }, [groupedByBedroomsArray]);
-
-    console.log(cleanedGroupedByBedroomsArray, "cleanedGroupedByBedroomsArray");
-
-
 
     const defaultColDef = useMemo(() => ({
         sortable: true,
@@ -127,10 +135,38 @@ const PropertyGrid = ({ groupedByBedroomsArray,selectedBedrooms,setSelectedPrope
                 </p>
             ),
             headerClass: "custom-header"
+        },
+        {
+            headerName: "Actions",
+            field: "fullPropertyData", // Use fullPropertyData
+            flex: 0.8,
+            cellStyle: { textAlign: "center", display: "flex", justifyContent: "center", gap: "10px" },
+            cellRenderer: params => {
+                console.log(params,"param");
+                if (!params.value) return "N/A"; // Prevent undefined error
+                return (
+                    <div style={{ display: "flex", gap: "10px" }}>
+                        {/* Heart Icon for Favorite */}
+                        <FaHeart
+                            className="action-icon"
+                            style={{ color: favorites[params.value.PropertyID] ? "red" : "#bbb", cursor: "pointer" }}
+                            onClick={() => toggleFavorite(params.value.PropertyID)}
+                        />
+                        {/* Star Icon for Featured */}
+                        <FaStar
+                            className="action-icon"
+                            style={{ color: featured[params.value.PropertyID] ? "gold" : "#bbb", cursor: "pointer" }}
+                            onClick={() => toggleFeatured(params.value.PropertyID)}
+                        />
+                    </div>
+                );
+            },
+            headerClass: "custom-header"
         }
-    ], []);
+        
+    ], [favorites, featured]); 
     
-    console.log(flatData, "flatData");
+ 
 
     const onGridReady = params => {
         params.api.sizeColumnsToFit();

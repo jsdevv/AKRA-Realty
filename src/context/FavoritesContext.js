@@ -4,10 +4,12 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 const FavoritesContext = createContext();
 
 export const FavoritesProvider = ({ children }) => {
+    
     const [favorites, setFavorites] = useState([]);
 
     useEffect(() => {
         const storedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    
         setFavorites(storedFavorites);
     }, []);
 
@@ -15,49 +17,60 @@ export const FavoritesProvider = ({ children }) => {
         useEffect(() => {
             if (favorites.length > 0) {
                 localStorage.setItem('favorites', JSON.stringify(favorites));
+               
+            } else {
+                localStorage.removeItem('favorites'); // Remove if empty
+             
             }
         }, [favorites]);
+        
 
         useEffect(() => {
             const handleStorageChange = () => {
                 const storedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
-                setFavorites(storedFavorites);
+                setFavorites((prevFavorites) =>
+                    JSON.stringify(prevFavorites) !== JSON.stringify(storedFavorites)
+                        ? storedFavorites
+                        : prevFavorites
+                );
             };
-        
+    
             window.addEventListener('storage', handleStorageChange);
-        
-            return () => {
-                window.removeEventListener('storage', handleStorageChange);
-            };
+            return () => window.removeEventListener('storage', handleStorageChange);
         }, []);
         
 
+         // Toggle favorite property
     const toggleFavorite = (property) => {
-        const propertyID = property.PropertyID;
-        const isFavorite = favorites.some((fav) => fav.PropertyID === propertyID);
+    
+        setFavorites((prevFavorites) => {
+            const isFavorite = prevFavorites.some((fav) => fav.PropertyID === property.PropertyID);
+            const updatedFavorites = isFavorite
+                ? prevFavorites.filter((fav) => fav.PropertyID !== property.PropertyID)
+                : [...prevFavorites, property];
 
-        if (isFavorite) {
-            const updatedFavorites = favorites.filter((fav) => fav.PropertyID !== propertyID);
-            setFavorites(updatedFavorites);
-       
-        } else {
-            const updatedFavorites = [...favorites, property];
-            setFavorites(updatedFavorites);
-        }
+            return updatedFavorites;
+        });
     };
 
-    const removeFavorite = (propertyID) => {
-        const updatedFavorites = favorites.filter((fav) => fav.PropertyID !== propertyID);
-        setFavorites(updatedFavorites);
-    };
+    // Remove a favorite
+ const removeFavorite = (propertyID) => {
+
+    setFavorites((prevFavorites) => {
+        const updatedFavorites = prevFavorites.filter(item => item.PropertyID !== propertyID);
+        localStorage.setItem("favorites", JSON.stringify(updatedFavorites)); // Ensure localStorage is updated
+        return updatedFavorites;
+    });
+};
 
     const toggleShortlist = (propertyID) => {
-        const updatedFavorites = favorites.map((property) =>
-            property.PropertyID === propertyID
-                ? { ...property, shortlisted: !property.shortlisted }
-                : property
+        setFavorites((prevFavorites) =>
+            prevFavorites.map((property) =>
+                property.PropertyID === propertyID
+                    ? { ...property, shortlisted: !property.shortlisted }
+                    : property
+            )
         );
-        setFavorites(updatedFavorites);
     };
 
     return (

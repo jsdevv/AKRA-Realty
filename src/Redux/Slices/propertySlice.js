@@ -7,7 +7,8 @@ import { fetchListings,
          fetchPropertyView,  
          fetchProjectView,
          fetchPropertyAlertAPI,          
-         fetchFavoritesAPI
+         fetchProjectFavorites,
+         fetchPropertyFavorites
         } from '../../API/api';
   import { toast } from "react-toastify";
   import "react-toastify/dist/ReactToastify.css"; 
@@ -124,11 +125,23 @@ function isPointInBounds(point, bounds) {
 }
 
 // Async thunk for fetching favorites
-export const fetchFavorites = createAsyncThunk(
-  'favorites/fetchFavorites',
+export const fetchGetprojectFavorites = createAsyncThunk(
+  'favorites/fetchGetprojectFavorites',
   async (bearerToken, { rejectWithValue }) => {
       try {
-          const data = await fetchFavoritesAPI(bearerToken);
+          const data = await fetchProjectFavorites(bearerToken);
+          return data; // Ensure data is returned as an array
+      } catch (error) {
+          return rejectWithValue(error.message);
+      }
+  }
+);
+
+export const fetchGetpropertyFavorites = createAsyncThunk(
+  'favorites/fetchGetpropertyFavorites',
+  async (bearerToken, { rejectWithValue }) => {
+      try {
+          const data = await fetchPropertyFavorites(bearerToken);
           return data; // Ensure data is returned as an array
       } catch (error) {
           return rejectWithValue(error.message);
@@ -163,7 +176,8 @@ const propertySlice = createSlice({
     mapPolygonBounds: null,
     selectedAgentProperty: null,
     selectedCenterOfMap: null,
-    favoriteitems: [],
+    Projectfavorites: [],
+    Propertyfavorites: [],
   },
   reducers: {
     setSelectedBuilder: (state, action) => {
@@ -404,19 +418,30 @@ const propertySlice = createSlice({
         state.status = "failed";
         state.error = action.payload;
       })
-      .addCase(fetchFavorites.pending, (state) => {
+      .addCase(fetchGetprojectFavorites.pending, (state) => {
         state.loading = true;
         state.error = null;
     })
-    .addCase(fetchFavorites.fulfilled, (state, action) => {
+    .addCase(fetchGetprojectFavorites.fulfilled, (state, action) => {
         state.loading = false;
-        console.log("Fetched favoriteitems:", action.payload);
-        state.favoriteitems = action.payload;
+        state.Projectfavorites = action.payload;
     })
-    .addCase(fetchFavorites.rejected, (state, action) => {
+    .addCase(fetchGetprojectFavorites.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-    });
+    })
+    .addCase(fetchGetpropertyFavorites.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+  })
+  .addCase(fetchGetpropertyFavorites.fulfilled, (state, action) => {
+      state.loading = false;
+      state.Propertyfavorites = action.payload;
+  })
+  .addCase(fetchGetpropertyFavorites.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+  });
   },
 });
 

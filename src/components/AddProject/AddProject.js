@@ -54,10 +54,6 @@ const AddProject = () => {
   const [formData, setFormData] = useState(initialValues);
   const [projectimgerror, setProjectimgerror] = useState("");
 
-  console.log(projectimgerror, "formikerror");
-
-  console.log(propertyImages, "images");
-
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   const domainOnlyRegex = /^@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   const consecutiveDotsRegex = /\.{2,}/;
@@ -139,7 +135,6 @@ const AddProject = () => {
       return;
     }
 
-    console.log(projectid, "Extracted Project ID");
 
     try {
       const allowedExtensions = ["jpg", "jpeg", "png"]; // Allowed formats
@@ -215,7 +210,6 @@ const AddProject = () => {
       updatedAmenities = updatedAmenities.replace(new RegExp(`(?:^|, )${amenity}(?=,|$)`, 'g'), '');
     }
 
-    console.log(updatedAmenities, "updated");
     setFieldValue("Amenities", updatedAmenities);
   };
 
@@ -223,7 +217,6 @@ const AddProject = () => {
     const selectedCompanyData = companyData.find((company) => company.CompanyName === newValue);
     const selectedCompanyID = selectedCompanyData ? selectedCompanyData.CompanyID : '';
 
-    console.log(selectedCompanyID, newValue, "company");
 
     setFieldValue("companyName", newValue || '');
     setFieldValue("CompanyID", selectedCompanyID); // Ensure CompanyID is set in Formik state
@@ -237,11 +230,9 @@ const AddProject = () => {
       setProjectimgerror("");
     }
 
-    console.log(values, "values");
     setLoading(true);
     try {
       const response = await fetchAddProject(values, bearerToken);
-      console.log(response, "API Response");
 
       const processMessage = response?.processMessage;
       if (!processMessage) {
@@ -306,7 +297,6 @@ const AddProject = () => {
       >
         {({ isSubmitting, resetForm, touched, values, errors, setFieldValue, setTouched, handleChange }) => {
 
-          console.log(errors, "error");
           return (<Form className="add-project-grid">
             <Grid item xs={12} sm={6} className="project-left-container">
               <Grid container>
