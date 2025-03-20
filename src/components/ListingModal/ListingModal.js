@@ -4,23 +4,39 @@ import { BsArrowRightCircleFill, BsArrowLeftCircleFill } from 'react-icons/bs';
 import { IoCloseCircleSharp } from 'react-icons/io5';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import './ListingModal.css';
-// import propertyImages from '../propertyImages/propertyImages';
 import { useFavorites } from '../../context/FavoritesContext';
-import { fetchPropertiesDetails } from '../../API/api';
+import { fetchAddprojectFavorties, fetchAddpropertyFavorties, fetchDeleteProjectFavorties, fetchDeletePropertyFavorties, fetchPropertiesDetails } from '../../API/api';
 import { AiOutlineClose } from 'react-icons/ai';
 import ListingModalDetails from '../ListingModalDetails/ListingModalDetails';
-import demoimg from "../../images/Villa106.jpeg"
 import { useSelector } from 'react-redux';
+import './ListingModal.css';
+import { MdOutlineFavorite } from 'react-icons/md';
+import { toast } from 'react-toastify';
 
 
-const ListingModal = ({ selectedProperty, onClose , propertyType}) => {
+const ListingModal = ({ selectedProperty, onClose, propertyType }) => {
+
+  const { groupedProperties } = useSelector((state) => state.properties);
+  // console.log(groupedProperties,"groupedProperties");
   const bearerToken = useSelector((state) => state.auth.bearerToken);
-  const { favorites, toggleFavorite } = useFavorites();
+  const { Id } = useSelector((state) => state.auth.userDetails || {});
+  const { favorites, toggleFavorite, favoriteColor } = useFavorites();
   const [showSharePopup, setShowSharePopup] = useState(false);
   const [propertyDetails, setPropertyDetails] = useState(null);
   const [showCarousel, setShowCarousel] = useState(false);
   const [carouselIndex, setCarouselIndex] = useState(0);
+  const [isFavorited, setIsFavorited] = useState(false);
+
+  const property = Object.values(groupedProperties).find((group) =>
+    group.UnitTypeDetails.some((unit) => unit.PropertyID === selectedProperty?.PropertyID)
+  );
+
+  useEffect(() => {
+    if (selectedProperty) {
+      setIsFavorited(favorites.some((fav) => fav.PropertyID === selectedProperty.PropertyID));
+    }
+  }, [favorites, selectedProperty]);
+
 
   useEffect(() => {
     if (selectedProperty && bearerToken) {
@@ -33,7 +49,7 @@ const ListingModal = ({ selectedProperty, onClose , propertyType}) => {
       const data = await fetchPropertiesDetails(bearerToken, selectedProperty.PropertyID);
       if (data.length > 0) {
         setPropertyDetails(data[0]);
-        
+
       }
 
     } catch (error) {
@@ -45,19 +61,47 @@ const ListingModal = ({ selectedProperty, onClose , propertyType}) => {
     return null;
   }
 
-  const isInFavorites = favorites.some(fav => fav.PropertyID === selectedProperty.PropertyID);
-
-
-  // const imageNames = propertyDetails.ImageNames?.split(',') || [];
 
   const imageNames = propertyDetails.PropertyImageUrls
-  ? propertyDetails.PropertyImageUrls.split(',').map(url => url.trim())
-  : propertyDetails.ProjectImageUrls
-    ? propertyDetails.ProjectImageUrls.split(',').map(url => url.trim())
-    : [];
-    const propertyImages = imageNames.map((imageName) => `${imageName}`);
-   const handleToggleFavorite = () => {
-    toggleFavorite(selectedProperty);
+    ? propertyDetails.PropertyImageUrls.split(',').map(url => url.trim())
+    : propertyDetails.ProjectImageUrls
+      ? propertyDetails.ProjectImageUrls.split(',').map(url => url.trim())
+      : [];
+
+  const propertyImages = imageNames.map((imageName) => `${imageName}`);
+
+  const handleToggleFavorite = async () => {
+    const isSingleProperty = property?.UnitTypeDetails.length  === 1;
+    const payload = isSingleProperty
+      ? { PropertyID: selectedProperty.PropertyID }
+      : { ProjectID: selectedProperty.ProjectID };
+
+    try {
+      let response;
+      if (!isFavorited) {
+        response = isSingleProperty
+          ? await fetchAddpropertyFavorties(bearerToken, payload)
+          : await fetchAddprojectFavorties(bearerToken, payload);
+      } else {
+        response = isSingleProperty
+          ? await fetchDeletePropertyFavorties(bearerToken, { ...payload, UserID: Id })
+          : await fetchDeleteProjectFavorties(bearerToken, { ...payload, UserID: Id });
+      }
+
+      const errorMessage = response?.processMessage?.includes("ERROR")
+        ? response.processMessage.replace(/^ERROR:\s*/, "").trim()
+        : "An error occurred, please try again.";
+
+      if (response?.ProcessCode === 101 || response?.processMessage?.includes("ERROR")) {
+        toast.error(errorMessage);
+      } else {
+        toggleFavorite(selectedProperty);
+        setIsFavorited(!isFavorited);
+      }
+    } catch (error) {
+      const errorMessage = error?.response?.data?.processMessage || "Something went wrong. Please try again.";
+      toast.error(errorMessage);
+    }
   };
 
   const handleShareClick = () => {
@@ -78,10 +122,13 @@ const ListingModal = ({ selectedProperty, onClose , propertyType}) => {
       <div className="modalContent" onClick={e => e.stopPropagation()}>
         <div className="modalHeader">
           <div className="modalActions">
-            {propertyType==='Property' && <button className="actionButton" onClick={handleToggleFavorite}>
-            {isInFavorites ? <FaHeart fill="red" /> : <FaHeart />}
-            </button>
-            }
+
+            <MdOutlineFavorite
+              className="actionButton"
+              style={{ color: isFavorited ? favoriteColor : "#888" }}
+              onClick={handleToggleFavorite}
+            />
+
             <button className="actionButton" onClick={handleShareClick}>
               <FaShareAlt />
             </button>
@@ -158,7 +205,11 @@ const ListingModal = ({ selectedProperty, onClose , propertyType}) => {
               </>
             )}
           </div>
-          <ListingModalDetails propertyType={propertyType} selectedProperty={propertyDetails} propertyCardData={selectedProperty} />
+          <ListingModalDetails 
+            propertyType={propertyType}  
+            selectedProperty={propertyDetails} 
+            propertyCardData={selectedProperty} 
+            />
         </div>
       </div>
 

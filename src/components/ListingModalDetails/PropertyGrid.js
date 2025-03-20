@@ -12,13 +12,19 @@ import { LiaRupeeSignSolid } from "react-icons/lia";
 import "./PropertyGrid.css"
 import { FaHeart, FaStar } from "react-icons/fa";
 import { useFavorites } from "../../context/FavoritesContext";
+import { toast } from "react-toastify";
+import {fetchAddpropertyFavorties,  fetchDeletePropertyFavorties } from "../../API/api";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchPropertyViews } from "../../utils/fetchPropertyViews";
 
 ModuleRegistry.registerModules([AllCommunityModule,MultiFilterModule,SetFilterModule ]);
 
 const PropertyGrid = ({ groupedByBedroomsArray,selectedBedrooms,setSelectedPropertyForDetailHandler }) => {
-    const { favorites, toggleFavorite } = useFavorites();
+    const bearerToken = useSelector((state) => state.auth.bearerToken);
+    const { Id } = useSelector((state) => state.auth.userDetails || {});
+    const { favorites,favoriteColor, toggleFavorite } = useFavorites();
     const [featured, setFeatured] = useState({});
-
+    const dispatch = useDispatch();
     // Toggle featured
     const toggleFeatured = (propertyId) => {
         setFeatured((prev) => ({
@@ -65,9 +71,52 @@ const PropertyGrid = ({ groupedByBedroomsArray,selectedBedrooms,setSelectedPrope
                     fullPropertyData: property,
                 }))
             );
-    }, [cleanedGroupedByBedroomsArray, selectedBedrooms]); // Depend on selectedBedrooms
+    }, [cleanedGroupedByBedroomsArray, selectedBedrooms]); 
+
+
+    const handlePropertyDetailsview = async (property) => {
+        try {
+            if (!property || !property.ProjectID) {
+                toast.error("Invalid property data");
+                return;
+            }
+            await fetchPropertyViews(dispatch, property.PropertyID, Id, bearerToken);
+            setSelectedPropertyForDetailHandler(property); // Update selected property
+        } catch (error) {
+            console.error("Error fetching project views:", error);
+            toast.error("Failed to fetch project views.");
+        }
+    };
+
+    const handleToggleFavorite = async (property) => {
+        console.log(property, "grid");
+        
+        const payload = { PropertyID: property.PropertyID };
     
+        try {
+            let response;
+            const isFavorited = favorites.some(fav => fav.PropertyID === property.PropertyID);
     
+            if (!isFavorited) {
+                response = await fetchAddpropertyFavorties(bearerToken, payload);
+            } else {
+                response = await fetchDeletePropertyFavorties(bearerToken, { ...payload, UserID: Id });
+            }
+    
+            const errorMessage = response?.processMessage?.includes("ERROR")
+                ? response.processMessage.replace(/^ERROR:\s*/, "").trim()
+                : "An error occurred, please try again.";
+    
+            if (response?.ProcessCode === 101 || response?.processMessage?.includes("ERROR")) {
+                toast.error(errorMessage);
+            } else {
+                toggleFavorite(property);
+            }
+        } catch (error) {
+            const errorMessage = error?.response?.data?.processMessage || "Something went wrong. Please try again.";
+            toast.error(errorMessage);
+        }
+    };
     
     const columnDefs = useMemo(() => [
         { 
@@ -78,7 +127,7 @@ const PropertyGrid = ({ groupedByBedroomsArray,selectedBedrooms,setSelectedPrope
             filter: "agSetColumnFilter", 
         },
         { 
-            headerName: "Amount", 
+            headerName: "Price", 
             cellStyle: { textAlign: "center" },
             field: "Amount", 
             flex: 0.8, 
@@ -129,7 +178,7 @@ const PropertyGrid = ({ groupedByBedroomsArray,selectedBedrooms,setSelectedPrope
             cellRenderer: params => (
                 <p 
                    className="details-link"
-                    onClick={() => setSelectedPropertyForDetailHandler(params.value)}
+                      onClick={() => handlePropertyDetailsview(params.value)}       
                 >
                     Details
                 </p>
@@ -139,18 +188,19 @@ const PropertyGrid = ({ groupedByBedroomsArray,selectedBedrooms,setSelectedPrope
         {
             headerName: "Actions",
             field: "fullPropertyData", // Use fullPropertyData
-            flex: 0.8,
+            flex: 0.6,
             cellStyle: { textAlign: "center", display: "flex", justifyContent: "center", gap: "10px" },
             cellRenderer: params => {
-                console.log(params,"param");
+                
                 if (!params.value) return "N/A"; // Prevent undefined error
+                const isFavorited = favorites.some(fav => fav.PropertyID === params.value.PropertyID);
                 return (
                     <div style={{ display: "flex", gap: "10px" }}>
                         {/* Heart Icon for Favorite */}
                         <FaHeart
                             className="action-icon"
-                            style={{ color: favorites[params.value.PropertyID] ? "red" : "#bbb", cursor: "pointer" }}
-                            onClick={() => toggleFavorite(params.value.PropertyID)}
+                            style={{ color: isFavorited ? favoriteColor : "#bbb", cursor: "pointer" }}
+                            onClick={() => handleToggleFavorite(params.value)}
                         />
                         {/* Star Icon for Featured */}
                         <FaStar

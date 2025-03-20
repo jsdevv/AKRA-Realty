@@ -218,10 +218,8 @@ const Listings = () => {
                       aria-label={`View details of ${propertyName}`}
                     >
                       {/* Favorite Icon Added Above Image */}
-                      <FavoriteIcon
-                       groupproperty={property}
-                       PropertyCount={property.PropertyCount} 
-                        />
+                      <FavoriteIcon groupproperty={property} />
+                      
                       <div className="propertyImages">
                         <div className="slide-wrapper">
                           <Slider {...settings}>

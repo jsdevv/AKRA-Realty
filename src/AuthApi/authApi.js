@@ -112,19 +112,22 @@ export const formresetpassword = async (password, confirmPassword, email, token)
       body: JSON.stringify({ password, confirmPassword, email, token }),
     });
 
-    
+    console.log(response,"response");
+  
     if (response.status === 204) {
-      return { success: true, message: ' Password reset successfully! Redirecting to login...' };
+      return { success: true, message: 'Password reset successfully! Redirecting to login...' };
     }
 
-    if (!response.ok) {
+    if (response.status === 400) {
       const errorData = await response.json();
-      throw new Error(errorData.message || 'Failed to change password');
+      console.log(errorData,"errr")
+      throw new Error(errorData.message || 'Link Already Expired');
     }
 
-    // For other successful responses, parse the JSON
     return await response.json();
+
   } catch (error) {
+    console.log(error,"catcherror");
     throw new Error(error.message || 'Something went wrong');
   }
 };

@@ -13,12 +13,14 @@ const ResetPasswordForm = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [passwordError, setPasswordError] = useState('');
+  console.log(passwordError,"passwordError");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, success, error } = useSelector((state) => state.resetPassword);
 
+  console.log(error,"error");
+
   const query = new URLSearchParams(useLocation().search);
-  console.log(query,"query");
   const token = query.get('token');
   const emailFromUrl = query.get('email');
 
@@ -39,6 +41,7 @@ const ResetPasswordForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setPasswordError("");
 
     // Password validation regex (at least 10 characters, 1 uppercase, 1 lowercase, 1 number, and 1 special character)
     const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{10,}$/;
@@ -61,11 +64,11 @@ const ResetPasswordForm = () => {
       showMessageWithDelay();
     }
   }, [success]);
-  console.log(success,"success");
+
 
   if (!token || !emailFromUrl) {
     return <p className="reset-password-error">Missing token or email. Please try again.</p>;
-    
+ 
   }
 
   return (

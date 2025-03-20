@@ -226,12 +226,12 @@ const Listingsmap = ({ handlePropertyClick, bearerToken }) => {
   };
   const showInfoWindow = useCallback(
     (map, marker, property, relatedUnits) => {
-     console.log(property,"showInfoWindow");
+     
       if (infoWindowRef.current) {
         infoWindowRef.current.close();
       }
 
-      console.log(property,"clickedd");
+   
 
       // Construct the HTML content using template literals
       const imageUrls = property.PropertyImageUrls
@@ -337,7 +337,7 @@ const imagesToShow = imageUrls.length > 0 ? imageUrls : [defaultimg1, defaultimg
       }, 500);
 
       const handleInfoWindowClick = (property) => {
-        console.log(property,"view");
+  
         if (relatedUnits.Amount.length > 1) {
           fetchProjectViews(dispatch, property.ProjectID, Id, bearerToken);
         } else {
@@ -521,7 +521,7 @@ const imagesToShow = imageUrls.length > 0 ? imageUrls : [defaultimg1, defaultimg
     if (drawnCircleRef.current) {
       fetchmapshapealert(bearerToken, drawnCircleRef.current, Id)
        .then((response) => {
-          console.log(response,"response");
+          
           setAlertsuccessMsg(true);
           
           setTimeout(() => {

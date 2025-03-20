@@ -7,17 +7,18 @@ export const resetPassword = createAsyncThunk(
     try {
       const response = await formresetpassword(password, confirmPassword, email, token);
 
-      if (response.status >= 200 && response.status < 300) {
-        return response.data;
-      } else {
-        return rejectWithValue('Failed to reset password');
+      // Handle 204 success response
+      if (response.success) {
+        return { message: response.message };
       }
+
+      return rejectWithValue(response.message || 'Failed to reset password');
+      
     } catch (error) {
       return rejectWithValue(error.message || 'Something went wrong');
     }
   }
 );
-
 
 const resetPasswordSlice = createSlice({
   name: 'resetPassword',

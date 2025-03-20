@@ -10,8 +10,7 @@ import { fetchListings,
          fetchProjectFavorites,
          fetchPropertyFavorites
         } from '../../API/api';
-  import { toast } from "react-toastify";
-  import "react-toastify/dist/ReactToastify.css"; 
+
 
 export const fetchProperties = createAsyncThunk(
   'properties/fetchProperties',

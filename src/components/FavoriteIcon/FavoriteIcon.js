@@ -9,11 +9,13 @@ import {
 } from "../../API/api";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import "./FavoriteIcon.css";
 
 const FavoriteIcon = ({ groupproperty }) => {
+
     const bearerToken = useSelector((state) => state.auth.bearerToken);
     const { Id } = useSelector((state) => state.auth.userDetails || {});
-    const { favorites, toggleFavorite } = useFavorites();
+    const { favorites, toggleFavorite, favoriteColor } = useFavorites();
     const property = groupproperty?.UnitTypeDetails?.[0];
     const [isFavorited, setIsFavorited] = useState(false);
 
@@ -45,10 +47,6 @@ const FavoriteIcon = ({ groupproperty }) => {
                     : await fetchDeleteProjectFavorties(bearerToken, { ...payload, UserID: Id });
             }
 
-            const successMessage = response?.processMessage?.includes("SUCCESS")
-            ? response.processMessage.replace(/^SUCCESS:\s*/, "").trim()
-            : "Action completed successfully.";
-
         const errorMessage = response?.processMessage?.includes("ERROR")
             ? response.processMessage.replace(/^ERROR:\s*/, "").trim()
             : "An error occurred, please try again.";
@@ -57,7 +55,6 @@ const FavoriteIcon = ({ groupproperty }) => {
                 toast.error(errorMessage);
             } else {
                 toggleFavorite(property);
-                toast.success(successMessage);
             }
         } catch (error) {
             const errorMessage = error?.response?.data?.processMessage || "Something went wrong. Please try again.";
@@ -67,7 +64,8 @@ const FavoriteIcon = ({ groupproperty }) => {
 
     return (
         <MdOutlineFavorite
-            className={`favoriteIcon ${isFavorited ? "favorited" : ""}`}
+            className="favoriteIcon"
+            style={{ color: isFavorited ? favoriteColor : "#ffffff" }} 
             onClick={handleToggleFavorite}
             role="button"
             aria-pressed={isFavorited}

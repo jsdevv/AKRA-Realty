@@ -9,7 +9,7 @@
 
 .geolocation-container .search-box {
 position: absolute;
-top: 27%;
+top: 16%;
 left: 88%;
 transform: translateX(-50%);
 z-index: 10;

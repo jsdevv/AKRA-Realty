@@ -1034,7 +1034,6 @@ export const fetchpropertyVideos = async (bearerToken) => {
 //views
 
 export const fetchPropertyView = async (bearerToken, payload) => {
-  console.log(bearerToken,"beee");
   try {
     const response = await fetch(AddData_API, {
       method: 'POST',
@@ -1064,7 +1063,7 @@ export const fetchPropertyView = async (bearerToken, payload) => {
 };
 
 export const fetchProjectView = async (bearerToken, payload) => {
-  console.log(bearerToken,"beee");
+
   try {
     const response = await fetch(AddData_API, {
       method: 'POST',

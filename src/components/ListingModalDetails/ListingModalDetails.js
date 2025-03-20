@@ -12,8 +12,8 @@ import ListingModal from '../ListingModal/ListingModal';
 import PropertyGrid from './PropertyGrid';
 import './ListingModalDetails.css';
 
-const ListingModalDetails = ({ selectedProperty, propertyCardData, propertyType }) => {
-  console.log(selectedProperty,"selectedProperty");
+const ListingModalDetails = ({ selectedProperty, propertyCardData, propertyType,propertycount }) => {
+   console.log(selectedProperty,"selectedProperty");
   const tabs = [
     { id: 'scheduleVisit', label: 'Schedule Visit' },
     { id: 'requestInfo', label: 'Request Info' },
@@ -109,6 +109,8 @@ const ListingModalDetails = ({ selectedProperty, propertyCardData, propertyType 
   groupedByBedroomsArray.sort((a, b) => a.Bedrooms - b.Bedrooms);
   groupedByBedroomsArray.splice(0, 0, { Bedrooms: 0, properties: relatedUnits?.UnitTypeDetails ?? [] });
   let unitCount = relatedUnits?.UnitTypeDetails?.length ?? 0;
+
+  console.log(propertyType,"propertytype");
   if (propertyType === 'Property') {
     unitCount = 1;
   }
@@ -120,18 +122,18 @@ const ListingModalDetails = ({ selectedProperty, propertyCardData, propertyType 
           <span className="badge for-sale">
             {selectedProperty.PropertyType}
           </span>
-          <span className="property-info">
+          {/* <span className="property-info">
             &nbsp; <FaClock aria-label="Time since listed" /> &nbsp; 2 months
             ago
-          </span>
+          </span> */}
           <span className="property-info">
             <FaEye aria-label="Number of views" /> &nbsp;{" "}
-            {selectedProperty.Views} views
+            {propertyType === 'Project' ? selectedProperty.ProjectViewCount : selectedProperty.PropertyViewCount} views
           </span>
-          <span className="property-info">
+          {/* <span className="property-info">
             <RiShareForwardFill aria-label="Number of views" /> &nbsp;{" "}
             {selectedProperty.Shares} Shares
-          </span>
+          </span> */}
         </div>
 
         <div className="listingmodal-container">
