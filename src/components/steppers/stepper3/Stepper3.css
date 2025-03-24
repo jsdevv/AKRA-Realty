@@ -6,7 +6,15 @@
   padding: 10px 10px 10px 0px;
   height: 50vh;
 }
-
+.step1error-message {
+  color: red;
+  font-size: 10px;
+  margin-top: 4px;
+  position: relative;
+}
+.form-field-w-100{
+  width: 100%;
+}
 .stepper3-form-container {
   width: 45%;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);

@@ -64,7 +64,7 @@ const AddListings = () => {
     PropertyLatitude: EditPropertyData.PropertyLatitude || '',
     PropertyLongitude: EditPropertyData.PropertyLongitude || '',
     district: EditPropertyData.district || '',
-    PlotNo: EditPropertyData.plotno || '',
+    plotno: EditPropertyData.plotno || '',
     PropertyFloorNumber: EditPropertyData.PropertyFloorNumber || '',
     Bedrooms: EditPropertyData.Bedrooms || '',
     PropertyBathrooms: EditPropertyData.PropertyBathrooms || '',
@@ -94,6 +94,7 @@ const AddListings = () => {
     if (currentStep === 1) return step1ValidationSchema;
     if (currentStep === 2) return step2ValidationSchema;
     if (currentStep === 3) return step3ValidationSchema;
+    if (currentStep === 4) return step4ValidationSchema;
     return step4ValidationSchema;
   };
  
@@ -136,6 +137,9 @@ const AddListings = () => {
     }
     if(currentStep <= 2 && stepNumber > 2 && propertyImages.length < 2) {
       setShowImageCountError(true);
+      return;
+    }
+    if(currentStep <= 3 &&  stepNumber > 3 && errors && Object.keys(errors).length > 0) {
       return;
     }
     setCurrentStep(stepNumber);

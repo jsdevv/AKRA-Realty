@@ -110,7 +110,6 @@ const ListingModalDetails = ({ selectedProperty, propertyCardData, propertyType,
   groupedByBedroomsArray.splice(0, 0, { Bedrooms: 0, properties: relatedUnits?.UnitTypeDetails ?? [] });
   let unitCount = relatedUnits?.UnitTypeDetails?.length ?? 0;
 
-  console.log(propertyType,"propertytype");
   if (propertyType === 'Property') {
     unitCount = 1;
   }

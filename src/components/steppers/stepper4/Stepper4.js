@@ -8,6 +8,7 @@ import { Autocomplete, TextField } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { renderLabel } from '../../AddListings/validationSchema';
 const Stepper4 = () => {
 
   const furnishingOptions = [
@@ -25,7 +26,7 @@ const Stepper4 = () => {
 
 
   const dispatch = useDispatch();
-  const { values, handleChange, setFieldValue } = useFormikContext();
+  const { values, handleChange, setFieldValue, errors, touched  } = useFormikContext();
 
   const handleFieldChange = (e) => {
     const { name, value } = e.target;
@@ -58,67 +59,93 @@ const Stepper4 = () => {
       <div className="stepper4-container">
 
         <div className="stepper4-group">
-          <label htmlFor="plotno">Plot/Flat No: </label>
+          {renderLabel("plotno", "Plot/Flat No", values, 4)}
+          <div className='custom-textfield4'>
           <TextField
-            className="custom-textfield4"
+           className="form-field-w-100"
             placeholder='Plot No'
             id="plotno"
             type="text"
-            name="PlotNo"
-            value={values.PlotNo}
+            name="plotno"
+            value={values.plotno}
             onChange={handleFieldChange}
-
+            error={Boolean(errors.plotno)}
           />
+          {
+            errors.plotno && (
+              <div className="step1error-message">{errors.plotno}</div>
+            )
+          }
+          </div>
 
-          <label htmlFor="Bedrooms">Floor Number:</label>
+          {renderLabel("PropertyFloorNumber", "Floor Number", values, 4)}
+          <div className='custom-textfield4'>
           <TextField
-            className="custom-textfield4"
+           className="form-field-w-100"
             placeholder='Floor'
             id="PropertyFloorNumber"
             type="number"
             name="PropertyFloorNumber"
             value={values.PropertyFloorNumber} // Formik's value
             onChange={handleFieldChange}
-
+          error={Boolean(errors.PropertyFloorNumber)}
           />
-
+          {
+            errors.PropertyFloorNumber && (
+              <div className="step1error-message">{errors.PropertyFloorNumber}</div>
+            )
+          }
+          </div>
         </div>
 
 
         <div className="stepper4-group">
 
-          <label htmlFor="Bedrooms">Bedrooms:</label>
+          {renderLabel("Bedrooms", "Bedrooms", values, 4)}
+          <div className='custom-textfield4'>
           <TextField
-            className="custom-textfield4"
+            className="form-field-w-100"
             placeholder='Bedrooms'
             id="Bedrooms"
             type="number"
             name="Bedrooms"
             value={values.Bedrooms} // Formik's value
             onChange={handleFieldChange}
-
+            error={Boolean(errors.Bedrooms)}
           />
-          <label className="stepper4-label" htmlFor="PropertyBathrooms">Bathrooms:    </label>
+          {
+            errors.Bedrooms && (
+              <div className="step1error-message">{errors.Bedrooms}</div>
+            )
+          }
+          </div>
+          {renderLabel("PropertyBathrooms", "Bathrooms", values, 4)}
+          <div className='custom-textfield4'>
           <TextField
-            className="custom-textfield4"
+            className="form-field-w-100"
             placeholder='Bathrooms'
             id="PropertyBathrooms"
             type="number"
             name="PropertyBathrooms"
             value={values.PropertyBathrooms} // Formik's value
             onChange={handleFieldChange}
-
+            error={Boolean(errors.PropertyBathrooms)}
           />
+          {
+            errors.PropertyBathrooms && (
+              <div className="step1error-message">{errors.PropertyBathrooms}</div>
+            )
+          }
+          </div>
 
         </div>
 
         <div className="stepper4-group">
-          <label className="stepper4-label" htmlFor=" PropertyFurnishing">Parking: </label>
+          {renderLabel("PropertyParking", "Parking", values, 4)}
 
-
-
+          <div className='custom-textfield4'>
           <Autocomplete
-            className="custom-autocomplete4"
+            className="custom-autocomplete4 form-field-w-100"
             options={parkingOptions}
             getOptionLabel={(option) => option.label}
             value={parkingOptions.find((opt) => opt.value === values.PropertyParking) || null}
@@ -129,11 +156,18 @@ const Stepper4 = () => {
             renderInput={(params) => (
               <TextField {...params} placeholder="Select parking" />
             )}
-          />
 
-          <label htmlFor="Parkingslot">Parking Slot:       </label>
+          />
+          {
+            errors.PropertyParking && (
+              <div className="step1error-message">{errors.PropertyParking}</div>
+            )
+          }
+          </div>
+          {renderLabel("Parkingslot", "Parking Slot", values, 4)}
+          <div className='custom-textfield4'>
           <TextField
-            className="custom-textfield4"
+            className="form-field-w-100"
             placeholder='Parking Slot'
             id="Parkingslot"
             type="number"
@@ -142,11 +176,15 @@ const Stepper4 = () => {
             value={values.Parkingslot} // Formik's value
             onChange={handleFieldChange}
             required
+            error={Boolean(errors.Parkingslot)}
 
           />
-
-
-
+          {
+            errors.Parkingslot && (
+              <div className="step1error-message">{errors.Parkingslot}</div>
+            )
+          }
+          </div>
         </div>
 
         <div className="stepper4-group">
@@ -157,7 +195,7 @@ const Stepper4 = () => {
 
 
           <Autocomplete
-            className="custom-autocomplete4"
+            className="custom-autocomplete4 "
             options={furnishingOptions}
             getOptionLabel={(option) => option.label}
             value={furnishingOptions.find((opt) => opt.value === values.PropertyFurnishing) || null}
@@ -170,11 +208,11 @@ const Stepper4 = () => {
             )}
           />
 
-          <label htmlFor="AvailableFrom">
-            Available from:  </label>
+            {renderLabel("AvailableFrom", "Available From", values, 4)}
+            <div className='custom-textfield4'>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker
-              className="custom-date-picker"
+              className="custom-date-picker form-field-w-100"
               placeholder="Available From"
               value={values.AvailableFrom || null} // Ensure it's handled properly
               onChange={(newDate) => {
@@ -182,8 +220,15 @@ const Stepper4 = () => {
                 dispatch(AddlistingFormData({ AvailableFrom: newDate }));
               }}
               renderInput={(params) => <TextField {...params} className="custom-date-input" />}
+              error={Boolean(errors.AvailableFrom)}
             />
           </LocalizationProvider>
+          {
+            errors.AvailableFrom && (
+              <div className="step1error-message">{errors.AvailableFrom}</div>
+            )
+          }
+          </div>
 
         </div>
 

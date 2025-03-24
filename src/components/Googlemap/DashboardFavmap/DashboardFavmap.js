@@ -4,12 +4,12 @@ import { APIProvider, Map, InfoWindow, useMap, AdvancedMarker } from "@vis.gl/re
 import { clearSelectedProperty, setSelectedProperty } from "../../../Redux/Slices/propertySlice";
 import ListingModal from "../../ListingModal/ListingModal";
 import "./DashboardFavmap.css";
-import { useFavorites } from "../../../context/FavoritesContext";
+import Slider from "react-slick";
 
 const API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 const DEFAULT_CENTER = { lat: 17.4065, lng: 78.4772 };
 
-const CircleMarker = ({ position, onClick }) => {
+const CircleMarker = ({ position, onClick, propertyType }) => {
   const map = useMap();
 
   useEffect(() => {
@@ -26,10 +26,11 @@ const CircleMarker = ({ position, onClick }) => {
   );
 };
 
-const DashboardFavmap = () => {
+const DashboardFavmap = ({favData}) => {
   const dispatch = useDispatch();
-  const { favorites } = useFavorites(); // Getting favorites from context
   const {selectedAgentProperty, selectedProperty } = useSelector((state) => state.properties);
+
+  console.log(selectedAgentProperty,"agent");
 
   const [infoWindowPosition, setInfoWindowPosition] = useState(null);
   const mapRef = useRef(null);
@@ -99,7 +100,7 @@ const DashboardFavmap = () => {
         >
          {/* Render all favorite properties as markers if no property is selected */}
          {!selectedAgentProperty &&
-            favorites?.map((property) => (
+            favData?.map((property) => (
               property.PropertyLatitude && property.PropertyLongitude && (
                 <CircleMarker
                   key={property.PropertyID}
@@ -125,34 +126,71 @@ const DashboardFavmap = () => {
           )}
 
           {/* Info Window */}
-          {infoWindowPosition && selectedAgentProperty && (
-            <InfoWindow position={infoWindowPosition}>
-              <div className="mappopup-content">
-                <button
-                  className="mappopup-close-button"
-                  onClick={() => setInfoWindowPosition(null)}
-                >
-                  X
-                </button>
+        {/* Info Window */}
+{infoWindowPosition && selectedAgentProperty && (
+  <InfoWindow position={infoWindowPosition}>
+    <div className="dashboard-favmap-popup">
+      <button
+        className="dashboard-favmap-close-btn"
+        onClick={() => setInfoWindowPosition(null)}
+      >
+        X
+      </button>
+
+      {/* Image Slider */}
+      {(() => {
+        const imageUrls = selectedAgentProperty.PropertyImageUrls
+          ? selectedAgentProperty.PropertyImageUrls.split(",").map((url) => url.trim())
+          : selectedAgentProperty.ProjectImageUrls
+          ? selectedAgentProperty.ProjectImageUrls.split(",").map((url) => url.trim())
+          : [];
+
+        const imagesToShow = imageUrls.length > 0 ? imageUrls : ["/images/defaultimg.jpg", "/images/defaultimg1.jpg"];
+
+        const settings = {
+          infinite: true,
+          speed: 500,
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          arrows: true,
+        };
+
+        return (
+          <Slider {...settings} className="dashboard-favmap-slider">
+            {imagesToShow.map((url, index) => (
+              <div key={index} onClick={() => handlePopupopen(selectedAgentProperty)}>
                 <img
-                  src={require(`../../../images/${selectedAgentProperty.ImageNames}`)}
-                  alt={selectedAgentProperty.PropertyName}
-                  className="mappopup-image"
-                  onClick={() => handlePopupopen(selectedAgentProperty)}
+                  src={url}
+                  alt={`Slide ${index + 1}`}
+                    className="dashboard-favmap-slider-img"
+                  loading="lazy"
+                  style={{
+                    maxWidth: "100%",
+                    maxHeight: "125px",
+                    objectFit: "cover",
+                  }}
                 />
-                <div className="mappopup-details">
-                  <h3 className="mappopup-amount">
-                    {selectedAgentProperty.PropertyName}, ₹{selectedAgentProperty.Amount}
-                  </h3>
-                  <p className="mappopup-address">
-                    {selectedAgentProperty.PropertyType} | {selectedAgentProperty.PropertyBedrooms} | {selectedAgentProperty.SqFt}
-                    <br />
-                    {selectedAgentProperty.PropertyArea} | {selectedAgentProperty.PropertyCity} | {selectedAgentProperty.PropertyZipCode}
-                  </p>
-                </div>
               </div>
-            </InfoWindow>
-                 )}
+            ))}
+          </Slider>
+        );
+      })()}
+
+<div className="dashboard-favmap-details">
+<h3 className="dashboard-favmap-price">
+          {selectedAgentProperty.PropertyName}, {selectedAgentProperty.MinPrice ?   ` ₹${selectedAgentProperty.MinPrice} - ₹${selectedAgentProperty.MaxPrice}` : 
+    ` ₹${selectedAgentProperty.Amount}`
+  }
+        </h3>
+        <p className="dashboard-favmap-location">
+          {selectedAgentProperty.PropertyType} | {selectedAgentProperty.PropertyBedrooms} | {selectedAgentProperty.SqFt}
+          {selectedAgentProperty.PropertyArea} | {selectedAgentProperty.PropertyCity} | {selectedAgentProperty.PropertyZipCode}
+        </p>
+      </div>
+    </div>
+  </InfoWindow>
+)}
+
         </Map>
       </APIProvider>
 

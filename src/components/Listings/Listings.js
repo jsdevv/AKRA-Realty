@@ -152,6 +152,7 @@ const Listings = () => {
                 {currentItems.map((property) => {
 
                   const propertyUnit = property.UnitTypeDetails[0];
+                  console.log(propertyUnit,"propertyUnit");
 
                   const propertyUrls = propertyUnit.ProjectImageUrls ?? propertyUnit.PropertyImageUrls;
                   const imageUrls = propertyUrls ? propertyUrls.split(',').map(url => url.trim()) : [];
@@ -219,7 +220,7 @@ const Listings = () => {
                     >
                       {/* Favorite Icon Added Above Image */}
                       <FavoriteIcon groupproperty={property} />
-                      
+
                       <div className="propertyImages">
                         <div className="slide-wrapper">
                           <Slider {...settings}>
@@ -251,7 +252,15 @@ const Listings = () => {
                             <br />
                             {propertyAmount} {" "} {" "}
                           </h3>
-                          <span className="listcount">{property.PropertyCount} Units</span>
+
+                          <span
+                            className="listcount"
+                            onClick={() => handlePropertyClick(propertyUnit)}
+                            style={{ cursor: "pointer" }}
+                          >
+                            {property.PropertyCount} Units
+                          </span>
+
                         </div>
 
                         <p>{propertyDetails} {line3 && <><br />{line3}</>}</p>

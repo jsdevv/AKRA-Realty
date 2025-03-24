@@ -2,3 +2,100 @@
     height: 100%;
     width: 100%;
   }
+
+  
+/* Slider container */
+.dashboard-favmap-slider {
+  max-width: 100%;
+  width: 234px;
+  height: 135px;
+  cursor: pointer;
+}
+
+/* Image inside the slider */
+.dashboard-favmap-slider-img {
+  width: 100%;
+  width: 233px;
+  height: 100%;
+  transition: transform 0.3s ease-in-out;
+}
+
+.dashboard-favmap-slider-img:hover {
+  transform: scale(1.05);
+}
+
+/* Slider arrows */
+.dashboard-favmap-slider .slick-prev, 
+.dashboard-favmap-slider .slick-next {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  z-index: 10;
+}
+
+
+.dashboard-favmap-slider .slick-prev::before, 
+.dashboard-favmap-slider .slick-next::before {
+  font-size: 18px;
+  color: white;
+}
+
+.dashboard-favmap-details{
+  width: 230px;
+  padding: 4px 0px 2px 4px;
+  cursor: pointer;
+}
+
+.dashboard-favmap-price {
+  font-size: 12px;
+  font-weight: 600;
+  color: #333;
+  margin: 2px 2px 2px 2px;
+}
+
+.dashboard-favmap-location {
+  font-size: 11px;
+  color: #666;
+  margin: 2px 2px 2px 2px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .dashboard-favmap-popup {
+    max-width: 280px;
+  }
+
+  .dashboard-favmap-slider-img {
+    height: 150px;
+  }
+
+  .dashboard-favmap-price {
+    font-size: 14px;
+  }
+
+  .dashboard-favmap-location {
+    font-size: 12px;
+  }
+}
+
+.dashboard-favmap-close-btn{
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 10; /* Ensure it appears above other elements */
+}
+
+.dashboard-favmap-close-btn:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}

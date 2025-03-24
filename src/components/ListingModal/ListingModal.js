@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaHeart, FaShareAlt, FaTimes } from 'react-icons/fa';
+import { FaShareAlt, FaTimes } from 'react-icons/fa';
 import { BsArrowRightCircleFill, BsArrowLeftCircleFill } from 'react-icons/bs';
 import { IoCloseCircleSharp } from 'react-icons/io5';
 import { Carousel } from 'react-responsive-carousel';
@@ -15,9 +15,7 @@ import { toast } from 'react-toastify';
 
 
 const ListingModal = ({ selectedProperty, onClose, propertyType }) => {
-
-  const { groupedProperties } = useSelector((state) => state.properties);
-  // console.log(groupedProperties,"groupedProperties");
+ 
   const bearerToken = useSelector((state) => state.auth.bearerToken);
   const { Id } = useSelector((state) => state.auth.userDetails || {});
   const { favorites, toggleFavorite, favoriteColor } = useFavorites();
@@ -26,10 +24,6 @@ const ListingModal = ({ selectedProperty, onClose, propertyType }) => {
   const [showCarousel, setShowCarousel] = useState(false);
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [isFavorited, setIsFavorited] = useState(false);
-
-  const property = Object.values(groupedProperties).find((group) =>
-    group.UnitTypeDetails.some((unit) => unit.PropertyID === selectedProperty?.PropertyID)
-  );
 
   useEffect(() => {
     if (selectedProperty) {
@@ -71,10 +65,9 @@ const ListingModal = ({ selectedProperty, onClose, propertyType }) => {
   const propertyImages = imageNames.map((imageName) => `${imageName}`);
 
   const handleToggleFavorite = async () => {
-    const isSingleProperty = property?.UnitTypeDetails.length  === 1;
-    const payload = isSingleProperty
-      ? { PropertyID: selectedProperty.PropertyID }
-      : { ProjectID: selectedProperty.ProjectID };
+    const isSingleProperty = propertyType === "Property";
+    const payloadKey = isSingleProperty ? "PropertyID" : "ProjectID";
+    const payload = { [payloadKey]: selectedProperty[payloadKey] };
 
     try {
       let response;

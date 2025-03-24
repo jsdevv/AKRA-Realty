@@ -5,6 +5,7 @@ import { useFormikContext } from 'formik';
 import { mapStyle } from '../../Mapstyles/mapStyles';
 import './Stepper3.css';
 import { Autocomplete, TextField } from '@mui/material';
+import { renderLabel } from '../../AddListings/validationSchema';
 
 const API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
@@ -18,7 +19,7 @@ const Stepper3 = ({formData}) => {
   const addlistingmapRef = useRef(null);
   const marker = useRef(null);
   const autocomplete = useRef(null);
-  const { values, handleChange,setFieldValue } = useFormikContext();
+  const { values, handleChange, setFieldValue, errors, touched } = useFormikContext();
   const [selectedLocation, setSelectedLocation] = useState(null);
 
   useEffect(() => {
@@ -261,139 +262,176 @@ const Stepper3 = ({formData}) => {
       <div className="stepper3-form-container">
 
         <div className="stepper3-form-group">
-          <label htmlFor="PropertyAddress1">Address1:</label>
-          <TextField
-            className="custom-textfield3"
-            id="PropertyAddress1"
-            placeholder='Address1'
-            name="PropertyAddress1"
-            value={values.PropertyAddress1} // Formik's value
-            onChange={handleChange} // Using Formik's handleChange
-
-          />
+          {renderLabel("PropertyAddress1", "Address1", values, 3)}
+          <div className='custom-textfield3'>
+            <TextField
+              className="form-field-w-100"
+              id="PropertyAddress1"
+              placeholder='Address1'
+              name="PropertyAddress1"
+              value={values.PropertyAddress1} // Formik's value
+              onChange={handleChange} // Using Formik's handleChange
+              error={Boolean(errors.PropertyAddress1)}
+            />
+            {errors.PropertyAddress1 && (
+              <div className="step1error-message">{errors.PropertyAddress1}</div>
+            )}
+          </div>
 
           <label htmlFor="PropertyAddress2">Address2:</label>
-          <TextField
-            className="custom-textfield3"
-            id="PropertyAddress2"
-            placeholder='Address2'
-            type="text"
-            name="PropertyAddress2"
-            value={values.PropertyAddress2} // Formik's value
-            onChange={handleChange} // Using Formik's handleChange
-          />
-
+          <div className='custom-textfield3'>
+            <TextField
+              className="form-field-w-100"
+              id="PropertyAddress2"
+              placeholder='Address2'
+              type="text"
+              name="PropertyAddress2"
+              value={values.PropertyAddress2} // Formik's value
+              onChange={handleChange} // Using Formik's handleChange
+            />
+          </div>
         </div>
 
         <div className="stepper3-form-group">
-          <label htmlFor="PropertyZipCode">Zip Code:</label>
-          <TextField
-            className="custom-textfield3"
-            id="PropertyZipCode"
-            placeholder='ZipCode'
-            type="number"
-            name="PropertyZipCode"
-            value={values.PropertyZipCode} 
-            onChange={handleChange}
-
-          />
-
-          <label htmlFor="PropertyCity">City:</label>
-          <TextField
-            className="custom-textfield3"
-            id="PropertyCity"
-            placeholder='City'
-            type="text"
-            name="PropertyCity"
-            value={values.PropertyCity} 
-            onChange={handleChange} 
-
-          />
-
-        </div>
-
-        <div className="stepper3-form-group">
-
-          <label htmlFor="PropertyState">State: </label>
-          <TextField
-            className="custom-textfield3"
-            id="PropertyState"
-            placeholder='State'
-            type="text"
-            name="PropertyState"
-            value={values.PropertyState} // Formik's value
-            onChange={handleChange} // Using Formik's handleChange
-            required
-          />
-
-          <label htmlFor="Locality">District:</label>
-          <TextField
-            className="custom-textfield3"
-            id="district"
-            placeholder='district'
-            type="text"
-            name="district"
-            value={values.district}
-            onChange={handleChange}
-
-          />
-
-        </div>
-
-        <div className="stepper3-form-group">
-          <label htmlFor="Locality">Locality:</label>
-          <TextField
-            className="custom-textfield3"
-            id="Locality"
-            placeholder='Locality'
-            type="text"
-            name="Locality"
-            value={values.Locality}
-            onChange={handleChange}
-
-          />
-
-
-          <label htmlFor="SubLocality">Sub Locality:</label>
-          <TextField
-            className="custom-textfield3"
-            id="SubLocality"
-            placeholder='SubLocality'
-            type="text"
-            name="SubLocality"
-            value={values.SubLocality}
-            onChange={handleChange}
-
-          />
-        </div>
-
-        <div className="stepper3-form-group">
-
-          <label htmlFor="PropertyLandmark">Location:  </label>
-          <Autocomplete
-            className="custom-textfield3"
-            id="ShowLocation"
-            options={["Yes", "No"]}
-            getOptionLabel={(option) => option}
-            value={values.ShowLocation || "Yes"} // Default to "Yes" if no value is set
-            onChange={(event, newValue) => {
-              handleChange({ target: { name: "ShowLocation", value: newValue } });
-            }}
-            renderInput={(params) => (
-              <TextField {...params} placeholder="Location Available?" />
+          {renderLabel("PropertyZipCode", "Zip Code", values, 3)}
+          <div className='custom-textfield3'>
+            <TextField
+              className="form-field-w-100"
+              id="PropertyZipCode"
+              placeholder='ZipCode'
+              type="number"
+              name="PropertyZipCode"
+              value={values.PropertyZipCode} 
+              onChange={handleChange}
+              error={Boolean(errors.PropertyZipCode)}
+            />
+            {errors.PropertyZipCode && (
+              <div className="step1error-message">{errors.PropertyZipCode}</div>
             )}
-          />
+          </div>
+
+          {renderLabel("PropertyCity", "City", values, 3)}
+          <div className='custom-textfield3'>
+            <TextField
+              className="form-field-w-100"
+              id="PropertyCity"
+              placeholder='City'
+              type="text"
+              name="PropertyCity"
+              value={values.PropertyCity} 
+              onChange={handleChange} 
+              error={Boolean(errors.PropertyCity)}
+            />
+            {errors.PropertyCity && (
+              <div className="step1error-message">{errors.PropertyCity}</div>
+            )}
+          </div>
+        </div>
+
+        <div className="stepper3-form-group">
+          {renderLabel("PropertyState", "State", values, 3)}
+          <div className='custom-textfield3'>
+            <TextField
+              className="form-field-w-100"
+              id="PropertyState"
+              placeholder='State'
+              type="text"
+              name="PropertyState"
+              value={values.PropertyState} // Formik's value
+              onChange={handleChange} // Using Formik's handleChange
+              error={Boolean(errors.PropertyState)}
+              required
+            />
+             {errors.PropertyState && (
+              <div className="step1error-message">{errors.PropertyState}</div>
+            )}
+          </div>
+
+          {renderLabel("district", "District", values, 3)}
+          <div className='custom-textfield3'>
+            <TextField
+              className="form-field-w-100"
+              id="district"
+              placeholder='district'
+              type="text"
+              name="district"
+              value={values.district}
+              onChange={handleChange}
+              error={Boolean(errors.district)}
+            />
+            {errors.district && (
+              <div className="step1error-message">{errors.district}</div>
+            )}
+          </div>
+        </div>
+
+        <div className="stepper3-form-group">
+          {renderLabel("Locality", "Locality", values, 3)}
+          <div className='custom-textfield3'>
+            <TextField
+              className="form-field-w-100"
+              id="Locality"
+              placeholder='Locality'
+              type="text"
+              name="Locality"
+              value={values.Locality}
+              onChange={handleChange}
+              error={Boolean(errors.Locality)}
+            />
+            {errors.Locality && (
+              <div className="step1error-message">{errors.Locality}</div>
+            )}
+          </div>
+
+          {renderLabel("SubLocality", "Sub Locality", values, 3)}
+          <div className='custom-textfield3'>
+            <TextField
+              className="form-field-w-100"
+              id="SubLocality"
+              placeholder='SubLocality'
+              type="text"
+              name="SubLocality"
+              value={values.SubLocality}
+              onChange={handleChange}
+              error={Boolean(errors.SubLocality)}
+            />
+            {errors.SubLocality && (
+              <div className="step1error-message">{errors.SubLocality}</div>
+            )}
+          </div>
+        </div>
+
+        <div className="stepper3-form-group">
+          <label htmlFor="PropertyLandmark">Location:  </label>
+          <div className='custom-textfield3'>
+            <Autocomplete
+              className="form-field-w-100"
+              id="ShowLocation"
+              options={["Yes", "No"]}
+              getOptionLabel={(option) => option}
+              value={values.ShowLocation || "Yes"} // Default to "Yes" if no value is set
+              onChange={(event, newValue) => {
+                handleChange({ target: { name: "ShowLocation", value: newValue } });
+              }}
+              renderInput={(params) => (
+                <TextField {...params} placeholder="Location Available?" />
+              )}
+            />
+          </div>
 
           <label htmlFor="Geolocation">Geolocation:</label>
-          <TextField
-            className="custom-textfield3"
-            id="Geolocation"
-            placeholder="Enter Latitude, Longitude"
-            type="text"
-            name="Geolocation"
-            value={selectedLocation}  // Combine latitude and longitude as a string
-            onChange={handleGeolocationInputChange}
-          />
+          <div className='custom-textfield3'>
+            <TextField
+              className="form-field-w-100"
+              id="Geolocation"
+              placeholder="Enter Latitude, Longitude"
+              type="text"
+              name="Geolocation"
+              value={selectedLocation}  // Combine latitude and longitude as a string
+              onChange={handleGeolocationInputChange}
+              helperText={touched.Geolocation && errors.Geolocation}
+            />
+          </div>
         </div>
       </div>
 

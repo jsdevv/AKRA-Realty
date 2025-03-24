@@ -16,7 +16,6 @@ import defaultimg2 from "../../images/Apartment103.jpeg"
 import Slider from 'react-slick/lib/slider';
 import ListingModal from '../../components/ListingModal/ListingModal';
 import { fetchDeleteProjectFavorties, fetchDeletePropertyFavorties } from '../../API/api';
-import { toast, ToastContainer } from 'react-toastify';
 
 const Favorites = () => {
     const bearerToken = useSelector((state) => state.auth.bearerToken);
@@ -25,12 +24,12 @@ const Favorites = () => {
     const { selectedProperty, Projectfavorites, Propertyfavorites } = useSelector((state) => state.properties);
     const [selectedFavoritecompare, setSelectedFavoritescompare] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [activeTab, setActiveTab] = useState('project');
+    const [activeTab, setActiveTab] = useState('Project');
     const dispatch = useDispatch();
-
+    
     useEffect(() => {
         if (bearerToken && Id) {
-            const fetchFavorites = activeTab === 'project' ? fetchGetprojectFavorites : fetchGetpropertyFavorites;
+            const fetchFavorites = activeTab === 'Project' ? fetchGetprojectFavorites : fetchGetpropertyFavorites;
             dispatch(fetchFavorites(bearerToken));
         }
     }, [bearerToken, activeTab,Id, dispatch]);
@@ -58,6 +57,7 @@ const Favorites = () => {
 
     const handlePopupopen = useCallback(
         (property) => {
+            console.log(property,"property");
             dispatch(setSelectedProperty(property));
         },
         [dispatch]
@@ -76,7 +76,7 @@ const Favorites = () => {
         arrows: true,
     };
 
-    const filteredFavorites = activeTab === 'project' ? Projectfavorites : Propertyfavorites;
+    const filteredFavorites = activeTab === 'Project' ? Projectfavorites : Propertyfavorites;
     const sortedFavorites = filteredFavorites ? [...filteredFavorites].sort((a, b) => b.shortlisted - a.shortlisted) : [];
     const propertyUrls = sortedFavorites?.ProjectImageUrls || sortedFavorites?.PropertyImageUrls;
     const imageUrls = propertyUrls ? propertyUrls.split(',').map(url => url.trim()).filter(Boolean) : [];
@@ -88,28 +88,21 @@ const Favorites = () => {
         console.log(favorites,"favorites");
         
         removeFavorite(property.PropertyID ); 
-        const payload = activeTab === 'project' ? { ProjectID: property.ProjectID } : { PropertyID: property.PropertyID };
+        const payload = activeTab === 'Project' ? { ProjectID: property.ProjectID } : { PropertyID: property.PropertyID };
 
         try {
             let response;
-            if (activeTab === 'property') {
+            if (activeTab === 'Property') {
                 response = await fetchDeletePropertyFavorties(bearerToken, { ...payload, UserID: Id });
             } else {
                 response = await fetchDeleteProjectFavorties(bearerToken, { ...payload, UserID: Id });
             }
-    
-             if (response?.ProcessCode === 0) {
-                const successMessage = response?.processMessage?.includes("SUCCESS")
-                ? response.processMessage.replace(/^SUCCESS:\s*/, "").trim()
-                : "Action completed successfully.";
-                toast.success(successMessage , { position: "top-right" });
-            }            
+              
         } catch (error) {
             console.error("Error removing favorite:", error);
-            toast.error("Something went wrong! Please try again.", { position: "top-right" });
         }
 
-        if (activeTab === 'property') {
+        if (activeTab === 'Property') {
             dispatch(fetchGetpropertyFavorites(bearerToken));  // Fetch updated favorites list
         } else {
             dispatch(fetchGetprojectFavorites(bearerToken));  // Fetch updated favorites list
@@ -119,18 +112,24 @@ const Favorites = () => {
     return (
         <>
             <div className="favorites-container">
-               <ToastContainer autoClose={3000} />
+         
             
                     <div className="favorites-tabs">
                         <button
-                            className={`favtab-button ${activeTab === 'project' ? 'active' : ''}`}
-                            onClick={() => setActiveTab('project')}
+                            className={`favtab-button ${activeTab === 'Project' ? 'active' : ''}`}
+                            onClick={() => {
+                                setActiveTab('Project');
+                                setSelectedFavoritescompare([]); // Clear selected properties for comparison
+                            }}
                         >
                             Project Favorites
                         </button>
                         <button
-                            className={`favtab-button ${activeTab === 'property' ? 'active' : ''}`}
-                            onClick={() => setActiveTab('property')}
+                            className={`favtab-button ${activeTab === 'Property' ? 'active' : ''}`}
+                            onClick={() => {
+                                setActiveTab('Property');
+                                setSelectedFavoritescompare([]); // Clear selected properties for comparison
+                            }}
                         >
                             Property Favorites
                         </button>
@@ -196,7 +195,7 @@ const Favorites = () => {
                                             </div>
                                             <div className="favorites-address-container">
                                                 <div className="favorites-address">
-                                                    {activeTab === 'property' ? (
+                                                    {activeTab === 'Property' ? (
                                                         <span>₹ {property.Amount}</span> // Keep property prices as they are
                                                     ) : (
                                                         <span>
@@ -258,7 +257,7 @@ const Favorites = () => {
             )}
             {selectedProperty && (
                 <ListingModal
-                    propertyType="Project"
+                    propertyType={activeTab === 'Project' ? 'Project' : 'Property'}
                     selectedProperty={selectedProperty}
                     onClose={handleCloseModal}
                     bearerToken={bearerToken}

@@ -74,7 +74,6 @@
   border-collapse: collapse;
   text-align:start;
   margin-top: 20px;
-  font-size: 14px;
   border: 1px solid #ddd;
 }
 
@@ -88,12 +87,14 @@
 .favcomparison-table th {
   background-color: #007aff;
   color: white;
-  font-weight: bold;
+  font-weight: 400;
+  font-size: 12px;
   border: 1px solid #ddd;
   padding: 12px 15px;
 }
 
 .favcomparison-table td {
+  font-size: 12px;
   color: #555;
 }
 
@@ -114,11 +115,15 @@
 .fav-comparison-image{
   display: flex;
   gap: 10px;
+  align-items: center;
 }
+
 .fav-comparison-image img {
-  max-width: 100px;
-  height: auto;
+  width: 90px;  /* Adjust width as needed */
+  height: 60px;  /* Adjust height to maintain aspect ratio */
+  object-fit: cover; /* Ensures image fits well */
   border-radius: 8px;
+  border: 1px solid #ddd;
 }
 
 .favcompare-share {
@@ -144,12 +149,12 @@
 
 .compare-name {
   font-weight: 400;
-  font-size: 14px;
+  font-size: 12px;
   margin-bottom: 4px; /* Adjust this if the name still takes too much space */
 }
 
 .compare-location {
-  font-size: 14px;
+  font-size: 12px;
   color: #777;
 }
 

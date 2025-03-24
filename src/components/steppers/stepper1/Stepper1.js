@@ -10,6 +10,7 @@ import {
 } from "../../../Redux/Slices/propertySlice";
 import { useFormikContext } from "formik";
 import "./Stepper1.css";
+import { renderLabel } from "../../AddListings/validationSchema";
 
 const Stepper1 = () => {
 
@@ -33,7 +34,6 @@ const Stepper1 = () => {
   const [filteredProjects, setFilteredProjects] = useState([]);
 
   const { values, handleChange, setFieldValue, handleBlur, errors, touched } = useFormikContext();
-
 
   // console.log(errors, "errors");
   // console.log(touched, "touched");
@@ -183,7 +183,9 @@ const Stepper1 = () => {
                 key={(company) => company.CompanyID}
                 required
               />
-
+              {errors.CompanyName && (
+                <span className="step1error-message">{errors.CompanyName}</span>
+              )}
             </div>
           </div>
 
@@ -200,7 +202,9 @@ const Stepper1 = () => {
                 required
                 key={(project) => project.ProjectID}
               />
-
+              {errors.ProjectName && (
+                <span className="step1error-message">{errors.ProjectName}</span>
+              )}
             </div>
           </div>
         </div>
@@ -209,7 +213,7 @@ const Stepper1 = () => {
         <div className="flex-row">
           <div className="box">
             <div className="step-formgroup">
-              <label>Property Name<span className="required">*</span>:  </label>
+            {renderLabel("PropertyName", "Property Name", values, 1)}
               <div className="step1field">
 
                 <TextField
@@ -219,7 +223,7 @@ const Stepper1 = () => {
                   value={values.PropertyName || ""}
                   onChange={handleFieldChange}
                   onBlur={handleBlur}
-                  error={touched.propertyName && errors.PropertyName}
+                  error={errors.PropertyName}
                 />
 
                 {touched && errors.PropertyName && (
@@ -243,7 +247,11 @@ const Stepper1 = () => {
                   value={values.PropertyDescription}
                   onChange={handleFieldChange}
                   required
+                  error={errors.PropertyDescription}
                 />
+                {errors.PropertyDescription && (
+                  <span className="step1error-message">{errors.PropertyDescription}</span>
+                )}
               </div>
             </div>
           </div>
@@ -254,29 +262,33 @@ const Stepper1 = () => {
         <div className="flex-row">
           <div className="box">
             <div className="step-formgroup">
-
-              <label>Property Type<span className="required">*</span>:    </label>
+              {renderLabel("PropertyType", "Property Type", values, 1)}
               { propertyTypes.length && <Autocomplete
                 className="autocomplete-root"
                 name="PropertyType"
                 value={propertyTypes.find(option => option.value === values.PropertyTypeID) || propertyTypes[0]}
                 onChange={(event, newValue) => {
+                  console.log(errors)
                   // Set the label instead of value in the field value
                   setFieldValue("PropertyType", newValue ? newValue.label : propertyTypes[0].label);
                   setFieldValue("PropertyTypeID", newValue ? newValue.value : propertyTypes[0].value);
                 }}
                 options={propertyTypes}
                 getOptionLabel={(option) => option.label}
+                error={errors.PropertyType}
                 isOptionEqualToValue={(option, value) => option.label === value?.label} // Compare label instead of value
                 renderInput={(params) => <TextField {...params} placeholder="Select Property Type" />}
               />
             }
+              {errors.PropertyType && (
+                <span className="step1error-message">{errors.PropertyType}</span>
+              )}
             </div>
           </div>
           <div className="box">
             <div className="step-formgroup1">
 
-              <label>Property Area<span className="required">*</span>:  </label>
+              {renderLabel("SqFt", "Property Area", values, 1)}
               <div className="step1field1">
 
                 <TextField
@@ -308,7 +320,7 @@ const Stepper1 = () => {
                   value={values.SqFt} // Formik's value
                   onChange={handleFieldChange}
                   onBlur={handleBlur}
-                  error={touched.SqFt && errors.SqFt}
+                  error={errors.SqFt}
                 // helperText={touched.SqFt && errors.SqFt}
                 />
                 <Select
@@ -345,8 +357,7 @@ const Stepper1 = () => {
         <div className="flex-row">
           <div className="box">
             <div className="step-formgroup1">
-              <label>Price<span className="required">*</span>:  </label>
-
+              {renderLabel("Amount", "Price", values, 1)}
               <div className="step1field1">
                 <TextField
                   type="number"
@@ -356,7 +367,7 @@ const Stepper1 = () => {
                   value={values.Amount}
                   onChange={handleFieldChange}
                   onBlur={handleBlur}
-                  error={touched.Amount && errors.Amount}
+                  error={errors.Amount}
                   fullWidth
                   inputProps={{
                     style: {
@@ -411,7 +422,7 @@ const Stepper1 = () => {
 
           <div className="box">
             <div className="step-formgroup1">
-              <label>Lot Size<span className="required">*</span>:  </label>
+              {renderLabel("LotSize", "Lot Size", values, 1)}
               <div className="step1field1">
                 <TextField
                   placeholder="Lot Size"
@@ -439,7 +450,7 @@ const Stepper1 = () => {
                   value={values.LotSize} // Formik's value
                   onChange={handleFieldChange}
                   onBlur={handleBlur}
-                  error={touched.LotSize && errors.LotSize}
+                  error={errors.LotSize}
                 />
                 <Select
                   className="price-unit-select"
@@ -471,7 +482,7 @@ const Stepper1 = () => {
         <div className="flex-row">
           <div className="box">
             <div className="step-formgroup">
-              <label>Year Of built<span className="required">*</span>:   </label>
+              {renderLabel("YearBuilt", "Year Of Built", values, 1)}
               <div className="step1field">
                 <TextField
                   className="custom-textfield"
@@ -481,7 +492,7 @@ const Stepper1 = () => {
                   value={values.YearBuilt} // Formik's value
                   onChange={handleFieldChange}
                   onBlur={handleBlur}
-                  error={touched.YearBuilt && errors.YearBuilt}
+                  error={errors.YearBuilt}
                 />
                 {errors.YearBuilt && (
                   <span className="step1error-message">{errors.YearBuilt}</span>
@@ -494,11 +505,11 @@ const Stepper1 = () => {
 
           <div className="box">
             <div className="step-formgroup">
-              <label>Property Facing<span className="required">*</span>:</label>
+              {renderLabel("PropertyMainEntranceFacing", "Property Facing", values, 1)}
 
-
+                <div className="step1field1">
               <Autocomplete
-                className="autocomplete-root"
+                className="autocomplete-root autocomplete-w-100"
                 name="PropertyMainEntranceFacing"
                 value={values.PropertyMainEntranceFacing || ""}
                 onChange={(event, newValue) => {
@@ -506,17 +517,19 @@ const Stepper1 = () => {
                 }}
                 options={facingOptions.map(option => option.facing)} // Array of facing options
                 renderInput={(params) => <TextField {...params} placeholder="Facing" />}
-
+                error={errors.PropertyMainEntranceFacing}
               />
-
-
+              {errors.PropertyMainEntranceFacing && (
+                <div className="step1error-message">{errors.PropertyMainEntranceFacing}</div>
+              )}
+              </div>
             </div>
           </div>
         </div>
         <div className="flex-row">
           <div className="box">
             <div className="step-formgroup">
-              <label>Property Status<span className="required">*</span>:    </label>
+              {renderLabel("PropertyStatus", "Property Status", values, 1)}
               { propertyStatus.length > 0 && <Autocomplete
                 className="autocomplete-root"
                 name="PropertyStatus"
@@ -533,17 +546,21 @@ const Stepper1 = () => {
                 isOptionEqualToValue={(option, value) => option.value === value} // Ensure option equality check is based on 'value'
                 renderInput={(params) => <TextField {...params} placeholder="Property Status" />}
                 required
+                error={errors.PropertyStatus}
               />
             }
+              {errors.PropertyStatus && (
+                <span className="step1error-message">{errors.PropertyStatus}</span>
+              )}
             </div>
           </div>
           <div className="box">
             <div className="step-formgroup">
-              <label>Possession Status<span className="required">*</span>:    </label>
+              {renderLabel("PropertyPossessionStatus", "Possession Status", values, 1)}
 
-
+              <div className="step1field1">
               <Autocomplete
-                className="autocomplete-root"
+                className="autocomplete-root autocomplete-w-100"
                 name="PropertyPossessionStatus"
                 value={values.PropertyPossessionStatus || ""}
                 onChange={(event, newValue) => {
@@ -553,8 +570,12 @@ const Stepper1 = () => {
                 options={possessionStatusOptions.map((option) => option.possessionStatusOption)} // Use the possessionStatusOption field
                 renderInput={(params) => <TextField {...params} placeholder="Possession Status" />}
                 required
+                error={errors.PropertyPossessionStatus}
               />
-
+              {errors.PropertyPossessionStatus && (
+                <div className="step1error-message">{errors.PropertyPossessionStatus}</div>
+              )}
+              </div>
             </div>
           </div>
         </div>

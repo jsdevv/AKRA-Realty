@@ -18,7 +18,15 @@
   padding: 10px  5px;
 }
 
-
+.step1error-message {
+  color: red;
+  font-size: 10px;
+  margin-top: 4px;
+  position: relative;
+}
+.form-field-w-100{
+  width: 100% !important;
+}
 
 
 .stepper4-group label {

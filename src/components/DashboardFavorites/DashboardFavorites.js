@@ -15,7 +15,7 @@ import Slider from 'react-slick/lib/slider';
 
 const DashboardFavorites = () => {
     const bearerToken = useSelector((state) => state.auth.bearerToken);
-     const { selectedAgentProperty, selectedProperty } = useSelector((state) => state.properties);
+     const {selectedProperty } = useSelector((state) => state.properties);
     const { favorites, removeFavorite, toggleShortlist } = useFavorites();
     console.log(favorites, "fav");
     const [selectedFavoritecompare, setSelectedFavoritescompare] = useState([]);
@@ -130,7 +130,6 @@ const DashboardFavorites = () => {
                                         <tr key={property.PropertyID}>
                                             <td>
                                             
-
                                                       <Slider {...settings}>
                                                                             {imagesToShow.map((url, index) => (
                                                                               <div key={index} 
