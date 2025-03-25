@@ -16,6 +16,8 @@ const RegisterForm = () => {
   const dispatch = useDispatch();
   const { loading, error, success } = useSelector((state) => state.registration);
 
+  console.log(success,"successmsg");
+
   const [countryCode, setCountryCode] = useState('+91');
 
   useEffect(() => {
@@ -66,10 +68,17 @@ const RegisterForm = () => {
         role: values.role,
       };
       dispatch(registerUser(payload));
-      formik.resetForm();
-      dispatch(resetState());
     },
   });
+
+  useEffect(() => {
+    if (success) {
+      formik.resetForm();
+      setTimeout(() => {
+        dispatch(resetState());
+      }, 3000);
+    }
+  }, [success, dispatch]);
 
   const handleCancel = () => {
     formik.resetForm();

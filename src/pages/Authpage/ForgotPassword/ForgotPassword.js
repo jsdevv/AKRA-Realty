@@ -26,6 +26,10 @@ const ForgotPassword = () => {
       console.log("Reset password email sent successfully.");
     }
   }, [success]);
+
+  useEffect(() => {
+    dispatch(resetState());
+  }, [dispatch]);
   
   return (
     <div className="forgot-password-container">

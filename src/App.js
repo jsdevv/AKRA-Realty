@@ -224,14 +224,14 @@ const App = () => {
               }
             />
              <Route path="/owner" element={<Owner />} />  
-             <Route path="/dashboard" element={<Dashboard />} />    
+             <Route path="/dashboard" element={isLoggedIn ? (<Dashboard /> ) : (   <Navigate to="/" />  )} />    
             <Route path="/addlistings" element={<AddListings />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/register" element={<RegisterForm />} />
             <Route path="/passwordreset" element={<ResetPasswordForm />} />
             <Route path="/addproject" element={<AddProject />} />
             <Route path="/addcompany" element={<Addcompany />} />
-            <Route path="/videos" element={<Videos />} />
+            <Route path="/videos" element={   isLoggedIn ? (<Videos />) : (   <Navigate to="/" /> )} />
           
           </Routes>
           <FeedbackWidget bearerToken={bearerToken} />
