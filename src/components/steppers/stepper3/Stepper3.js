@@ -19,7 +19,7 @@ const Stepper3 = ({formData}) => {
   const addlistingmapRef = useRef(null);
   const marker = useRef(null);
   const autocomplete = useRef(null);
-  const { values, handleChange, setFieldValue, errors, touched } = useFormikContext();
+  const { values, handleChange, setFieldValue, errors, touched, validateForm } = useFormikContext();
   const [selectedLocation, setSelectedLocation] = useState(null);
 
   useEffect(() => {
@@ -32,18 +32,19 @@ const Stepper3 = ({formData}) => {
       selectedProject?.Longitude ||
       selectedProject?.Locality
     ) {
-      setFieldValue('PropertyCity', selectedProject.City);
-      setFieldValue('PropertyAddress1', selectedProject.Address1);
-      setFieldValue('PropertyAddress2', selectedProject.Address2);
-      setFieldValue('PropertyZipCode', selectedProject.ZipCode);
-      setFieldValue('PropertyLatitude', selectedProject.Latitude);
-      setFieldValue('PropertyLongitude', selectedProject.Longitude);
-      setFieldValue('Locality', selectedProject.Locality);
+      setFieldValue('PropertyCity', selectedProject.City, false);
+      setFieldValue('PropertyAddress1', selectedProject.Address1, false);
+      setFieldValue('PropertyAddress2', selectedProject.Address2, false);
+      setFieldValue('PropertyZipCode', selectedProject.ZipCode, false);
+      setFieldValue('PropertyLatitude', selectedProject.Latitude, false);
+      setFieldValue('PropertyLongitude', selectedProject.Longitude, false);
+      setFieldValue('Locality', selectedProject.Locality, false);
   
       if (selectedProject.Latitude && selectedProject.Longitude) {
          const lat = selectedProject.Latitude;
          const lng = selectedProject.Longitude;
         setSelectedLocation( `${lat}, ${lng}`);
+        setFieldValue('Geolocation', `${lat}, ${lng}`, false);
         if (marker.current) {
           marker.current.setPosition({ lat, lng });
           const map = marker.current.getMap();
@@ -89,8 +90,12 @@ const Stepper3 = ({formData}) => {
     if(selectedProject?.Latitude && selectedProject?.Longitude){
       markerPosition.lat = selectedProject.Latitude * 1;
       markerPosition.lng = selectedProject.Longitude * 1;
+    }else if(values.PropertyLatitude && values.PropertyLongitude){
+      markerPosition.lat = values.PropertyLatitude * 1;
+      markerPosition.lng = values.PropertyLongitude * 1;
     }
     setSelectedLocation(`${markerPosition.lat}, ${markerPosition.lng}`);
+    setFieldValue('Geolocation', `${markerPosition.lat}, ${markerPosition.lng}`, false);
     const map = new window.google.maps.Map(addlistingmapRef.current, {
       center: markerPosition,
       zoom: 12,
@@ -168,6 +173,7 @@ const Stepper3 = ({formData}) => {
     handleChange({ target: { name: 'PropertyLatitude', value: lat.toString() } });
     handleChange({ target: { name: 'PropertyLongitude', value: lng.toString() } });
     setSelectedLocation(`${lat}, ${lng}`);
+    setFieldValue('Geolocation', `${lat}, ${lng}`);
     dispatch(AddlistingFormData({ PropertyLatitude: lat, PropertyLongitude: lng }));
     getAddressFromGeolocation(lat, lng);
   };
@@ -208,13 +214,13 @@ const Stepper3 = ({formData}) => {
         }
         return acc;
       }, {});
-      setFieldValue('PropertyCity', address.city || '');
-      setFieldValue('PropertyZipCode', address.postal_code || '');
-      setFieldValue('PropertyState', address.state || '');
-      setFieldValue('Locality', address.locality || '');
-      setFieldValue('SubLocality', address.sublocality || '');
-      setFieldValue('district', address.district || '');
-
+      setFieldValue('PropertyCity', address.city || '', false);
+      setFieldValue('PropertyZipCode', address.postal_code || '', false);
+      setFieldValue('PropertyState', address.state || '', false);
+      setFieldValue('Locality', address.locality || '', false);
+      setFieldValue('SubLocality', address.sublocality || '', false);
+      setFieldValue('district', address.district || '', false);
+      setTimeout(() => validateForm());
     }
   };
 
@@ -231,10 +237,12 @@ const Stepper3 = ({formData}) => {
     const { value } = e.target;
     if(value.endsWith('.')){
       setSelectedLocation(value);
+      setFieldValue('Geolocation', value);
       return;
     }
     let [lat, lng] = value.split(',').map((val) => parseFloat(val.trim()));
     setSelectedLocation(value);
+    setFieldValue('Geolocation', value);
     if(lat){
       handleChange({ target: { name: 'PropertyLatitude', value: lat.toString() } });
     }
@@ -320,7 +328,7 @@ const Stepper3 = ({formData}) => {
               name="PropertyCity"
               value={values.PropertyCity} 
               onChange={handleChange} 
-              error={Boolean(errors.PropertyCity)}
+              error={errors.PropertyCity}
             />
             {errors.PropertyCity && (
               <div className="step1error-message">{errors.PropertyCity}</div>
@@ -427,10 +435,14 @@ const Stepper3 = ({formData}) => {
               placeholder="Enter Latitude, Longitude"
               type="text"
               name="Geolocation"
-              value={selectedLocation}  // Combine latitude and longitude as a string
+              value={values.Geolocation}  // Combine latitude and longitude as a string
               onChange={handleGeolocationInputChange}
               helperText={touched.Geolocation && errors.Geolocation}
+              error={Boolean(errors.Geolocation)}
             />
+            {errors.Geolocation && (
+              <div className="step1error-message">{errors.Geolocation}</div>
+            )}
           </div>
         </div>
       </div>
@@ -449,6 +461,11 @@ const Stepper3 = ({formData}) => {
 
         <div className="stepper3-box stepper3-map">
           <div ref={addlistingmapRef} className="stepper3-map-view"></div>
+          {/* {
+            <pre>
+              {JSON.stringify(values, null, 2)}
+            </pre>
+          } */}
         </div>
       </div>
     </div>

@@ -104,22 +104,22 @@ export const FavoritesProvider = ({ children }) => {
     });
 };
 
-const toggleShortlist = (propertyID) => {
-    setFavorites((prevFavorites) => {
-        const updatedFavorites = prevFavorites.map((property) =>
-            property.PropertyID === propertyID
-                ? { ...property, shortlisted: !property.shortlisted }
-                : property
-        );
-        localStorage.setItem("favorites", JSON.stringify(updatedFavorites)); // Sync with localStorage
-        return updatedFavorites;
-    });
-};
+// const toggleShortlist = (propertyID) => {
+//     setFavorites((prevFavorites) => {
+//         const updatedFavorites = prevFavorites.map((property) =>
+//             property.PropertyID === propertyID
+//                 ? { ...property, shortlisted: !property.shortlisted }
+//                 : property
+//         );
+//         localStorage.setItem("favorites", JSON.stringify(updatedFavorites)); // Sync with localStorage
+//         return updatedFavorites;
+//     });
+// };
 
 
 
     return (
-        <FavoritesContext.Provider value={{ favorites, toggleFavorite, removeFavorite,toggleShortlist, favoriteColor,updateFavoriteColor  }}>
+        <FavoritesContext.Provider value={{ favorites, toggleFavorite, removeFavorite, favoriteColor,updateFavoriteColor  }}>
             {children}
         </FavoritesContext.Provider>
     );

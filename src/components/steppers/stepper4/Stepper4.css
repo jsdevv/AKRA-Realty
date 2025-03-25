@@ -17,6 +17,9 @@
   align-items: center;
   padding: 10px  5px;
 }
+.MuiIconButton-edgeEnd{
+  left: -12px;
+}
 
 .step1error-message {
   color: red;

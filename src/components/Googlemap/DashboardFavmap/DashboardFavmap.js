@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { APIProvider, Map, InfoWindow, useMap, AdvancedMarker } from "@vis.gl/react-google-maps";
-import { clearSelectedProperty, setSelectedProperty } from "../../../Redux/Slices/propertySlice";
+import { clearSelectedProperty, setSelectedAgentProperty, setSelectedProperty } from "../../../Redux/Slices/propertySlice";
 import ListingModal from "../../ListingModal/ListingModal";
 import "./DashboardFavmap.css";
 import Slider from "react-slick";
@@ -67,7 +67,8 @@ const DashboardFavmap = ({favData}) => {
       lng: parseFloat(property.PropertyLongitude),
     };
 
-    setInfoWindowPosition(position);
+        setInfoWindowPosition(position);
+        dispatch(setSelectedAgentProperty(property));
     
     if (mapRef.current) {
       mapRef.current.panTo(position);

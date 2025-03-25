@@ -259,6 +259,124 @@ export const fetchAddpropertyFavorties  = async (bearerToken, payload) => {
 };
 
 
+export const fetchAddpropertyshortlist  = async (bearerToken, payload) => {
+  try {
+    const response = await fetch(AddData_API, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${bearerToken}`,
+      },
+      body: JSON.stringify({
+        RequestParamType: 'AddPropertyShortlist',
+        json: payload,
+      }),
+    });
+
+    if (!response.ok) {
+      // If the response is not successful, throw an error with the response status
+      const errorMessage = await response.text();
+      throw new Error(errorMessage || 'Failed to add favorites. Please try again.');
+    }
+
+    const data = await response.json();
+    return data; // Return the response data
+
+  } catch (error) {
+    console.error('Error in set alert:', error);
+    throw new Error(error.message || 'Failed to add alert.');
+  }
+};
+
+
+export const fetchAddprojectshortlist  = async (bearerToken, payload) => {
+  try {
+    const response = await fetch(AddData_API, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${bearerToken}`,
+      },
+      body: JSON.stringify({
+        RequestParamType: 'AddProjectShortlist',
+        json: payload,
+      }),
+    });
+
+    if (!response.ok) {
+      // If the response is not successful, throw an error with the response status
+      const errorMessage = await response.text();
+      throw new Error(errorMessage || 'Failed to add favorites. Please try again.');
+    }
+
+    const data = await response.json();
+    return data; // Return the response data
+
+  } catch (error) {
+    console.error('Error in set alert:', error);
+    throw new Error(error.message || 'Failed to add alert.');
+  }
+};
+
+export const fetchDeletePropertyshortlist  = async (bearerToken, payload) => {
+  try {
+    const response = await fetch(DeleteData_API, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${bearerToken}`,
+      },
+      body: JSON.stringify({
+        RequestParamType: 'DeletePropertyShortlist',
+        json: payload,
+      }),
+    });
+
+    if (!response.ok) {
+      // If the response is not successful, throw an error with the response status
+      const errorMessage = await response.text();
+      throw new Error(errorMessage || 'Failed to add favorites. Please try again.');
+    }
+
+    const data = await response.json();
+    return data; // Return the response data
+
+  } catch (error) {
+    console.error('Error in set alert:', error);
+    throw new Error(error.message || 'Failed to add alert.');
+  }
+};
+
+export const fetchDeleteProjectshortlist  = async (bearerToken, payload) => {
+  try {
+    const response = await fetch(DeleteData_API, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${bearerToken}`,
+      },
+      body: JSON.stringify({
+        RequestParamType: 'DeleteProjectShortlist',
+        json: payload,
+      }),
+    });
+
+    if (!response.ok) {
+      // If the response is not successful, throw an error with the response status
+      const errorMessage = await response.text();
+      throw new Error(errorMessage || 'Failed to add favorites. Please try again.');
+    }
+
+    const data = await response.json();
+    return data; // Return the response data
+
+  } catch (error) {
+    console.error('Error in set alert:', error);
+    throw new Error(error.message || 'Failed to add alert.');
+  }
+};
+
+
 export const fetchDeleteProjectFavorties  = async (bearerToken, payload) => {
   try {
     const response = await fetch(DeleteData_API, {

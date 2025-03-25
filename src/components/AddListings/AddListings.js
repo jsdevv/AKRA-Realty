@@ -39,7 +39,7 @@ const AddListings = () => {
     PropertyID: EditPropertyData.PropertyID || '',
     PropertyName: EditPropertyData.PropertyName || '',
     PropertyDescription: EditPropertyData.PropertyDescription || '',  // Adjusted for property notes
-    PropertyType: EditPropertyData.PropertyType || 'Villas',
+    PropertyType: EditPropertyData.PropertyType || '',
     PropertyTypeID: EditPropertyData.PropertyTypeID || '',
     SqFt: EditPropertyData.SqFt || '',
     MeasurementType:EditPropertyData.MeasurementType || 'SqFt',
@@ -49,7 +49,7 @@ const AddListings = () => {
     LotSizeUnit: EditPropertyData.LotSizeUnit || 'SqYds',
     YearBuilt: EditPropertyData.YearBuilt || '',
     PropertyMainEntranceFacing: EditPropertyData.PropertyMainEntranceFacing || 'East',
-    PropertyStatus: EditPropertyData.PropertyStatus || 'For Sale',
+    PropertyStatus: EditPropertyData.PropertyStatus || '',
     PropertyPossessionStatus: EditPropertyData.PropertyPossessionStatus || 'Ready To Move',
     PropertyFeatures: EditPropertyData.PropertyAmenities || '',
     PropertyAddress1: EditPropertyData.PropertyAddress1 || '',
@@ -73,7 +73,8 @@ const AddListings = () => {
     PropertyFurnishing: EditPropertyData.PropertyFurnishing || 'Furnished',
     AvailableFrom: EditPropertyData.AvailableFrom || '',
     PropertyNotes: EditPropertyData.PropertyNotes || '',
-    PropertyAmenities: EditPropertyData.PropertyAmenities || ''
+    PropertyAmenities: EditPropertyData.PropertyAmenities || '',
+    Geolocation:  ''
   };
 
   const resetFormToDefault = () => {

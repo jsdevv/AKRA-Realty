@@ -4,7 +4,7 @@
   /* Changes to row layout */
   gap: 10px;
   padding: 10px 10px 10px 0px;
-  height: 50vh;
+  /* height: 50vh; */
 }
 .step1error-message {
   color: red;
@@ -36,6 +36,8 @@
   font-size: 14px;
   width: 20%;
   margin-right: 2px;
+  display: flex;
+  white-space: nowrap;
 }
 
 

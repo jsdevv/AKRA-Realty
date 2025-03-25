@@ -8,7 +8,7 @@ import {
     setSelectedAgentProperty,
     setSelectedProperty
 } from '../../Redux/Slices/propertySlice';
-import { fetchDeleteProjectFavorties } from '../../API/api';
+import { fetchAddprojectshortlist, fetchDeleteProjectFavorties, fetchDeleteProjectshortlist } from '../../API/api';
 import ListingModal from '../../components/ListingModal/ListingModal';
 import Favoritescompare from '../../components/Favoritescompare/Favoritescompare';
 import { useFavorites } from '../../context/FavoritesContext';
@@ -22,7 +22,7 @@ const DashboardProjectFav = ({ propertyfavtype }) => {
     const dispatch = useDispatch();
     const bearerToken = useSelector((state) => state.auth.bearerToken);
     const { Id } = useSelector((state) => state.auth.userDetails || {});
-    const { favorites, removeFavorite, toggleShortlist } = useFavorites();
+    const { favorites, removeFavorite } = useFavorites();
     const { selectedProperty, Projectfavorites } = useSelector((state) => state.properties);
 
     const [selectedCompare, setSelectedCompare] = useState([]);
@@ -41,8 +41,7 @@ const DashboardProjectFav = ({ propertyfavtype }) => {
     };
 
     const handleLocationClick = (project) => {
-        // Close both modals if they are open
-
+       
         dispatch(setSelectedAgentProperty(project));
 
     };
@@ -78,6 +77,25 @@ const DashboardProjectFav = ({ propertyfavtype }) => {
             console.error("Error removing favorite:", error);
         }
     };
+
+        const toggleShortlist = async (project) => {
+            const isShortlisted = project.ShortlistStatus === "Y";
+            const payload = { ProjectID: project.ProjectID };
+        
+            try {
+                const response = isShortlisted
+                    ? await fetchDeleteProjectshortlist(bearerToken, { ...payload, UserID: Id })
+                    : await fetchAddprojectshortlist(bearerToken, { ...payload, UserID: Id });
+        
+                console.log('Shortlist Toggle Response:', response);
+        
+                dispatch(fetchGetprojectFavorites(bearerToken));
+    
+            } catch (error) {
+                console.error('Error toggling shortlist:', error);
+            }
+        };
+        
 
     return (
         <div className="favoritesproject-container">
@@ -149,8 +167,8 @@ const DashboardProjectFav = ({ propertyfavtype }) => {
                                                 <button className="dashboard-details-button" onClick={() => handlePopupOpen(project)}>Details</button>
                                             </td>
                                             <td>
-                                                <button className={`dashboard-shortlist-button  ${project.shortlisted ? 'shortlisted' : ''}`} onClick={() => toggleShortlist(project.ProjectID)}>
-                                                    <FaStar className={`dashboard-shortlist-button  ${project.shortlisted ? 'highlighted' : ''}`} />
+                                                <button className={`dashboard-shortlist-button  ${project.ShortlistStatus === "Y" ? 'shortlisted' : ''}`} onClick={() => toggleShortlist(project)}>
+                                                    <FaStar className={`dashboard-shortlist-icon   ${project.ShortlistStatus === "Y" ? 'highlighted' : ''}`} />
                                                 </button>
                                             </td>
                                             <td>

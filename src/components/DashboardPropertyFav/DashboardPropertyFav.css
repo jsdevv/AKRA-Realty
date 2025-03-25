@@ -87,8 +87,7 @@
 
 /* Buttons */
 .dashboard-details-button,
-.dashboard-remove-button,
-.dashboard-shortlist-button {
+.dashboard-remove-button {
     background: none;
     border: none;
     color: #2C3E50;
@@ -96,6 +95,27 @@
     font-size: 14px;
     transition: color 0.3s;
 }
+
+.dashboard-shortlist-button {
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.dashboard-shortlist-icon {
+    font-size: 1.0rem;
+    color: #2C3E50;
+}
+
+.dashboard-shortlist-icon.highlighted {
+    color: #FFD700;
+}
+
+.dashboard-shortlist-icon.shortlisted {
+    color: #FFD700;
+    font-weight: bold;
+}
+
+
 
 .dashboard-details-button {
     padding: 0px;
@@ -112,22 +132,12 @@
     color:#2C3E50 ;
   
 }
-.dashboard-remove-button:hover,
-.dashboard-shortlist-button:hover {
+.dashboard-remove-button:hover{
     color: #2C3E50;
 }
 
-/* Shortlist Styling */
-/* Default state for the star icon (white) */
-.dashboard-shortlist-icon {
-    color: #c0c0c0;
-    transition: color 0.3s;
-}
 
-/* When the property is shortlisted, turn the star yellow */
-.dashboard-shortlist-icon.dashboard-shortlist-highlighted {
-    color: #ffcb00; /* Yellow */
-}
+
 
 /* Comparison Button - Positioned Above Table */
 .dashboard-favcompare-button-container {

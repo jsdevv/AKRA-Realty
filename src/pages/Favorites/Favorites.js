@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Favoritescompare from '../../components/Favoritescompare/Favoritescompare';
 import { useFavorites } from '../../context/FavoritesContext';
 import { FiTrash } from 'react-icons/fi';
-import { FaStar } from 'react-icons/fa'; // Star icon
+import { FaStar } from 'react-icons/fa'; 
 import {
     clearSelectedProperty,
     fetchGetprojectFavorites,
@@ -15,12 +15,12 @@ import defaultimg1 from "../../images/Apartment102.jpeg"
 import defaultimg2 from "../../images/Apartment103.jpeg"
 import Slider from 'react-slick/lib/slider';
 import ListingModal from '../../components/ListingModal/ListingModal';
-import { fetchDeleteProjectFavorties, fetchDeletePropertyFavorties } from '../../API/api';
+import { fetchAddprojectshortlist, fetchAddpropertyshortlist, fetchDeleteProjectFavorties, fetchDeleteProjectshortlist, fetchDeletePropertyFavorties, fetchDeletePropertyshortlist } from '../../API/api';
 
 const Favorites = () => {
     const bearerToken = useSelector((state) => state.auth.bearerToken);
      const { Id } = useSelector((state) => state.auth.userDetails || {});
-    const { favorites, removeFavorite, toggleShortlist } = useFavorites(); // Add updateFavorite
+    const { favorites, removeFavorite} = useFavorites();
     const { selectedProperty, Projectfavorites, Propertyfavorites } = useSelector((state) => state.properties);
     const [selectedFavoritecompare, setSelectedFavoritescompare] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -41,6 +41,8 @@ const Favorites = () => {
                 : [...prev, propertyID]
         );
     };
+
+
 
     const openComparisonModal = () => {
         if (selectedFavoritecompare.length < 2) {
@@ -82,9 +84,43 @@ const Favorites = () => {
     const imageUrls = propertyUrls ? propertyUrls.split(',').map(url => url.trim()).filter(Boolean) : [];
     const imagesToShow = imageUrls.length > 0 ? imageUrls : [defaultimg1, defaultimg2];
 
+    const toggleShortlist = async (property) => {
+        const isShortlisted = property.ShortlistStatus === "Y";
+        const payload = activeTab === 'Project' ? { ProjectID: property.ProjectID } : { PropertyID: property.PropertyID };
+    
+        try {
+            let response;
+            if (isShortlisted) {
+             
+                if (activeTab === 'Property') {
+                    response = await fetchDeletePropertyshortlist(bearerToken, { ...payload, UserID: Id });
+                } else {
+                    response = await fetchDeleteProjectshortlist(bearerToken, { ...payload, UserID: Id });
+                }
+            } else {
+               
+                if (activeTab === 'Property') {
+                    response = await fetchAddpropertyshortlist(bearerToken, { ...payload, UserID: Id });
+                } else {
+                    response = await fetchAddprojectshortlist(bearerToken, { ...payload, UserID: Id });
+                }
+            }
+    
+            console.log('Shortlist Toggle Response:', response);
+    
+         
+            if (activeTab === 'Property') {
+                dispatch(fetchGetpropertyFavorites(bearerToken));
+            } else {
+                dispatch(fetchGetprojectFavorites(bearerToken));
+            }
+        } catch (error) {
+            console.error('Error toggling shortlist:', error);
+        }
+    };
+    
     const handleRemoveFavorite = async (property) => {
  
-
         console.log(favorites,"favorites");
         
         removeFavorite(property.PropertyID ); 
@@ -215,14 +251,13 @@ const Favorites = () => {
                                             {/* Shortlist Button */}
                                             <div className="shortlist-button-container">
                                                 <button
-                                                    className={`shortlist-button ${property.shortlisted ? 'shortlisted' : ''
-                                                        }`}
-                                                    onClick={() => toggleShortlist(property.PropertyID)}
+                                                      className={`shortlist-button ${property.ShortlistStatus === "Y" ? 'shortlisted' : ''}`}
+                                                      onClick={() => toggleShortlist(property)}
+                                            
                                                     aria-label="Shortlist property"
                                                 >
                                                     <FaStar
-                                                        className={`shortlist-icon ${property.shortlisted ? 'highlighted' : ''
-                                                            }`}
+                                                      className={`shortlist-icon ${property.ShortlistStatus === "Y" ? 'highlighted' : ''}`}
                                                     />
 
                                                 </button>

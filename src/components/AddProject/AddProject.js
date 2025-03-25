@@ -700,15 +700,21 @@ const AddProject = () => {
                 </Grid>
               </Grid>
           
-              <TextField sx={{ mt: 2 }}
+              <TextField 
+                 sx={{
+                  mt: 2,
+                  "& .MuiInputBase-input::placeholder": {
+                    padding: "10px"   
+                  },
+                }}
                 fullWidth
-                label="Description"
+                placeholder="Description"
                 name="description"
                 value={values.description}
                 onChange={handleChange}
                 className='autocomplete-projectroot'
                 multiline
-                rows={5}
+                rows={6}
               />
               <Grid item xs={12} sm={6} className="amenities-container">
                 <div className="amenities-grid">

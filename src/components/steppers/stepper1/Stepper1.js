@@ -49,17 +49,17 @@ const Stepper1 = () => {
   }, [bearerToken, dispatch, propertyTypes, propertyStatus]);
 
   useEffect(() => {
-    if(propertyTypes.length > 0){
+    if(propertyTypes.length > 0 && !(values.PropertyType || values.PropertyTypeID)){
       setFieldValue("PropertyType", propertyTypes[0].label, false);
       setFieldValue("PropertyTypeID", propertyTypes[0].value, false);
     }
-  }, [propertyTypes, setFieldValue]);
+  }, [propertyTypes, setFieldValue, values.PropertyType, values.PropertyTypeID]);
 
   useEffect(() => {
-    if(propertyStatus.length > 0){
+    if(propertyStatus.length > 0 && !values.PropertyStatus){
       setFieldValue("PropertyStatus", propertyStatus[0].value, false);
     }
-  }, [propertyStatus, setFieldValue]);
+  }, [propertyStatus, setFieldValue, values.PropertyStatus]);
 
   useEffect(() => {
     if (bearerToken && companyData.length === 0) {

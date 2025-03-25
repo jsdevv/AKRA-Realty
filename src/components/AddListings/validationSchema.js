@@ -86,7 +86,8 @@ export const step3ValidationSchema = Yup.object().shape({
   PropertyState: Yup.string().required('State is required'),
   district: Yup.string().required('District is required'),
   Locality: Yup.string().required('Locality is required'),
-  SubLocality: Yup.string().required('Sub Locality is required')
+  SubLocality: Yup.string().required('Sub Locality is required'),
+  Geolocation: Yup.string().required('Geolocation is required'),
 });
 
 

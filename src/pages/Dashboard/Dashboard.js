@@ -76,17 +76,17 @@ const Dashboard = () => {
           </p> */}
           
           <p
-            className={`dashboard-tab ${activeTab === 'Project' ? 'active' : ''}`}
-            onClick={() => setActiveTab('Project')}
-          >
-           Project Favorites
-          </p>
-
-          <p
             className={`dashboard-tab ${activeTab === 'Property' ? 'active' : ''}`}
             onClick={() => setActiveTab('Property')}
           >
            Property Favorites
+          </p>
+
+          <p
+            className={`dashboard-tab ${activeTab === 'Project' ? 'active' : ''}`}
+            onClick={() => setActiveTab('Project')}
+          >
+           Project Favorites
           </p>
      
      

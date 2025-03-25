@@ -4,6 +4,7 @@ import { APIProvider, Map, InfoWindow, useMap, AdvancedMarker } from "@vis.gl/re
 import "./Dashboardmap.css";
 import { clearSelectedProperty, setSelectedProperty } from "../../../Redux/Slices/propertySlice";
 import ListingModal from "../../ListingModal/ListingModal";
+import Slider from "react-slick";
 
 const API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
@@ -122,12 +123,52 @@ const Dashboardmap = ({onClose}) => {
               >
                 X
               </button>
-              <img
+              {/* <img
                  src={selectedAgentProperty.ImageUrl }
                 alt={selectedAgentProperty.PropertyName}
                 className="mappopup-image"
                 onClick={() => handlePopupopen(selectedAgentProperty)}
-              />
+              /> */}
+
+{(() => {
+       const imageUrls = selectedAgentProperty.ImageUrls
+       ? selectedAgentProperty.ImageUrls.split(",").map((url) => url.trim())
+       : selectedAgentProperty.PropertyImageUrls
+       ? selectedAgentProperty.PropertyImageUrls.split(",").map((url) => url.trim())
+       : selectedAgentProperty.ProjectImageUrls
+       ? selectedAgentProperty.ProjectImageUrls.split(",").map((url) => url.trim())
+       : [];
+
+        const imagesToShow = imageUrls.length > 0 ? imageUrls : ["/images/defaultimg.jpg", "/images/defaultimg1.jpg"];
+
+        const settings = {
+          infinite: true,
+          speed: 500,
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          arrows: true,
+        };
+
+        return (
+          <Slider {...settings} className="dashboard-favmap-slider">
+            {imagesToShow.map((url, index) => (
+              <div key={index} onClick={() => handlePopupopen(selectedAgentProperty)}>
+                <img
+                  src={url}
+                  alt={`Slide ${index + 1}`}
+                    className="dashboard-favmap-slider-img"
+                  loading="lazy"
+                  style={{
+                    maxWidth: "100%",
+                    maxHeight: "125px",
+                    objectFit: "cover",
+                  }}
+                />
+              </div>
+            ))}
+          </Slider>
+        );
+      })()}
               <div className="mappopup-details">
                 <h3 className="mappopup-amount">
                   {selectedAgentProperty.PropertyName}, ₹{selectedAgentProperty.Amount} {selectedAgentProperty.PriceUnit}

@@ -400,13 +400,19 @@ const NavbarBottom = ({
 
     const getSuggestions = (value) => {
         const inputValue = value ? value.toLowerCase() : '';
-        return inputValue.length === 0
-            ? []
-            : filteredProperties.filter((property) =>
-                property.PropertyName?.toLowerCase().includes(inputValue) ||
-                property.PropertyArea?.toLowerCase().includes(inputValue) ||
-                property.PropertyZipCode?.toLowerCase().includes(inputValue)
-            );
+        const matches = inputValue.length === 0
+        ? []
+        : filteredProperties.filter((property) =>
+            property.PropertyName?.toLowerCase().includes(inputValue) ||
+            property.PropertyArea?.toLowerCase().includes(inputValue) ||
+            property.PropertyZipCode?.toLowerCase().includes(inputValue)
+        );
+        return matches.reduce((acc, property) => {
+            if (!acc.find((p) => p.PropertyName === property.PropertyName)) {
+                acc.push(property);
+            }
+            return acc;
+        }, []);
     };
 
     const onSuggestionsFetchRequested = ({ value }) => {
@@ -513,8 +519,7 @@ const NavbarBottom = ({
               getSuggestionValue={(suggestion) => suggestion.PropertyName}
               renderSuggestion={(suggestion) => (
                 <div onClick={() => {handleSuggestionClick(suggestion)}}>
-                  {suggestion.PropertyName}, {suggestion.PropertyArea},{" "}
-                  {suggestion.PropertyZipCode}
+                  {suggestion.PropertyName}, {suggestion.Locality},{" "} {suggestion.PropertyZipCode}
                 </div>
               )}
               inputProps={inputProps}

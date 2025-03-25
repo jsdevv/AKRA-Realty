@@ -4,11 +4,12 @@ import { FiTrash } from 'react-icons/fi';
 import { FaMapMarkerAlt, FaStar } from 'react-icons/fa';
 import {
     clearSelectedProperty,
+    fetchGetprojectFavorites,
     fetchGetpropertyFavorites,
     setSelectedAgentProperty,
     setSelectedProperty
 } from '../../Redux/Slices/propertySlice';
-import { fetchDeletePropertyFavorties } from '../../API/api';
+import { fetchAddprojectshortlist, fetchAddpropertyshortlist, fetchDeleteProjectshortlist, fetchDeletePropertyFavorties, fetchDeletePropertyshortlist } from '../../API/api';
 import ListingModal from '../../components/ListingModal/ListingModal';
 import Favoritescompare from '../../components/Favoritescompare/Favoritescompare';
 import { useFavorites } from '../../context/FavoritesContext';
@@ -22,7 +23,7 @@ const DashboardPropertyFav = ({ propertyfavtype }) => {
     const dispatch = useDispatch();
     const bearerToken = useSelector((state) => state.auth.bearerToken);
     const { Id } = useSelector((state) => state.auth.userDetails || {});
-    const { favorites, removeFavorite, toggleShortlist } = useFavorites();
+    const { favorites, removeFavorite } = useFavorites();
     const { selectedProperty, Propertyfavorites } = useSelector((state) => state.properties);
 
     const [selectedCompare, setSelectedCompare] = useState([]);
@@ -78,6 +79,60 @@ const DashboardPropertyFav = ({ propertyfavtype }) => {
             console.error("Error removing favorite:", error);
         }
     };
+
+    //  const toggleShortlist = async (Property) => {
+    //         const isShortlisted = Property.ShortlistStatus === "Y";
+    //         const payload = propertyfavtype === 'Property' ? { PropertyID: Property.PropertyID } : { ProjectID: Property.ProjectID } ;
+        
+    //         try {
+    //             let response;
+    //             if (isShortlisted) {
+                 
+    //                 if (propertyfavtype === 'Property') {
+    //                     response = await fetchDeletePropertyshortlist(bearerToken, { ...payload, UserID: Id });
+    //                 } else {
+    //                     response = await fetchDeleteProjectshortlist(bearerToken, { ...payload, UserID: Id });
+    //                 }
+    //             } else {
+                   
+    //                 if (propertyfavtype === 'Property') {
+    //                     response = await fetchAddpropertyshortlist(bearerToken, { ...payload, UserID: Id });
+    //                 } else {
+    //                     response = await fetchAddprojectshortlist(bearerToken, { ...payload, UserID: Id });
+    //                 }
+    //             }
+        
+    //             console.log('Shortlist Toggle Response:', response);
+        
+             
+    //             if (propertyfavtype === 'Property') {
+    //                 dispatch(fetchGetpropertyFavorites(bearerToken));
+    //             } else {
+    //                 dispatch(fetchGetprojectFavorites(bearerToken));
+    //             }
+    //         } catch (error) {
+    //             console.error('Error toggling shortlist:', error);
+    //         }
+    //     };
+
+    const toggleShortlist = async (Property) => {
+        const isShortlisted = Property.ShortlistStatus === "Y";
+        const payload = { PropertyID: Property.PropertyID };
+    
+        try {
+            const response = isShortlisted
+                ? await fetchDeletePropertyshortlist(bearerToken, { ...payload, UserID: Id })
+                : await fetchAddpropertyshortlist(bearerToken, { ...payload, UserID: Id });
+    
+            console.log('Shortlist Toggle Response:', response);
+    
+            dispatch(fetchGetpropertyFavorites(bearerToken));
+
+        } catch (error) {
+            console.error('Error toggling shortlist:', error);
+        }
+    };
+    
 
     return (
         <div className="favoritesproject-container">
@@ -149,8 +204,12 @@ const DashboardPropertyFav = ({ propertyfavtype }) => {
                                                 <button className="dashboard-details-button" onClick={() => handlePopupOpen(Property)}>Details</button>
                                             </td>
                                             <td>
-                                                <button className={`dashboard-shortlist-button  ${Property.shortlisted ? 'shortlisted' : ''}`} onClick={() => toggleShortlist(Property.PropertyID)}>
-                                                    <FaStar className={`dashboard-shortlist-button  ${Property.shortlisted ? 'highlighted' : ''}`} />
+                                                <button 
+                                
+                                                  className={`dashboard-shortlist-button ${Property.ShortlistStatus === "Y" ? 'shortlisted' : ''}`}
+                                                  onClick={() => toggleShortlist(Property)}>
+                                                    <FaStar className={`dashboard-shortlist-icon  ${Property.ShortlistStatus === "Y" ? 'highlighted' : ''}`} />
+                                                    
                                                 </button>
                                             </td>
                                             <td>
