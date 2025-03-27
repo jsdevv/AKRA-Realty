@@ -24,6 +24,8 @@
     font-size: 14px;
     color: #777;
     text-align: center;
+    position: relative;
+    left: 29%;
 }
 
 /* Table Styling */

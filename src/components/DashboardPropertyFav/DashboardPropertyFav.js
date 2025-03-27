@@ -108,7 +108,7 @@ const DashboardPropertyFav = ({ propertyfavtype }) => {
             <div className='projectfav-box'>
                 <div className='projectfavleft-section'>
                     {Propertyfavorites?.length === 0 ? (
-                        <p className="dashboard-favorites-empty ">You haven't saved any property favorites yet.</p>
+                        <p className="dashboard-favorites-empty">You haven't saved any property favorites yet.</p>
                     ) : (
                         <table className="dashboard-favorites-table ">
                             <thead>
