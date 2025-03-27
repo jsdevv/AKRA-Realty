@@ -1,38 +1,46 @@
-import './Favorites.css';
 import React, { useCallback, useEffect, useState } from 'react';
 import Favoritescompare from '../../components/Favoritescompare/Favoritescompare';
 import { useFavorites } from '../../context/FavoritesContext';
 import { FiTrash } from 'react-icons/fi';
-import { FaStar } from 'react-icons/fa'; 
+import { FaStar } from 'react-icons/fa';
 import {
     clearSelectedProperty,
     fetchGetprojectFavorites,
     fetchGetpropertyFavorites,
     setSelectedProperty
 } from '../../Redux/Slices/propertySlice';
+import {
+    fetchAddprojectshortlist,
+    fetchAddpropertyshortlist,
+    fetchDeleteProjectFavorties,
+    fetchDeleteProjectshortlist,
+    fetchDeletePropertyFavorties,
+    fetchDeletePropertyshortlist
+} from '../../API/api';
+
 import { useDispatch, useSelector } from 'react-redux';
 import defaultimg1 from "../../images/Apartment102.jpeg"
 import defaultimg2 from "../../images/Apartment103.jpeg"
 import Slider from 'react-slick/lib/slider';
 import ListingModal from '../../components/ListingModal/ListingModal';
-import { fetchAddprojectshortlist, fetchAddpropertyshortlist, fetchDeleteProjectFavorties, fetchDeleteProjectshortlist, fetchDeletePropertyFavorties, fetchDeletePropertyshortlist } from '../../API/api';
+import './Favorites.css';
 
 const Favorites = () => {
     const bearerToken = useSelector((state) => state.auth.bearerToken);
-     const { Id } = useSelector((state) => state.auth.userDetails || {});
-    const { favorites, removeFavorite} = useFavorites();
+    const { Id } = useSelector((state) => state.auth.userDetails || {});
+    const { favorites, removeFavorite } = useFavorites();
     const { selectedProperty, Projectfavorites, Propertyfavorites } = useSelector((state) => state.properties);
     const [selectedFavoritecompare, setSelectedFavoritescompare] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [activeTab, setActiveTab] = useState('Project');
+    const [activeTab, setActiveTab] = useState('Property');
     const dispatch = useDispatch();
-    
+
     useEffect(() => {
         if (bearerToken && Id) {
             const fetchFavorites = activeTab === 'Project' ? fetchGetprojectFavorites : fetchGetpropertyFavorites;
             dispatch(fetchFavorites(bearerToken));
         }
-    }, [bearerToken, activeTab,Id, dispatch]);
+    }, [bearerToken, activeTab, Id, dispatch]);
 
     const handleCompareSelect = (propertyID) => {
         setSelectedFavoritescompare((prev) =>
@@ -41,8 +49,6 @@ const Favorites = () => {
                 : [...prev, propertyID]
         );
     };
-
-
 
     const openComparisonModal = () => {
         if (selectedFavoritecompare.length < 2) {
@@ -54,12 +60,12 @@ const Favorites = () => {
 
     const closeComparisonModal = () => {
         setIsModalOpen(false);
-        setSelectedFavoritescompare([]);
+        // setSelectedFavoritescompare([]);
     };
 
     const handlePopupopen = useCallback(
         (property) => {
-            console.log(property,"property");
+            console.log(property, "property");
             dispatch(setSelectedProperty(property));
         },
         [dispatch]
@@ -80,35 +86,32 @@ const Favorites = () => {
 
     const filteredFavorites = activeTab === 'Project' ? Projectfavorites : Propertyfavorites;
     const sortedFavorites = filteredFavorites ? [...filteredFavorites].sort((a, b) => b.shortlisted - a.shortlisted) : [];
-    const propertyUrls = sortedFavorites?.ProjectImageUrls || sortedFavorites?.PropertyImageUrls;
-    const imageUrls = propertyUrls ? propertyUrls.split(',').map(url => url.trim()).filter(Boolean) : [];
-    const imagesToShow = imageUrls.length > 0 ? imageUrls : [defaultimg1, defaultimg2];
 
     const toggleShortlist = async (property) => {
         const isShortlisted = property.ShortlistStatus === "Y";
         const payload = activeTab === 'Project' ? { ProjectID: property.ProjectID } : { PropertyID: property.PropertyID };
-    
+
         try {
             let response;
             if (isShortlisted) {
-             
+
                 if (activeTab === 'Property') {
                     response = await fetchDeletePropertyshortlist(bearerToken, { ...payload, UserID: Id });
                 } else {
                     response = await fetchDeleteProjectshortlist(bearerToken, { ...payload, UserID: Id });
                 }
             } else {
-               
+
                 if (activeTab === 'Property') {
                     response = await fetchAddpropertyshortlist(bearerToken, { ...payload, UserID: Id });
                 } else {
                     response = await fetchAddprojectshortlist(bearerToken, { ...payload, UserID: Id });
                 }
             }
-    
+
             console.log('Shortlist Toggle Response:', response);
-    
-         
+
+
             if (activeTab === 'Property') {
                 dispatch(fetchGetpropertyFavorites(bearerToken));
             } else {
@@ -118,12 +121,12 @@ const Favorites = () => {
             console.error('Error toggling shortlist:', error);
         }
     };
-    
+
     const handleRemoveFavorite = async (property) => {
- 
-        console.log(favorites,"favorites");
-        
-        removeFavorite(property.PropertyID ); 
+
+        console.log(favorites, "favorites");
+
+        removeFavorite(property.PropertyID);
         const payload = activeTab === 'Project' ? { ProjectID: property.ProjectID } : { PropertyID: property.PropertyID };
 
         try {
@@ -133,7 +136,7 @@ const Favorites = () => {
             } else {
                 response = await fetchDeleteProjectFavorties(bearerToken, { ...payload, UserID: Id });
             }
-              
+
         } catch (error) {
             console.error("Error removing favorite:", error);
         }
@@ -144,33 +147,36 @@ const Favorites = () => {
             dispatch(fetchGetprojectFavorites(bearerToken));  // Fetch updated favorites list
         }
     };
-    
+
     return (
         <>
             <div className="favorites-container">
-         
-            
-                    <div className="favorites-tabs">
-                        <button
-                            className={`favtab-button ${activeTab === 'Project' ? 'active' : ''}`}
-                            onClick={() => {
-                                setActiveTab('Project');
-                                setSelectedFavoritescompare([]); // Clear selected properties for comparison
-                            }}
-                        >
-                            Project Favorites
-                        </button>
-                        <button
-                            className={`favtab-button ${activeTab === 'Property' ? 'active' : ''}`}
-                            onClick={() => {
-                                setActiveTab('Property');
-                                setSelectedFavoritescompare([]); // Clear selected properties for comparison
-                            }}
-                        >
-                            Property Favorites
-                        </button>
-                    </div>
-     
+
+
+                <div className="favorites-tabs">
+
+                    <button
+                        className={`favtab-button ${activeTab === 'Property' ? 'active' : ''}`}
+                        onClick={() => {
+                            setActiveTab('Property');
+                            setSelectedFavoritescompare([]);
+                        }}
+                    >
+                        Property Favorites
+                    </button>
+
+                    <button
+                        className={`favtab-button ${activeTab === 'Project' ? 'active' : ''}`}
+                        onClick={() => {
+                            setActiveTab('Project');
+                            setSelectedFavoritescompare([]); // Clear selected properties for comparison
+                        }}
+                    >
+                        Project Favorites
+                    </button>
+
+                </div>
+
                 {sortedFavorites.length === 0 ? (
                     <p className="favorites-empty">You haven't saved any favorites yet.</p>
                 ) : (
@@ -251,13 +257,13 @@ const Favorites = () => {
                                             {/* Shortlist Button */}
                                             <div className="shortlist-button-container">
                                                 <button
-                                                      className={`shortlist-button ${property.ShortlistStatus === "Y" ? 'shortlisted' : ''}`}
-                                                      onClick={() => toggleShortlist(property)}
-                                            
+                                                    className={`shortlist-button ${property.ShortlistStatus === "Y" ? 'shortlisted' : ''}`}
+                                                    onClick={() => toggleShortlist(property)}
+
                                                     aria-label="Shortlist property"
                                                 >
                                                     <FaStar
-                                                      className={`shortlist-icon ${property.ShortlistStatus === "Y" ? 'highlighted' : ''}`}
+                                                        className={`shortlist-icon ${property.ShortlistStatus === "Y" ? 'highlighted' : ''}`}
                                                     />
 
                                                 </button>

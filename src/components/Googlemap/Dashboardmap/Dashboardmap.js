@@ -26,38 +26,41 @@ const CircleMarker = ({ position, onClick }) => {
 };
 
 
-const Dashboardmap = ({onClose}) => {
+const Dashboardmap = ({onClose, myProperty}) => {
   const dispatch = useDispatch();
-    const { selectedAgentProperty, selectedProperty } = useSelector((state) => state.properties);
-   
-    console.log(selectedProperty,"selectedprop");
+  const { selectedAgentProperty, selectedProperty } = useSelector((state) => state.properties);
+   console.log(myProperty ,"myProperty ");
 
-
-  console.log(selectedAgentProperty,"selectedAgentProperty");
   const [infoWindowPosition, setInfoWindowPosition] = useState(null);
   const mapRef = useRef(null);
 
-     const handlePopupopen = useCallback(
+  const handlePopupopen = useCallback(
             (property) => {
-              console.log(property,"prop");
                 dispatch(setSelectedProperty(property));
             },
             [dispatch]
-        );
+    );
   
-            const handleCloseModal = useCallback(() => {
+  const handleCloseModal = useCallback(() => {
                 dispatch(clearSelectedProperty());
-            }, [dispatch]);
+  }, [dispatch]);
         
-
   useEffect(() => {
     if (selectedAgentProperty?.PropertyLatitude && selectedAgentProperty?.PropertyLongitude) {
-      setInfoWindowPosition({
+      const position = {
         lat: parseFloat(selectedAgentProperty.PropertyLatitude),
         lng: parseFloat(selectedAgentProperty.PropertyLongitude),
-      });
+      };
+  
+      setInfoWindowPosition(position);
+  
+      if (mapRef.current && mapRef.current.panTo) {
+        mapRef.current.panTo(position);
+        mapRef.current.setZoom(14);
+      }
     }
   }, [selectedAgentProperty]);
+  
 
   const onMarkerClick = (property) => {
     const position = {
@@ -82,7 +85,7 @@ const Dashboardmap = ({onClose}) => {
     <>
           <APIProvider apiKey={API_KEY}>
       <Map
-        ref={mapRef}
+         ref={(map) => (mapRef.current = map)} 
         style={{ width: "100%", height: "100%" }}
         defaultCenter={{ lat: 17.4065, lng: 78.4772 }}
         defaultZoom={10}
@@ -96,13 +99,16 @@ const Dashboardmap = ({onClose}) => {
         }}
         mapId="5e34ee2a0a0595d8"
       >
-        {selectedAgentProperty?.PropertyLatitude && selectedAgentProperty?.PropertyLongitude && (
+        {myProperty &&
+  Array.isArray(myProperty) &&
+  myProperty.map((property, index) => (
           <CircleMarker
-            position={{
-              lat: parseFloat(selectedAgentProperty.PropertyLatitude),
-              lng: parseFloat(selectedAgentProperty.PropertyLongitude),
-            }}
-            onClick={() => onMarkerClick(selectedAgentProperty)}
+          key={index}
+          position={{
+            lat: parseFloat(property.PropertyLatitude),
+            lng: parseFloat(property.PropertyLongitude),
+          }}
+          onClick={() => onMarkerClick(property)}
             radius={100}
             options={{
               strokeColor: "#6D2323",
@@ -112,24 +118,18 @@ const Dashboardmap = ({onClose}) => {
               fillOpacity: 1,
             }}
           />
-        )}
+       ) )}
 
         {infoWindowPosition && selectedAgentProperty && (
           <InfoWindow position={infoWindowPosition} >
-            <div className="mappopup-content">
+            <div className="mappopup-content" >
               <button
                 className="mappopup-close-button"
                 onClick={() => setInfoWindowPosition(null)}
               >
                 X
               </button>
-              {/* <img
-                 src={selectedAgentProperty.ImageUrl }
-                alt={selectedAgentProperty.PropertyName}
-                className="mappopup-image"
-                onClick={() => handlePopupopen(selectedAgentProperty)}
-              /> */}
-
+  
 {(() => {
        const imageUrls = selectedAgentProperty.ImageUrls
        ? selectedAgentProperty.ImageUrls.split(",").map((url) => url.trim())
@@ -169,7 +169,7 @@ const Dashboardmap = ({onClose}) => {
           </Slider>
         );
       })()}
-              <div className="mappopup-details">
+              <div className="mappopup-details" onClick={() => handlePopupopen(selectedAgentProperty)}>
                 <h3 className="mappopup-amount">
                   {selectedAgentProperty.PropertyName}, ₹{selectedAgentProperty.Amount} {selectedAgentProperty.PriceUnit}
                 </h3>

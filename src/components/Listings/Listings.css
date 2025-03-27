@@ -57,6 +57,7 @@
   height: 16px;
   background-color: #e0e0e0;
   padding: 2px 4px;
+  cursor: pointer;
   border-radius: 4px;
 }
 .listing-container .listcount:hover{

@@ -13,9 +13,10 @@ import "./PropertyGrid.css"
 import { FaHeart, FaStar } from "react-icons/fa";
 import { useFavorites } from "../../context/FavoritesContext";
 import { toast } from "react-toastify";
-import {fetchAddpropertyFavorties,  fetchDeletePropertyFavorties } from "../../API/api";
+import {fetchAddpropertyFavorties,  fetchAddpropertyshortlist,  fetchDeletePropertyFavorties, fetchDeletePropertyshortlist } from "../../API/api";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPropertyViews } from "../../utils/fetchPropertyViews";
+import { fetchGetpropertyFavorites } from "../../Redux/Slices/propertySlice";
 
 ModuleRegistry.registerModules([AllCommunityModule,MultiFilterModule,SetFilterModule ]);
 
@@ -23,16 +24,27 @@ const PropertyGrid = ({ groupedByBedroomsArray,selectedBedrooms,setSelectedPrope
     const bearerToken = useSelector((state) => state.auth.bearerToken);
     const { Id } = useSelector((state) => state.auth.userDetails || {});
     const { favorites,favoriteColor, toggleFavorite } = useFavorites();
-    const [featured, setFeatured] = useState({});
     const dispatch = useDispatch();
-    // Toggle featured
-    const toggleFeatured = (propertyId) => {
-        setFeatured((prev) => ({
-            ...prev,
-            [propertyId]: !prev[propertyId],
-        }));
-    };
+ 
 
+    const toggleShortlist = async (Property, event) => {
+        event?.preventDefault(); // Stop form submission if applicable
+        event?.stopPropagation(); 
+        const isShortlisted = Property.ShortlistStatus === "Y";
+        const payload = { PropertyID: Property.PropertyID };
+    
+        try {
+            const response = isShortlisted
+                ? await fetchDeletePropertyshortlist(bearerToken, { ...payload, UserID: Id })
+                : await fetchAddpropertyshortlist(bearerToken, { ...payload, UserID: Id });
+
+    
+        } catch (error) {
+            console.error("Error toggling shortlist:", error);
+            toast.error("Failed to update shortlist.");
+        }
+    };
+    
     // Filter and clean the grouped array
     const cleanedGroupedByBedroomsArray = useMemo(() => {
         if (!Array.isArray(groupedByBedroomsArray)) return [];
@@ -204,9 +216,9 @@ const PropertyGrid = ({ groupedByBedroomsArray,selectedBedrooms,setSelectedPrope
                         />
                         {/* Star Icon for Featured */}
                         <FaStar
-                            className="action-icon"
-                            style={{ color: featured[params.value.PropertyID] ? "gold" : "#bbb", cursor: "pointer" }}
-                            onClick={() => toggleFeatured(params.value.PropertyID)}
+                           
+                            className={`staraction-icon ${params.value.ShortlistStatus === "Y" ? 'shortlisted' : ''}`}
+                            onClick={() => toggleShortlist(params.value)}
                         />
                     </div>
                 );
@@ -214,7 +226,7 @@ const PropertyGrid = ({ groupedByBedroomsArray,selectedBedrooms,setSelectedPrope
             headerClass: "custom-header"
         }
         
-    ], [favorites, featured]); 
+    ], [favorites]); 
     
  
 

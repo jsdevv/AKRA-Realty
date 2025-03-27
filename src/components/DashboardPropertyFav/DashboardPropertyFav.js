@@ -4,12 +4,11 @@ import { FiTrash } from 'react-icons/fi';
 import { FaMapMarkerAlt, FaStar } from 'react-icons/fa';
 import {
     clearSelectedProperty,
-    fetchGetprojectFavorites,
     fetchGetpropertyFavorites,
     setSelectedAgentProperty,
     setSelectedProperty
 } from '../../Redux/Slices/propertySlice';
-import { fetchAddprojectshortlist, fetchAddpropertyshortlist, fetchDeleteProjectshortlist, fetchDeletePropertyFavorties, fetchDeletePropertyshortlist } from '../../API/api';
+import {  fetchAddpropertyshortlist, fetchDeletePropertyFavorties, fetchDeletePropertyshortlist } from '../../API/api';
 import ListingModal from '../../components/ListingModal/ListingModal';
 import Favoritescompare from '../../components/Favoritescompare/Favoritescompare';
 import { useFavorites } from '../../context/FavoritesContext';
@@ -23,13 +22,16 @@ const DashboardPropertyFav = ({ propertyfavtype }) => {
     const dispatch = useDispatch();
     const bearerToken = useSelector((state) => state.auth.bearerToken);
     const { Id } = useSelector((state) => state.auth.userDetails || {});
-    const { favorites, removeFavorite } = useFavorites();
+    const {  removeFavorite } = useFavorites();
     const { selectedProperty, Propertyfavorites } = useSelector((state) => state.properties);
 
     const [selectedCompare, setSelectedCompare] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
+        setSelectedCompare([]);
+        dispatch(clearSelectedProperty());
+        dispatch(setSelectedAgentProperty(null)); 
         if (bearerToken && Id && propertyfavtype === 'Property') {
             dispatch(fetchGetpropertyFavorites(bearerToken));
         }
@@ -42,9 +44,10 @@ const DashboardPropertyFav = ({ propertyfavtype }) => {
     };
 
     const handleLocationClick = (Property) => {
-        // Close both modals if they are open
-
-        dispatch(setSelectedAgentProperty(Property));
+      
+        if (propertyfavtype === 'Property') {
+            dispatch(setSelectedAgentProperty(Property));
+        }
 
     };
 
@@ -58,7 +61,7 @@ const DashboardPropertyFav = ({ propertyfavtype }) => {
 
     const closeComparisonModal = () => {
         setIsModalOpen(false);
-        setSelectedCompare([]);
+        // setSelectedCompare([]);
     };
 
     const handlePopupOpen = useCallback(
@@ -80,40 +83,6 @@ const DashboardPropertyFav = ({ propertyfavtype }) => {
         }
     };
 
-    //  const toggleShortlist = async (Property) => {
-    //         const isShortlisted = Property.ShortlistStatus === "Y";
-    //         const payload = propertyfavtype === 'Property' ? { PropertyID: Property.PropertyID } : { ProjectID: Property.ProjectID } ;
-        
-    //         try {
-    //             let response;
-    //             if (isShortlisted) {
-                 
-    //                 if (propertyfavtype === 'Property') {
-    //                     response = await fetchDeletePropertyshortlist(bearerToken, { ...payload, UserID: Id });
-    //                 } else {
-    //                     response = await fetchDeleteProjectshortlist(bearerToken, { ...payload, UserID: Id });
-    //                 }
-    //             } else {
-                   
-    //                 if (propertyfavtype === 'Property') {
-    //                     response = await fetchAddpropertyshortlist(bearerToken, { ...payload, UserID: Id });
-    //                 } else {
-    //                     response = await fetchAddprojectshortlist(bearerToken, { ...payload, UserID: Id });
-    //                 }
-    //             }
-        
-    //             console.log('Shortlist Toggle Response:', response);
-        
-             
-    //             if (propertyfavtype === 'Property') {
-    //                 dispatch(fetchGetpropertyFavorites(bearerToken));
-    //             } else {
-    //                 dispatch(fetchGetprojectFavorites(bearerToken));
-    //             }
-    //         } catch (error) {
-    //             console.error('Error toggling shortlist:', error);
-    //         }
-    //     };
 
     const toggleShortlist = async (Property) => {
         const isShortlisted = Property.ShortlistStatus === "Y";
@@ -213,7 +182,7 @@ const DashboardPropertyFav = ({ propertyfavtype }) => {
                                                 </button>
                                             </td>
                                             <td>
-                                                <input type="checkbox" checked={selectedCompare.includes(Property.PropertyID)} onChange={() => handleCompareSelect(Property.PropertyID)} />
+                                                <input className="dashboard-compare" type="checkbox" checked={selectedCompare.includes(Property.PropertyID)} onChange={() => handleCompareSelect(Property.PropertyID)} />
                                             </td>
                                             <td>
                                                 <button className="dashboard-remove-button" onClick={() => handleLocationClick(Property)}>
@@ -244,7 +213,7 @@ const DashboardPropertyFav = ({ propertyfavtype }) => {
             )}
 
             {isModalOpen && (
-                <Favoritescompare properties={favorites.filter((Property) => selectedCompare.includes(Property.PropertyID))} onClose={closeComparisonModal} />
+                <Favoritescompare properties={Propertyfavorites.filter((Property) => selectedCompare.includes(Property.PropertyID))} onClose={closeComparisonModal} />
             )}
 
             {selectedProperty && (

@@ -12,8 +12,8 @@ import ListingModal from '../ListingModal/ListingModal';
 import PropertyGrid from './PropertyGrid';
 import './ListingModalDetails.css';
 
-const ListingModalDetails = ({ selectedProperty, propertyCardData, propertyType,propertycount }) => {
-   console.log(selectedProperty,"selectedProperty");
+const ListingModalDetails = ({ selectedProperty, propertyCardData, propertyType }) => {
+   console.log(selectedProperty.PropertyViewCount,"selectedProperty");
   const tabs = [
     { id: 'scheduleVisit', label: 'Schedule Visit' },
     { id: 'requestInfo', label: 'Request Info' },
@@ -121,13 +121,10 @@ const ListingModalDetails = ({ selectedProperty, propertyCardData, propertyType,
           <span className="badge for-sale">
             {selectedProperty.PropertyType}
           </span>
-          {/* <span className="property-info">
-            &nbsp; <FaClock aria-label="Time since listed" /> &nbsp; 2 months
-            ago
-          </span> */}
+
           <span className="property-info">
             <FaEye aria-label="Number of views" /> &nbsp;{" "}
-            {propertyType === 'Project' ? selectedProperty.ProjectViewCount : selectedProperty.PropertyViewCount} views
+            { unitCount === 1 ?  selectedProperty.PropertyViewCount : selectedProperty.ProjectViewCount} views
           </span>
           {/* <span className="property-info">
             <RiShareForwardFill aria-label="Number of views" /> &nbsp;{" "}

@@ -56,12 +56,11 @@ const ListingModal = ({ selectedProperty, onClose, propertyType }) => {
   }
 
 
-  const imageNames = propertyDetails.PropertyImageUrls
-    ? propertyDetails.PropertyImageUrls.split(',').map(url => url.trim())
-    : propertyDetails.ProjectImageUrls
-      ? propertyDetails.ProjectImageUrls.split(',').map(url => url.trim())
-      : [];
-
+  const imageNames = [
+    ...(propertyDetails.ProjectImageUrls?.split(',').map(url => url.trim()) || []),
+    ...(propertyDetails.PropertyImageUrls?.split(',').map(url => url.trim()) || [])
+  ];
+  
   const propertyImages = imageNames.map((imageName) => `${imageName}`);
 
   const handleToggleFavorite = async () => {

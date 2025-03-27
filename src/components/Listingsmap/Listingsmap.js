@@ -71,14 +71,11 @@ const Listingsmap = ({ handlePropertyClick, bearerToken }) => {
       zoom: zoomLevel,
       mapId: "5e34ee2a0a0595d8",
       clickableIcons: false,
+      zoomControl: true,
       zoomControlOptions: {
-        position: window.google.maps.ControlPosition.RIGHT_CENTER,
-        style: window.google.maps.ZoomControlStyle.SMALL, // Ensures small, consistent controls
+        position: window.google.maps.ControlPosition.RIGHT_CENTER, // Position on the right center
       },
-  
-      mapTypeControlOptions: {
-        style: window.google.maps.MapTypeControlStyle.SMALL,
-      },
+      mapTypeControl: false,
       styles: [
         {
           featureType: "poi.school",
@@ -136,12 +133,10 @@ const Listingsmap = ({ handlePropertyClick, bearerToken }) => {
       drawnCircleRef.current = circle;
       filterPropertiesByCircle(circle);
       drawingManager.setDrawingMode(null);
-      // Assuming `circle` is the drawn circle object and `bearerToken` is available
       circle.addListener('rightclick', (event) => {
-        // Show button on right-click with circle position
         const position = event.latLng;
-        setCirclePosition({ x: position.lng(), y: position.lat() }); // Assuming `lat()` and `lng()` for position
-        setShowButton(true); // Show button when right-clicked
+        setCirclePosition({ x: position.lng(), y: position.lat() }); 
+        setShowButton(true);
       });
     };
 
@@ -234,11 +229,16 @@ const Listingsmap = ({ handlePropertyClick, bearerToken }) => {
    
 
       // Construct the HTML content using template literals
-      const imageUrls = property.PropertyImageUrls
-      ? property.PropertyImageUrls.split(',').map(url => url.trim())
-      : property.ProjectImageUrls
-        ? property.ProjectImageUrls.split(',').map(url => url.trim())
-        : [];
+      // const imageUrls = property.PropertyImageUrls
+      // ? property.PropertyImageUrls.split(',').map(url => url.trim())
+      // : property.ProjectImageUrls
+      //   ? property.ProjectImageUrls.split(',').map(url => url.trim())
+      //   : [];
+
+        const propertyUrls = property.ProjectImageUrls ?? property.PropertyImageUrls;
+        const imageUrls = propertyUrls ? propertyUrls.split(',').map(url => url.trim()) : [];
+
+        console.log(imageUrls,"image");
     
 
 const imagesToShow = imageUrls.length > 0 ? imageUrls : [defaultimg1, defaultimg2];

@@ -121,9 +121,7 @@
 .fav-comparison-image img {
   width: 90px;  /* Adjust width as needed */
   height: 60px;  /* Adjust height to maintain aspect ratio */
-  object-fit: cover; /* Ensures image fits well */
-  border-radius: 8px;
-  border: 1px solid #ddd;
+  object-fit: cover; 
 }
 
 .favcompare-share {

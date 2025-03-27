@@ -7,7 +7,6 @@ import {
     setSelectedAgentProperty,
     setSelectedProperty
 } from '../../Redux/Slices/propertySlice';
-import {setSelectedEditProperty } from '../../Redux/Slices/addListingsSlice';
 import ListingModal from '../../components/ListingModal/ListingModal';
 import './Myproperty.css';
 import Dashboardmap from '../Googlemap/Dashboardmap/Dashboardmap';
@@ -28,6 +27,8 @@ const Myproperty = ({ showMap, setShowMap, handleEditClick }) => {
   
 
     useEffect(() => {
+        dispatch(clearSelectedProperty());
+           dispatch(setSelectedAgentProperty(null)); 
         const fetchProperties = async () => {
             try {
                 const data = await fetchMyproperty(bearerToken);
@@ -87,11 +88,11 @@ const Myproperty = ({ showMap, setShowMap, handleEditClick }) => {
 
 
     const handlePropertyClick = (property) => {
-        // Close any open map first before opening ListingModal
+
         setShowMap(false);
         dispatch(setSelectedProperty(property));
         setShowListingModal(true);
-        setModalOpen(false); // Close Mypropertymodal if open
+        setModalOpen(false); 
     };
     
     return (
@@ -185,7 +186,7 @@ const Myproperty = ({ showMap, setShowMap, handleEditClick }) => {
             </div>
             {showMap && (
                 <div className="dashboard-map-container">
-                    <Dashboardmap onClose={handleCloseMap} />
+                    <Dashboardmap onClose={handleCloseMap} myProperty={myProperty} />
                 </div>
             )}
             { showListingModal  && selectedProperty && (

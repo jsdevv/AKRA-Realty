@@ -30,15 +30,13 @@ const DashboardFavmap = ({favData}) => {
   const dispatch = useDispatch();
   const {selectedAgentProperty, selectedProperty } = useSelector((state) => state.properties);
 
-  console.log(selectedAgentProperty,"agent");
-
   const [infoWindowPosition, setInfoWindowPosition] = useState(null);
   const mapRef = useRef(null);
 
   // Handle property selection for modal
      const handlePopupopen = useCallback(
             (property) => {
-              console.log(property,"prop");
+            
                 dispatch(setSelectedProperty(property));
             },
             [dispatch]
@@ -58,9 +56,25 @@ const DashboardFavmap = ({favData}) => {
       }
     }, [selectedAgentProperty]);
 
+    useEffect(() => {
+      setInfoWindowPosition(null); // Close InfoWindow when switching tabs
+      dispatch(clearSelectedProperty()); // Reset selected property
+  }, [favData, dispatch]);
+
+
+  
+  
+
   // Marker click event
   const onMarkerClick = useCallback((property) => {
     if (!property?.PropertyLatitude || !property?.PropertyLongitude) return;
+
+        // Ensure marker belongs to the active tab's data
+        if (!favData.some((fav) => fav.PropertyID === property.PropertyID)) {
+          setInfoWindowPosition(null); // Reset if the property is not in the current tab
+          dispatch(clearSelectedProperty());
+          return;
+      }
 
     const position = {
       lat: parseFloat(property.PropertyLatitude),
@@ -72,9 +86,9 @@ const DashboardFavmap = ({favData}) => {
     
     if (mapRef.current) {
       mapRef.current.panTo(position);
-      mapRef.current.setZoom(1);
+      mapRef.current.setZoom(10);
     }
-  }, []);
+  }, [ dispatch]);
 
   if (!API_KEY) {
     console.error("Google Maps API key is missing. Please set the REACT_APP_GOOGLE_MAPS_API_KEY environment variable.");
@@ -100,7 +114,7 @@ const DashboardFavmap = ({favData}) => {
           mapId="5e34ee2a0a0595d8"
         >
          {/* Render all favorite properties as markers if no property is selected */}
-         {!selectedAgentProperty &&
+         {
             favData?.map((property) => (
               property.PropertyLatitude && property.PropertyLongitude && (
                 <CircleMarker

@@ -86,3 +86,13 @@
         padding: 8px;
     }
 }
+
+.staraction-icon{
+    font-size: 1.0rem;
+    color: #2C3E50;
+}
+
+.staraction-icon.shortlisted {
+    color: #FFD700;
+    font-weight: bold;
+}

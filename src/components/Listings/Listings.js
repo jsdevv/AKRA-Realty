@@ -152,8 +152,9 @@ const Listings = () => {
                 {currentItems.map((property) => {
 
                   const propertyUnit = property.UnitTypeDetails[0];
-                  console.log(propertyUnit,"propertyUnit");
 
+                  console.log(propertyUnit,"propertyUnit");
+                
                   const propertyUrls = propertyUnit.ProjectImageUrls ?? propertyUnit.PropertyImageUrls;
                   const imageUrls = propertyUrls ? propertyUrls.split(',').map(url => url.trim()) : [];
 
@@ -256,7 +257,6 @@ const Listings = () => {
                           <span
                             className="listcount"
                             onClick={() => handlePropertyClick(propertyUnit)}
-                            style={{ cursor: "pointer" }}
                           >
                             {property.PropertyCount} Units
                           </span>

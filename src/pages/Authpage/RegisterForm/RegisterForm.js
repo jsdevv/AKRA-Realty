@@ -80,6 +80,10 @@ const RegisterForm = () => {
     }
   }, [success, dispatch]);
 
+  useEffect(() => {
+    dispatch(resetState());
+  }, [formik.values.email, formik.values.phoneNumber]);
+  
   const handleCancel = () => {
     formik.resetForm();
     dispatch(resetState());

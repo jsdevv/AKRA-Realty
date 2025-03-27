@@ -22,17 +22,22 @@ const DashboardProjectFav = ({ propertyfavtype }) => {
     const dispatch = useDispatch();
     const bearerToken = useSelector((state) => state.auth.bearerToken);
     const { Id } = useSelector((state) => state.auth.userDetails || {});
-    const { favorites, removeFavorite } = useFavorites();
+    const { removeFavorite } = useFavorites();
     const { selectedProperty, Projectfavorites } = useSelector((state) => state.properties);
 
     const [selectedCompare, setSelectedCompare] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    
 
-    useEffect(() => {
+ useEffect(() => {
+        setSelectedCompare([]);
+        dispatch(clearSelectedProperty());
+        dispatch(setSelectedAgentProperty(null)); 
         if (bearerToken && Id && propertyfavtype === 'Project') {
             dispatch(fetchGetprojectFavorites(bearerToken));
         }
     }, [bearerToken, propertyfavtype, Id, dispatch]);
+
 
     const handleCompareSelect = (projectID) => {
         setSelectedCompare((prev) =>
@@ -41,8 +46,10 @@ const DashboardProjectFav = ({ propertyfavtype }) => {
     };
 
     const handleLocationClick = (project) => {
-       
-        dispatch(setSelectedAgentProperty(project));
+        if (propertyfavtype === 'Project') {
+            dispatch(setSelectedAgentProperty(project));
+        }
+      
 
     };
 
@@ -56,7 +63,7 @@ const DashboardProjectFav = ({ propertyfavtype }) => {
 
     const closeComparisonModal = () => {
         setIsModalOpen(false);
-        setSelectedCompare([]);
+        // setSelectedCompare([]);
     };
 
     const handlePopupOpen = useCallback(
@@ -172,7 +179,7 @@ const DashboardProjectFav = ({ propertyfavtype }) => {
                                                 </button>
                                             </td>
                                             <td>
-                                                <input type="checkbox" checked={selectedCompare.includes(project.ProjectID)} onChange={() => handleCompareSelect(project.ProjectID)} />
+                                                <input className='dashboard-compare' type="checkbox" checked={selectedCompare.includes(project.ProjectID)} onChange={() => handleCompareSelect(project.ProjectID)} />
                                             </td>
                                             <td>
                                                 <button className="dashboard-remove-button" onClick={() => handleLocationClick(project)}>
@@ -203,7 +210,7 @@ const DashboardProjectFav = ({ propertyfavtype }) => {
             )}
 
             {isModalOpen && (
-                <Favoritescompare properties={favorites.filter((project) => selectedCompare.includes(project.ProjectID))} onClose={closeComparisonModal} />
+                <Favoritescompare properties={Projectfavorites.filter((project) => selectedCompare.includes(project.ProjectID))} onClose={closeComparisonModal} />
             )}
 
             {selectedProperty && (
