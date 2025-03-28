@@ -77,3 +77,6 @@
   background-color: #2A3650;
   color: #fff;
 }
+.gm-svpc {
+  top: 20px !important; /* Moves the Street View slightly up */
+}

@@ -46,21 +46,36 @@ const Myproperty = ({ showMap, setShowMap, handleEditClick }) => {
     };
 
     const handleLocationClick = (property) => {
+
+        console.log("Property Data:", property);
+
+        // Ensure valid latitude and longitude values
+        const lat = parseFloat(property.PropertyLatitude);
+        const lng = parseFloat(property.PropertyLongitude);
+    
+        if (isNaN(lat) || isNaN(lng)) {
+            console.error("Invalid latitude or longitude:", property.PropertyLatitude, property.PropertyLongitude);
+            return;
+        }
+    
         // Close both modals if they are open
         setShowListingModal(false);
         setModalOpen(false);
-
+    
         if (selectedPropertyForMap?.PropertyID === property.PropertyID) {
-            // If the same property is clicked again, close the map
             setShowMap(false);
             setSelectedPropertyForMap(null);
         } else {
-            // Otherwise, show the map for the new property
             dispatch(setSelectedAgentProperty(property));
             setShowMap(true);
-            setSelectedPropertyForMap(property);
+            setSelectedPropertyForMap({
+                ...property,
+                Latitude: lat,
+                Longitude: lng,
+            });
         }
     };
+    
 
     const handleCloseMap = () => {
         setShowMap(false);
@@ -131,7 +146,7 @@ const Myproperty = ({ showMap, setShowMap, handleEditClick }) => {
                                     <tr key={property.PropertyID}>
                                         <td>
                                             <img
-                                                 src={property.ImageUrls.split(',')[0]} 
+                                                 src={property.PropertyImageUrls.split(',')[0]} 
                                                 alt={property.PropertyName}
                                                 className="agent-property-table__image"
                                                 onClick={() => handlePropertyClick(property)} 
@@ -186,11 +201,12 @@ const Myproperty = ({ showMap, setShowMap, handleEditClick }) => {
             </div>
             {showMap && (
                 <div className="dashboard-map-container">
-                    <Dashboardmap onClose={handleCloseMap} myProperty={myProperty} />
+                    { myProperty.length > 0 &&   <Dashboardmap onClose={handleCloseMap} myProperty={myProperty} /> }
                 </div>
             )}
             { showListingModal  && selectedProperty && (
                 <ListingModal
+                    propertyType = "Property"
                     selectedProperty={selectedProperty}
                     onClose={handleCloseModal}
 

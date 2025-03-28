@@ -151,10 +151,7 @@ const Listings = () => {
               <div className="propertyList">
                 {currentItems.map((property) => {
 
-                  const propertyUnit = property.UnitTypeDetails[0];
-
-                  console.log(propertyUnit,"propertyUnit");
-                
+                  const propertyUnit = property.UnitTypeDetails[0];                
                   const propertyUrls = propertyUnit.ProjectImageUrls ?? propertyUnit.PropertyImageUrls;
                   const imageUrls = propertyUrls ? propertyUrls.split(',').map(url => url.trim()) : [];
 

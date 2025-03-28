@@ -108,7 +108,7 @@ const DashboardFavmap = ({favData}) => {
           options={{
             mapTypeControl: true,
             zoomControl: true,
-            streetViewControl: false,
+            streetViewControl: true,
             fullscreenControl: true,
           }}
           mapId="5e34ee2a0a0595d8"

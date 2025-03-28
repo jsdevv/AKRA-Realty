@@ -73,9 +73,13 @@ const Listingsmap = ({ handlePropertyClick, bearerToken }) => {
       clickableIcons: false,
       zoomControl: true,
       zoomControlOptions: {
-        position: window.google.maps.ControlPosition.RIGHT_CENTER, // Position on the right center
+        position: window.google.maps.ControlPosition.RIGHT_CENTER, 
       },
-      mapTypeControl: false,
+      mapTypeControl: true,
+      mapTypeControlOptions: { 
+          style: window.google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+          position: window.google.maps.ControlPosition.TOP_LEFT,
+      },
       styles: [
         {
           featureType: "poi.school",
@@ -225,15 +229,6 @@ const Listingsmap = ({ handlePropertyClick, bearerToken }) => {
       if (infoWindowRef.current) {
         infoWindowRef.current.close();
       }
-
-   
-
-      // Construct the HTML content using template literals
-      // const imageUrls = property.PropertyImageUrls
-      // ? property.PropertyImageUrls.split(',').map(url => url.trim())
-      // : property.ProjectImageUrls
-      //   ? property.ProjectImageUrls.split(',').map(url => url.trim())
-      //   : [];
 
         const propertyUrls = property.ProjectImageUrls ?? property.PropertyImageUrls;
         const imageUrls = propertyUrls ? propertyUrls.split(',').map(url => url.trim()) : [];

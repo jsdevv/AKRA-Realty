@@ -1,5 +1,6 @@
 .navbar-bottom {
-    position: relative;
+    position: sticky;
+    top: 0px;
     padding: 8px 10px;
     display: flex;
     align-items: center;

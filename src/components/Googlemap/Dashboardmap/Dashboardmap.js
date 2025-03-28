@@ -26,7 +26,7 @@ const CircleMarker = ({ position, onClick }) => {
 };
 
 
-const Dashboardmap = ({onClose, myProperty}) => {
+const Dashboardmap = ({onClose, myProperty = []}) => {
   const dispatch = useDispatch();
   const { selectedAgentProperty, selectedProperty } = useSelector((state) => state.properties);
    console.log(myProperty ,"myProperty ");
@@ -94,14 +94,12 @@ const Dashboardmap = ({onClose, myProperty}) => {
         options={{
           mapTypeControl: true, 
           zoomControl: true,
-          streetViewControl: false, 
+          streetViewControl: true, 
           fullscreenControl: true,
         }}
         mapId="5e34ee2a0a0595d8"
       >
-        {myProperty &&
-  Array.isArray(myProperty) &&
-  myProperty.map((property, index) => (
+       {myProperty.map((property, index) => (
           <CircleMarker
           key={index}
           position={{
@@ -118,7 +116,7 @@ const Dashboardmap = ({onClose, myProperty}) => {
               fillOpacity: 1,
             }}
           />
-       ) )}
+      ) )}
 
         {infoWindowPosition && selectedAgentProperty && (
           <InfoWindow position={infoWindowPosition} >
@@ -131,14 +129,12 @@ const Dashboardmap = ({onClose, myProperty}) => {
               </button>
   
 {(() => {
-       const imageUrls = selectedAgentProperty.ImageUrls
-       ? selectedAgentProperty.ImageUrls.split(",").map((url) => url.trim())
-       : selectedAgentProperty.PropertyImageUrls
-       ? selectedAgentProperty.PropertyImageUrls.split(",").map((url) => url.trim())
-       : selectedAgentProperty.ProjectImageUrls
-       ? selectedAgentProperty.ProjectImageUrls.split(",").map((url) => url.trim())
-       : [];
-
+     
+     const imageUrls = selectedAgentProperty?.PropertyImageUrls
+     ? selectedAgentProperty.PropertyImageUrls.includes(",")
+         ? selectedAgentProperty.PropertyImageUrls.split(",").map((url) => url.trim())
+         : [selectedAgentProperty.PropertyImageUrls.trim()]
+     : [];
         const imagesToShow = imageUrls.length > 0 ? imageUrls : ["/images/defaultimg.jpg", "/images/defaultimg1.jpg"];
 
         const settings = {
