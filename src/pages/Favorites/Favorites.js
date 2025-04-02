@@ -202,7 +202,7 @@ const Favorites = () => {
                                                             loading="lazy"
                                                             style={{
                                                                 maxWidth: "100%",
-                                                                maxHeight: "200px",
+                                                                maxHeight: "230px",
                                                                 objectFit: "cover",
                                                             }}
                                                         />

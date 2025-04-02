@@ -203,11 +203,21 @@ const DashboardProjectFav = ({ propertyfavtype }) => {
             </div>
 
             {selectedCompare.length >= 2 && (
-                <div className="dashboard-favcompare-button-container">
-                    <p>{selectedCompare.length} projects selected for comparison</p>
-                    <button   className="dashboard-favcompare-button" onClick={openComparisonModal}>Compare</button>
-                </div>
-            )}
+    <div className="dashboard-favcompare-button-container">
+        {selectedCompare.length >= 11 ? (
+            <p className="error-message">You can compare a maximum of 10 projects only.</p>
+        ) : (
+            selectedCompare.length <= 11 && <p>{selectedCompare.length} Projects selected for comparison</p>
+        )}
+
+        {selectedCompare.length <= 10 && (
+            <button className="dashboard-favcompare-button" onClick={openComparisonModal}>
+                Compare
+            </button>
+        )}
+    </div>
+)}
+
 
             {isModalOpen && (
                 <Favoritescompare properties={Projectfavorites.filter((project) => selectedCompare.includes(project.ProjectID))} onClose={closeComparisonModal} />

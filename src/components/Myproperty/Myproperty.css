@@ -37,6 +37,12 @@
   border-collapse: collapse; /* Ensures no double borders */
   margin-bottom: 10px; /* Reduced space below the table */
   }
+
+.agent-properties-view__table  thead{
+    position: sticky;
+    top: 0px;
+    z-index: 100;
+}
   
   /* Table Header */
   .agent-properties-view__table th {
@@ -73,7 +79,7 @@
   height: 70px; /* Reduced image height */
   object-fit: cover;
   border-radius: 4px;
-  border: 1px solid #ddd; /* Border around image */
+  border: 1px solid #ddd; 
   }
   
   /* Adjust container styling for better alignment */

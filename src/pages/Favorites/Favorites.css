@@ -49,7 +49,7 @@
 /* Grid Layout */
 .favorites-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
     gap: 20px;
 }
 
@@ -63,7 +63,6 @@
     flex-direction: column;
     transition: transform 0.2s ease-in-out;
     position: relative;
-    max-height: 450px; /* Limit height for overflow handling */
 }
 .favorites-card:hover {
     transform: translateY(-5px);
@@ -72,66 +71,64 @@
 /* Image Container */
 .favorites-image-container {
     width: 100%;
-    height: 200px; 
-    overflow: hidden;
-    align-items: center;
-    justify-content: center;
-    background-color: #f4f4f4; 
 }
 
 .favorites-image-container img {
     width: 100%;
+    max-height: 230px;
     height: 100%;
-    object-fit: cover; 
-    transition: transform 0.3s ease-in-out;
+    object-fit: cover;
+    aspect-ratio: 16 / 9; /* Maintain consistent aspect ratio */
 }
-
 /* Details Section */
 .favorites-details {
-    padding: 15px 15px 5px 15px;
+    padding: 10px 12px 10px 10px;
 }
 
 .favoritestop-container{
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
 /* Title Text */
 .favorites-title {
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 600;
-    padding: 2px 0px;
     color: #333;
+    white-space: nowrap;
     overflow: hidden;
+    text-overflow: ellipsis;
+    width: 65%;
 }
+
 
 /* Address Section */
 .favorites-address-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 5px; /* Adjust spacing if needed */
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 .favorites-address {
     font-size: 11px;
     color: #777;
-    margin-bottom: 12px;
     flex: 1; /* Ensure the address takes available space */
 }
 
 .details-button {
-    background-color: #2A3650; /* Primary color */
+    background-color: #2A3650;
     color: white;
-    padding: 6px;
+    padding: 6px 10px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 11px;
-    letter-spacing: 1px;
-    margin-left: 20px; /* Space between the address and button */
     transition: background-color 0.3s ease;
 }
+
 
 .details-button:hover {
     background-color: #1e2a38; /* Darker shade on hover */
@@ -146,13 +143,15 @@
     font-size: 11px; 
     display: flex;
     align-items: baseline;
-    cursor: pointer;    
+    cursor: pointer; 
+    align-items: center;
+    justify-content: center;   
 }
 
-.favcompare-checkbox label{
+/* .favcompare-checkbox label{
     position: relative;
     bottom: 20%;
-}
+} */
 
 .favcompare-checkbox input[type="checkbox"] {
     cursor: pointer;
@@ -181,41 +180,10 @@
 }
 
 
-/* Responsive Design */
-@media (max-width: 1024px) {
-    .favorites-grid {
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* 4 items per row on medium screens */
-    }
-}
-
-@media (max-width: 768px) {
-    .favorites-grid {
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* 2 items per row on small screens */
-    }
-
-    .favorites-header {
-        font-size: 20px;
-    }
-
-    .favorites-title {
-        font-size: 16px;
-    }
-
-    .favorites-address {
-        font-size: 12px;
-    }
-}
-
-@media (max-width: 480px) {
-    .favorites-grid {
-        grid-template-columns: 1fr; /* 1 item per row on very small screens */
-    }
-}
-
 
 .compare-label {
     font-size: 0.8em; /* Reduce font size */
-    margin-left: 5px; /* Space between checkbox and label */
+    margin-left: 5px; 
 }
 
 .favcompare-button-container {
@@ -232,7 +200,8 @@
     border-top-left-radius: 8px;
     border-top-right-radius: 0px;
     border-bottom-left-radius: 8px;
-    width: auto; /* Adjust the width as needed */
+    width: auto; 
+    z-index: 3;
 }
 
 .favcompare-button-container p {
@@ -315,3 +284,48 @@
 }
 
 
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .favorites-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); /* 4 items per row on medium screens */
+    }
+}
+
+@media (max-width: 768px) {
+    .favorites-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* 2 items per row on small screens */
+    }
+
+    .favorites-header {
+        font-size: 20px;
+    }
+
+    .favorites-title {
+        font-size: 12px;
+    }
+
+    .favorites-address {
+        font-size: 11px;
+    }
+}
+
+
+
+@media (max-width: 480px) {
+    .favorites-grid {
+        grid-template-columns: 1fr; /* Single column for small screens */
+    }
+
+    .favorites-image-container {
+        height: 180px; /* Adjusting height for mobile screens */
+    }
+
+    .favorites-title {
+        font-size: 14px;
+    }
+
+    .details-button {
+        font-size: 10px;
+        padding: 5px;
+    }
+}

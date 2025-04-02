@@ -206,14 +206,25 @@ const DashboardPropertyFav = ({ propertyfavtype }) => {
             </div>
 
             {selectedCompare.length >= 2 && (
-                <div className="dashboard-favcompare-button-container ">
-                    <p>{selectedCompare.length} Properties selected for comparison</p>
-                    <button className="dashboard-favcompare-button" onClick={openComparisonModal}>Compare</button>
-                </div>
-            )}
+    <div className="dashboard-favcompare-button-container">
+        {selectedCompare.length >= 11 ? (
+            <p className="error-message">You can compare a maximum of 10 properties only.</p>
+        ) : (
+            selectedCompare.length <= 11 && <p>{selectedCompare.length} properties selected for comparison</p>
+        )}
+
+        {selectedCompare.length <= 10 && (
+            <button className="dashboard-favcompare-button" onClick={openComparisonModal}>
+                Compare
+            </button>
+        )}
+    </div>
+)}
+
+
 
             {isModalOpen && (
-                <Favoritescompare properties={Propertyfavorites.filter((Property) => selectedCompare.includes(Property.PropertyID))} onClose={closeComparisonModal} />
+                <Favoritescompare propertyType="Property" properties={Propertyfavorites.filter((Property) => selectedCompare.includes(Property.PropertyID))} onClose={closeComparisonModal} />
             )}
 
             {selectedProperty && (

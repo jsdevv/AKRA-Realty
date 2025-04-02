@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector } from "react-redux";
-import { FaClock, FaEye, FaMapMarkerAlt, FaBed, FaBath, FaHome, FaWarehouse, FaCalendar, FaInfoCircle, FaHeart, FaStar } from 'react-icons/fa';
+import {  FaEye, FaMapMarkerAlt, FaBed, FaBath, FaHome, FaWarehouse, FaCalendar, FaInfoCircle } from 'react-icons/fa';
 import { MdSquareFoot, MdLocalFireDepartment, MdAcUnit, MdKitchen, MdBalcony } from 'react-icons/md';
-import { RiShareForwardFill } from "react-icons/ri";
 import ScheduleTourForm from '../ListingspopupForms/ScheduleTourForm/ScheduleTourForm';
 import Requestinfo from '../ListingspopupForms/Requestinfo/Requestinfo';
 import Nearbyplacemap from '../Googlemap/Nearbyplacemap/Nearbyplacemap';
@@ -13,7 +12,7 @@ import PropertyGrid from './PropertyGrid';
 import './ListingModalDetails.css';
 
 const ListingModalDetails = ({ selectedProperty, propertyCardData, propertyType }) => {
-   console.log(selectedProperty.PropertyViewCount,"selectedProperty");
+   console.log(selectedProperty,"selectedProperty");
   const tabs = [
     { id: 'scheduleVisit', label: 'Schedule Visit' },
     { id: 'requestInfo', label: 'Request Info' },
@@ -139,7 +138,7 @@ const ListingModalDetails = ({ selectedProperty, propertyCardData, propertyType 
             </p>
             <p className="property-location">
               <FaMapMarkerAlt aria-label="Location" />{" "}
-              {selectedProperty.propertyAddress1}
+              {selectedProperty.Locality}, {selectedProperty.ZipCode}
             </p>
           </div>
 

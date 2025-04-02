@@ -5,7 +5,7 @@ import { VscFeedback } from "react-icons/vsc";
 import { MdLocalPhone } from "react-icons/md";
 import './NavbarTop.css';
 import UserSettingsdropdown from '../../../components/UserSettingsdropdown/UserSettingsdropdown';
-import { BsHouseAdd } from 'react-icons/bs';
+import { BsBuildingAdd } from "react-icons/bs";
 
 const NavbarTop = ({ handleLogout,handleLogin, propertyStatusOptions = [], onSelectPropertyStatus }) => {
   
@@ -152,7 +152,7 @@ const NavbarTop = ({ handleLogout,handleLogin, propertyStatusOptions = [], onSel
                to="/addlistings" 
               className={`navbar-centerlink ${activeLink === 'addlistings' ? 'active' : ''}`} 
               onClick={() => handleLinkClick('addlistings')}>
-             <BsHouseAdd  size={22} className="home-icon" />
+             <BsBuildingAdd  size={22} className="home-icon" />
         </Link>
       </div>
       <div className="navbar-right">

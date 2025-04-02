@@ -4,10 +4,10 @@
   }
   
   .fixed-circle-marker {
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
-    background-color: #6D2323; /* Use your preferred color */
+    background-color: #A3000B; 
     border: 2px solid white;
     cursor: pointer;
     position: absolute;

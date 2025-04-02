@@ -4,89 +4,111 @@ import './Favoritescompare.css';
 import ShareProperty from '../ShareProperty/ShareProperty';
 import defaultimg from "../../images/Apartment102.jpeg"
 
-const Favoritescompare = ({ properties, onClose }) => {
+
+const Favoritescompare = ({ properties, onClose, propertyType }) => {
   console.log(properties,"table");
   const [isShareOpen, setIsShareOpen] = useState(false);
 
-  const columns = useMemo(() => [
-    {
-      Header: 'Overview',
-      accessor: 'ImageNames',
-      Cell: ({ row }) => {
-        const { PropertyImageUrls, ProjectImageUrls, PropertyName,PropertyCardLine2,PropertyCardLine3 } = row.original;
-        const imageUrls = PropertyImageUrls?.split(',').map((url) => url.trim()) || ProjectImageUrls?.split(',').map((url) => url.trim()) || [];
-        const imageSrc = imageUrls.length > 0 ? imageUrls[0] : defaultimg;
-        
-        return (
-          <div className="fav-comparison-image">
-            <img src={imageSrc} alt="Property" />
-            <div className="compare-details">
-              <div className="compare-name-price">
-                <p className="compare-name">{PropertyName}</p>
+  const columns = useMemo(() => {
+    // Define the base columns
+    const baseColumns = [
+      {
+        Header: 'Overview',
+        accessor: 'ImageNames',
+        Cell: ({ row }) => {
+          const { PropertyImageUrls, ProjectImageUrls, PropertyName } = row.original;
+          const imageUrls = PropertyImageUrls?.split(',').map((url) => url.trim()) || ProjectImageUrls?.split(',').map((url) => url.trim()) || [];
+          const imageSrc = imageUrls.length > 0 ? imageUrls[0] : defaultimg;
+
+          return (
+            <div className="fav-comparison-image">
+              <img src={imageSrc} alt="Property" />
+              <div className="compare-details">
+                <div className="compare-name-price">
+                  <p className="compare-name">{PropertyName}</p>
+                </div>
               </div>
-              <span className="compare-location">
-                {PropertyCardLine2} <br/> {PropertyCardLine3}
-              </span>
             </div>
-          </div>
-        );
+          );
+        },
       },
-    },
-    { Header: 'Property Type', accessor: 'PropertyType' },
-    { 
-      Header: 'Size (SqFt)', 
-      accessor: 'SqFt',
-      Cell: ({ row }) => 
-        row.original.MinSqFt && row.original.MaxSqFt
-          ? `${row.original.MinSqFt} - ${row.original.MaxSqFt} SqFt`
-          : row.original.SqFt || '-'
-    },
-    {
-      Header: 'Price',
-      accessor: 'Amount',
-      Cell: ({ row }) => {
-        const {Amount, MinPrice, MaxPrice } = row.original;
-        if (MinPrice && MaxPrice) return `₹ ${MinPrice} - ₹ ${MaxPrice}`;
-        if (MinPrice) return `₹ ${MinPrice}`;
-        if (MaxPrice) return `₹ ${MaxPrice}`;
-        return `₹ ${Amount}` || '-';
+      { Header: 'Property Type', accessor: 'PropertyType' },
+      { 
+        Header: 'Size (SqFt)', 
+        accessor: 'SqFt',
+        Cell: ({ row }) => 
+          row.original.MinSqFt && row.original.MaxSqFt
+            ? `${row.original.MinSqFt} - ${row.original.MaxSqFt} SqFt`
+            : row.original.SqFt || '-'
+      },
+      {
+        Header: 'Price',
+        accessor: 'Amount',
+        Cell: ({ row }) => {
+          const { MinPrice, MaxPrice } = row.original;
+          if (MinPrice && MaxPrice) return `₹ ${MinPrice} - ₹ ${MaxPrice}`;
+          if (MinPrice) return `₹ ${MinPrice}`;
+          if (MaxPrice) return `₹ ${MaxPrice}`;
+          return `₹ ${row.original.Amount}` || '-';
+        }
+      },
+      {
+        Header: 'Bedrooms',
+        accessor: 'Bedrooms',
+        Cell: ({ row }) => {
+          const { MinBedrooms, MaxBedrooms, Bedrooms } = row.original;
+          if (MinBedrooms && MaxBedrooms) return `${MinBedrooms} - ${MaxBedrooms}`;
+          return MinBedrooms || MaxBedrooms || Bedrooms || '-';
+        }
+      },
+      { 
+        Header: 'Bathrooms', 
+        accessor: 'PropertyBathrooms',
+        Cell: ({ row }) => 
+          row.original.MinBathrooms && row.original.MaxBathrooms
+            ? `${row.original.MinBathrooms} - ${row.original.MaxBathrooms}`
+            : row.original.PropertyBathrooms || '-'
+      },
+      { Header: 'Status', accessor: 'PropertyStatus' },
+      {
+        Header: 'Facing',
+        accessor: 'PropertyFacings',
+        Cell: ({ row }) => {
+          return row.original.PropertyFacings || row.original.PropertyMainEntranceFacing || '-';
+        }
+      },
+      { Header: 'Year Built', accessor: 'YearBuilt', Cell: ({ row }) => row.original.PropertyYear || row.original.YearBuilt || '-' },
+      { Header: 'Price Per SqFt', accessor: 'PricePerSqFt', Cell: ({ row }) => row.original.PricePerSqFt || '-' },
+    ];
+
+    // Conditionally include columns based on propertyType
+    if (propertyType === "Property") {
+      // Add Rental Estimate and Yearly Growth columns when propertyType is "Property"
+      return [
+        ...baseColumns,
+        {
+          Header: 'Rental Estimate',
+          accessor: 'RentalEstimateAmount',
+          Cell: ({ row }) => row.original.RentalEstimateAmount || '-',
+        },
+        {
+          Header: 'Yearly Growth (%)',
+          accessor: 'YearlyGrowthPercentage',
+          Cell: ({ row }) => row.original.YearlyGrowthPercentage || '-',
+        }
+      ];
+    }
+
+    // When propertyType is not "Property", exclude "Rental Estimate" and "Yearly Growth (%)", and show "No. of Units"
+    return [
+      ...baseColumns,
+      {
+        Header: 'No. of Units',
+        accessor: 'Units',
+        Cell: ({ row }) => row.original.Units || row.original.NumberOfUnits || '-',
       }
-    },    
-    {
-      Header: 'Bedrooms',
-      accessor: 'Bedrooms',
-      Cell: ({ row }) => {
-        const { MinBedrooms, MaxBedrooms, Bedrooms } = row.original;
-        if (MinBedrooms && MaxBedrooms) return `${MinBedrooms} - ${MaxBedrooms}`;
-        if (MinBedrooms) return MinBedrooms;
-        if (MaxBedrooms) return MaxBedrooms;
-        return Bedrooms || '-';
-      }
-    },    
-    { 
-      Header: 'Bathrooms', 
-      accessor: 'PropertyBathrooms',
-      Cell: ({ row }) => 
-        row.original.MinBathrooms && row.original.MaxBathrooms
-          ? `${row.original.MinBathrooms} - ${row.original.MaxBathrooms}`
-          : row.original.PropertyBathrooms || '-'
-    },
-    { Header: 'Status', accessor: 'PropertyStatus' },
-    {
-      Header: 'Facing',
-      accessor: 'PropertyFacings',
-      Cell: ({ row }) => {
-        const { PropertyFacings, PropertyMainEntranceFacing } = row.original;
-        return PropertyFacings || PropertyMainEntranceFacing || '-';
-      }
-    },    
-    { Header: 'Year Built', accessor: 'YearBuilt', Cell: ({ row }) => row.original.PropertyYear || row.original.YearBuilt || '-' },
-    { Header: 'Rental Estimate', accessor: 'RentalEstimateAmount', Cell: ({ row }) => row.original.RentalEstimateAmount || '-' },
-    { Header: 'Yearly Growth (%)', accessor: 'YearlyGrowthPercentage', Cell: ({ row }) => row.original.yearlyGrowthPercentage || row.original.YearlyGrowthPercentage || '-' },
-    { Header: 'No. of Units', accessor: 'Units', Cell: ({ row }) => row.original.Units || row.original.NumberOfUnits || '-' },
-    { Header: 'Price Per SqFt', accessor: 'PricePerSqFt', Cell: ({ row }) => row.original.PricePerSqFt || '-' },
-  ], []);
-  
+    ];
+  }, [propertyType]);
 
   
   // Open/close the share options

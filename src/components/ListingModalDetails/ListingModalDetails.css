@@ -54,22 +54,24 @@
 .listingmodal-title {
   font-size: 20px;
   font-weight: 600;
-  margin-top: 20px;
+  margin: 12px 0px;
   letter-spacing: 1px;
 }
 
 .property-location {
   font-size: 14px;
   color: #6c757d;
+  margin: 0px;
 }
 
 .left-section h3{
-  font-size: 20px;
+  font-size: 15px;
   font-weight: 500;
+  margin: 8px  0px;
 }
 
 .listingmodal-price p {
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 600;
   margin-top: 20px;
 }
@@ -80,10 +82,9 @@
 }
 
 .property-description {
-  margin-top: 18px;
-  line-height: 1.6;
   color: #6c757d;
-
+  font-size: 14px;
+  margin: 4px 0px;
 }
 
 .facts-features {

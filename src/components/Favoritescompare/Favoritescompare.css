@@ -16,13 +16,14 @@
   background-color: #fff;
   padding: 20px;
   border-radius: 8px;
-  width: 90%;
-  max-width: 1200px;
+  width: 95%;
+  max-width: 1400px;
   position: relative;
-  margin-top: 5%;
+  margin-top: 2%;
   display: flex;
   flex-direction: column;
   height: 90vh; /* Ensures it takes up most of the screen */
+  overflow: hidden;
 }
 
 /* Header Styling */
@@ -38,14 +39,13 @@
 }
 
 .comparison-modal-title {
-  font-size: 16px;
+  font-size: 18px;
   color: #2A3650;
   font-weight: bold;
 }
 
 .modal-actions {
   display: flex;
-  justify-content: flex-end;
   align-items: center;
 }
 
@@ -55,7 +55,7 @@
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 20px;
   margin-left: 15px;
   color: #2A3650;
 }
@@ -68,63 +68,83 @@
 /* Table Wrapper */
 .favcomparison-wrapper {
   flex-grow: 1;
+  overflow-x: auto; /* Allows horizontal scrolling */
   overflow-y: auto;
-  max-height: calc(90vh - 60px); /* Adjusts height dynamically */
+  max-height: calc(90vh - 60px);
+  background: white;
 }
 
 /* Table Styling */
 .favcomparison-table {
   width: 100%;
-  border-collapse: collapse;
   text-align: start;
-  border: 1px solid #ddd;
-  table-layout: fixed;
-}
-
-/* Sticky Table Head */
-.favcomparison-table thead {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  background: #007aff;
+  table-layout: auto;
+  border-collapse: collapse;
+  min-width: 1000px;
 }
 
 /* Sticky First Row */
+.favcomparison-table thead {
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 30;
+}
+/* Sticky First Row */
 .favcomparison-table tbody tr:first-child {
   position: sticky;
-  top: 0px; 
+  top: -2px;
   background: white;
-  z-index: 9;
-  font-weight: bold;
+  z-index: 100;
+}
+
+/* Sticky First Column */
+
+.favcomparison-table thead th:first-child {
+  position: sticky;
+  left: 0;
+  background: white;
+  z-index: 40;
+  font-size: 13px;
+  font-weight: 500;
+  min-width: 90px; /* Adjust width as needed */
+  max-width: 90px;
+  white-space: nowrap;
+}
+
+.favcomparison-table tbody td:first-child {
+  position: sticky;
+  left: 0;
+  background:#f6f6f6;
+  z-index: 50;
+  font-size: 13px;
+  font-weight: 500;
+  min-width: 150px; /* Adjust width as needed */
+  max-width: 200px;
+  white-space: nowrap;
+
 }
 
 /* Table Cells */
 .favcomparison-table th,
 .favcomparison-table td {
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
-  border-right: 1px solid #ddd;
+  padding: 12px;
+  border: 1px solid #cecece;
+  white-space: nowrap;
 }
 
 .favcomparison-table th {
-  position: sticky;
-  top: 0;
-  z-index: 10;
+  font-weight: 600;
+  font-size: 13px;
   background-color: #007aff;
   color: white;
-  font-weight: 400;
-  font-size: 12px;
-  border: 1px solid #ddd;
-  padding: 12px 15px;
+  text-align: left;
 }
 
 .favcomparison-table td {
   font-size: 12px;
   color: #555;
-}
-
-.favcomparison-table td:first-child {
-  font-weight: bold;
+  text-align: left;
 }
 
 .favcomparison-table tbody tr:nth-child(odd) {
@@ -139,15 +159,59 @@
 /* Image Styling */
 .fav-comparison-image {
   display: flex;
-  gap: 10px;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
+  width: 130px; /* Ensuring a consistent width */
 }
 
+
 .fav-comparison-image img {
-  width: 90px;
-  height: 60px;
+  width: 100%;
+  height: 80px;
   object-fit: cover;
 }
+
+
+/* Property Details */
+.compare-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+}
+
+.compare-name {
+  font-weight: 500;
+  font-size: 12px;
+  width: 100%;
+  text-align: center;
+  white-space: normal; /* Allows text wrapping */
+  word-wrap: break-word; /* Ensures long words wrap */
+  overflow: visible; /* Prevents text truncation */
+  max-width: 100%; /* Makes it responsive */
+  min-height: 35px; /* Ensures enough space for 2 lines of text */
+}
+
+/* .compare-location {
+  font-size: 11px;
+  color: #777;
+  white-space: nowrap;
+} */
+.compare-name {
+  font-weight: 500;
+  font-size: 12px;
+  width: 100%;
+  display: block;
+  text-align: center;
+  overflow: hidden; /* Prevents content from overflowing */
+  text-overflow: ellipsis; /* Adds '...' for very long text */
+  max-width: 150px; /* Prevents excessive stretching */
+  word-wrap: break-word; /* Ensures long words wrap */
+}
+
 
 /* Floating Share Button */
 .favcompare-share {
@@ -161,28 +225,106 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.compare-details {
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
+/* Responsive Styles */
+@media screen and (max-width: 1024px) {
+  .comparison-modal-content {
+    width: 98%;
+    height: 95vh;
+  }
+
+  .favcomparison-wrapper {
+    max-height: 85vh;
+  }
+
+  .favcomparison-table {
+    min-width: 800px; /* Allows table to scroll horizontally */
+  }
+
+  .compare-name {
+    font-size: 11px;
+  }
+
+  .compare-location {
+    font-size: 10px;
+  }
 }
 
-.compare-name-price {
-  margin: 0;
+@media screen and (max-width: 768px) {
+  .comparison-modal-content {
+    width: 100%;
+    height: 100vh;
+    border-radius: 0;
+    margin-top: 0;
+  }
+
+  .modal-header {
+    padding-bottom: 5px;
+  }
+
+  .comparison-modal-title {
+    font-size: 16px;
+  }
+
+  .favcomparison-table {
+    min-width: 600px; /* Ensures proper scrolling */
+  }
+
+  .fav-comparison-image {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .fav-comparison-image img {
+    width: 70px;
+    height: 50px;
+  }
+
+  .compare-name {
+    font-size: 10px;
+  }
+
+  .compare-location {
+    font-size: 9px;
+  }
+
+  .favcompare-share {
+    top: 3%;
+    right: 3%;
+  }
 }
 
-.compare-name {
-  font-weight: 400;
-  font-size: 12px;
-  margin-top: 0px;
-  margin-bottom: 4px;
-}
+@media screen and (max-width: 480px) {
+  .comparison-modal-content {
+    padding: 15px;
+  }
 
-.compare-location {
-  font-size: 11px;
-  color: #777;
-}
+  .comparison-modal-title {
+    font-size: 14px;
+  }
 
-.compare-name {
-  font-weight: bold;
+  .favcomparison-wrapper {
+    max-height: 80vh;
+  }
+
+  .favcomparison-table {
+    min-width: 500px;
+  }
+
+  .compare-name {
+    font-size: 9px;
+  }
+
+  .compare-location {
+    font-size: 8px;
+  }
+
+  .fav-comparison-image img {
+    width: 60px;
+    height: 40px;
+  }
+
+  .comparison-modal-share,
+  .comparison-modal-close {
+    font-size: 16px;
+  }
 }

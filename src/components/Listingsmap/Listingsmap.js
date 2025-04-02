@@ -233,8 +233,6 @@ const Listingsmap = ({ handlePropertyClick, bearerToken }) => {
         const propertyUrls = property.ProjectImageUrls ?? property.PropertyImageUrls;
         const imageUrls = propertyUrls ? propertyUrls.split(',').map(url => url.trim()) : [];
 
-        console.log(imageUrls,"image");
-    
 
 const imagesToShow = imageUrls.length > 0 ? imageUrls : [defaultimg1, defaultimg2];
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchProperties,
@@ -23,6 +23,7 @@ const Listings = () => {
   const [showModal, setShowModal] = useState(false);
   const [isFiltering, setIsFiltering] = useState(false);
   const dispatch = useDispatch();
+  const sliderRefs = useRef({});
   const {
     properties,
     premiumListings,
@@ -138,7 +139,7 @@ const Listings = () => {
           <div className="propertyListHeader">
             <h2>Property Listings</h2>
             <p>
-              {Object.keys(groupedProperties).length} {selectedPropertyStatus} properties
+              {Object.keys(visibleProperties).length} {selectedPropertyStatus} properties
               available
             </p>
           </div>
@@ -206,6 +207,17 @@ const Listings = () => {
                     slidesToShow: 1,
                     slidesToScroll: 1,
                     arrows: true,
+                    afterChange: (current) => {
+                      const lastIndex = imagesToShow.length - 1;
+                      if (current === lastIndex) {
+                        handlePropertyClick(propertyUnit); 
+                        setTimeout(() => {
+                          if (sliderRefs.current[propertyUnit.PropertyID]) {
+                            sliderRefs.current[propertyUnit.PropertyID].slickGoTo(0);
+                          }
+                        }, 500);
+                      }
+                    }
                   };
                   const propertyDetails = [propertyUnit.PropertyType, propertyBathrooms, propertySqft].filter(x => x).join(" | ");
                   const line3 = propertyUnit.PropertyCardLine3.split('|').map(x => x.trim()).filter(x => x).join(" | ");
@@ -221,7 +233,7 @@ const Listings = () => {
 
                       <div className="propertyImages">
                         <div className="slide-wrapper">
-                          <Slider {...settings}>
+                          <Slider key={propertyUnit.PropertyID} ref={(el) => (sliderRefs.current[propertyUnit.PropertyID] = el)} {...settings}>
                             {imagesToShow.map((url, index) => (
                               <div key={index}
                                 onClick={() => handlePropertymodalopen(propertyUnit)}>

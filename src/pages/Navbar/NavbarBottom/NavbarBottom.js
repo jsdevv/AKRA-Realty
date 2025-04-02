@@ -404,7 +404,7 @@ const NavbarBottom = ({
         ? []
         : filteredProperties.filter((property) =>
             property.PropertyName?.toLowerCase().includes(inputValue) ||
-            property.PropertyArea?.toLowerCase().includes(inputValue) ||
+            property.Locality?.toLowerCase().includes(inputValue) ||
             property.PropertyZipCode?.toLowerCase().includes(inputValue)
         );
         return matches.reduce((acc, property) => {

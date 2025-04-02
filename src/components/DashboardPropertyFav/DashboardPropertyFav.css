@@ -44,15 +44,10 @@
     color: #333;
 }
 
-.favproperty-table__image{
-    cursor: pointer;
-    width: 80px;
-    height: 50px;
-    padding: 2px;
- 
-    object-fit: cover;
+.favproperty-table__image {
+    display: block;
+    margin: 0 auto;
 }
-
 
 .dashboard-favorites-table td {
     padding: 0px;
@@ -105,7 +100,7 @@
 
 .dashboard-shortlist-icon {
     font-size: 1.0rem;
-    color: #2C3E50;
+    color: #ccc;
 }
 
 .dashboard-shortlist-icon.highlighted {
@@ -143,7 +138,7 @@
 
 /* Comparison Button - Positioned Above Table */
 .dashboard-favcompare-button-container {
-    width: 26%;
+    width: 27%;
     position: sticky;
     bottom: 0px;
     left: 100%;

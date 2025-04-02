@@ -27,23 +27,23 @@ const PropertyGrid = ({ groupedByBedroomsArray,selectedBedrooms,setSelectedPrope
     const dispatch = useDispatch();
  
 
-    const toggleShortlist = async (Property, event) => {
-        event?.preventDefault(); // Stop form submission if applicable
-        event?.stopPropagation(); 
-        const isShortlisted = Property.ShortlistStatus === "Y";
-        const payload = { PropertyID: Property.PropertyID };
+    // const toggleShortlist = async (Property, event) => {
+    //     event?.preventDefault(); 
+    //     event?.stopPropagation(); 
+    //     const isShortlisted = Property.ShortlistStatus === "Y";
+    //     const payload = { PropertyID: Property.PropertyID };
     
-        try {
-            const response = isShortlisted
-                ? await fetchDeletePropertyshortlist(bearerToken, { ...payload, UserID: Id })
-                : await fetchAddpropertyshortlist(bearerToken, { ...payload, UserID: Id });
+    //     try {
+    //         const response = isShortlisted
+    //             ? await fetchDeletePropertyshortlist(bearerToken, { ...payload, UserID: Id })
+    //             : await fetchAddpropertyshortlist(bearerToken, { ...payload, UserID: Id });
 
     
-        } catch (error) {
-            console.error("Error toggling shortlist:", error);
-            toast.error("Failed to update shortlist.");
-        }
-    };
+    //     } catch (error) {
+    //         console.error("Error toggling shortlist:", error);
+    //         toast.error("Failed to update shortlist.");
+    //     }
+    // };
     
     // Filter and clean the grouped array
     const cleanedGroupedByBedroomsArray = useMemo(() => {
@@ -198,7 +198,7 @@ const PropertyGrid = ({ groupedByBedroomsArray,selectedBedrooms,setSelectedPrope
             headerClass: "custom-header"
         },
         {
-            headerName: "Actions",
+            headerName: "Action",
             field: "fullPropertyData", // Use fullPropertyData
             flex: 0.6,
             cellStyle: { textAlign: "center", display: "flex", justifyContent: "center", gap: "10px" },
@@ -215,11 +215,11 @@ const PropertyGrid = ({ groupedByBedroomsArray,selectedBedrooms,setSelectedPrope
                             onClick={() => handleToggleFavorite(params.value)}
                         />
                         {/* Star Icon for Featured */}
-                        <FaStar
+                        {/* <FaStar
                            
                             className={`staraction-icon ${params.value.ShortlistStatus === "Y" ? 'shortlisted' : ''}`}
                             onClick={() => toggleShortlist(params.value)}
-                        />
+                        /> */}
                     </div>
                 );
             },

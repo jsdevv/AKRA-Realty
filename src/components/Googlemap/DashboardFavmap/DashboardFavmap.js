@@ -191,7 +191,7 @@ const DashboardFavmap = ({favData}) => {
         );
       })()}
 
-<div className="dashboard-favmap-details">
+<div className="dashboard-favmap-details"  onClick={() => handlePopupopen(selectedAgentProperty)}>
 <h3 className="dashboard-favmap-price">
           {selectedAgentProperty.PropertyName}, {selectedAgentProperty.MinPrice ?   ` ₹${selectedAgentProperty.MinPrice} - ₹${selectedAgentProperty.MaxPrice}` : 
     ` ₹${selectedAgentProperty.Amount}`
