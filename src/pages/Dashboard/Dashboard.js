@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Dashboardmap from '../../components/Googlemap/Dashboardmap/Dashboardmap';
-import DashboardFavorites from '../../components/DashboardFavorites/DashboardFavorites';
 import AddListings from '../../components/AddListings/AddListings';
 import Myproperty from '../../components/Myproperty/Myproperty';
 import { setSelectedEditProperty } from '../../Redux/Slices/addListingsSlice';
@@ -8,17 +7,42 @@ import { useDispatch } from 'react-redux';
 import DashboardProjectFav from '../../components/DashboardProjectFav/DashboardProjectFav';
 import DashboardPropertyFav from '../../components/DashboardPropertyFav/DashboardPropertyFav';
 import './Dashboard.css';
+import { FaChevronDown } from 'react-icons/fa';
+import { Menu } from '@headlessui/react';
 
 const Dashboard = () => {
   const [showMap, setShowMap] = useState(false);
   const [selectedPropertyForMap, setSelectedPropertyForMap] = useState(null);
   const [activeTab, setActiveTab] = useState('properties');
+  const [selectedFavoriteLabel, setSelectedFavoriteLabel] = useState('Favorites');
+  const [selectedAlertLabel, setSelectedAlertLabel] = useState('Alerts');
+
   const dispatch = useDispatch();
 
   const handleEditClick = (property) => {
     dispatch(setSelectedEditProperty(property));
     setActiveTab('addlistings');
   };
+
+  useEffect(() => {
+    // Reset both labels only when going to the main tabs
+    if (activeTab === 'properties' || activeTab === 'addlistings') {
+      setSelectedFavoriteLabel('Favorites');
+      setSelectedAlertLabel('Alerts');
+    }
+  
+    // If switching to Favorites tab only, reset Alerts label
+    if (activeTab === 'Property' || activeTab === 'Project') {
+      setSelectedAlertLabel('Alerts');
+    }
+  
+    // If switching to Alerts tab only, reset Favorites label
+    if (activeTab === 'Buy' || activeTab === 'Sell') {
+      setSelectedFavoriteLabel('Favorites');
+    }
+  }, [activeTab]);
+  
+  
 
   // Render the active tab content
   const renderTabContent = () => {
@@ -66,34 +90,75 @@ const Dashboard = () => {
           >
             My Properties
           </p>
+          {/* FAVORITES DROPDOWN */}
+<Menu as="div" className="relative">
+  <Menu.Button className="dashboard-dropdown-toggle">
+    {selectedFavoriteLabel} <FaChevronDown className="inline" />
+  </Menu.Button>
+  <Menu.Items className="dashboard-dropdown-menu">
+    <Menu.Item>
+      {() => (
+        <button
+          onClick={() => {
+            setActiveTab('Property');
+            setSelectedFavoriteLabel('Property Favorite');
+          }}
+          className={`dashboard-dropdown-item ${activeTab === 'Property' ? 'active' : ''}`}
+        >
+          Property Favorite
+        </button>
+      )}
+    </Menu.Item>
+    <Menu.Item>
+      {() => (
+        <button
+          onClick={() => {
+            setActiveTab('Project');
+            setSelectedFavoriteLabel('Project Favorite');
+          }}
+          className={`dashboard-dropdown-item ${activeTab === 'Project' ? 'active' : ''}`}
+        >
+          Project Favorite
+        </button>
+      )}
+    </Menu.Item>
+  </Menu.Items>
+</Menu>
 
-
-
-          <div className="dashboard-tab-dropdown-container">
-            <select
-              className="dashboard-tab-dropdown"
-              value={activeTab === 'Property' || activeTab === 'Project' ? activeTab : ''}
-              onChange={(e) => setActiveTab(e.target.value)}
-            >
-              <option value="">Favorites</option>
-              <option value="Property">Property Favorite</option>
-              <option value="Project">Project Favorite</option>
-            </select>
-          </div>
-
-
-
-          <div className="dashboard-tab-dropdown-container">
-            <select
-              className="dashboard-tab-dropdown"
-              value={activeTab === 'Buy' || activeTab === 'Sell' ? activeTab : ''}
-              onChange={(e) => setActiveTab(e.target.value)}
-            >
-              <option value="">Alerts</option>
-              <option value="Buy">Buy Alert</option>
-              <option value="Sell">Sell Alert</option>
-            </select>
-          </div>
+{/* ALERTS DROPDOWN */}
+<Menu as="div" className="relative">
+  <Menu.Button className="dashboard-dropdown-toggle">
+    {selectedAlertLabel} <FaChevronDown className="inline" />
+  </Menu.Button>
+  <Menu.Items className="dashboard-dropdown-menu">
+    <Menu.Item>
+      {() => (
+        <button
+          onClick={() => {
+            setActiveTab('Buy');
+            setSelectedAlertLabel('Buy Alert');
+          }}
+          className={`dashboard-dropdown-item ${activeTab === 'Buy' ? 'active' : ''}`}
+        >
+          Buy Alert
+        </button>
+      )}
+    </Menu.Item>
+    <Menu.Item>
+      {() => (
+        <button
+          onClick={() => {
+            setActiveTab('Sell');
+            setSelectedAlertLabel('Sell Alert');
+          }}
+          className={`dashboard-dropdown-item ${activeTab === 'Sell' ? 'active' : ''}`}
+        >
+          Sell Alert
+        </button>
+      )}
+    </Menu.Item>
+  </Menu.Items>
+</Menu>
 
 
           <p

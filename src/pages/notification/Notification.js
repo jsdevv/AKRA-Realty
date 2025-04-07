@@ -123,7 +123,7 @@ const Notification = () => {
                       onClick={() => handleRowClick(index)} // Click to toggle visibility
                     >
                       <td>{`Alert ${notification.AlertID}`}</td>
-                      <td>{notification.propertyArea}</td>
+                      <td>{notification.Locality}</td>
                       <td>{notification.sqFt}</td>
                       <td>{notification.Amount}</td>
                       <td>{notification.Status}</td>

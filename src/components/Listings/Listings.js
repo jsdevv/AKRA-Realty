@@ -209,6 +209,7 @@ const Listings = () => {
                     slidesToShow: 1,
                     slidesToScroll: 1,
                     arrows: true,
+                    lazyLoad: true,
                     afterChange: (current) => {
                       const lastIndex = imagesToShow.length - 1;
                       if (current === lastIndex) {

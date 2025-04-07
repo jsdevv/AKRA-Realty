@@ -126,11 +126,12 @@ const DashboardProjectFav = ({ propertyfavtype }) => {
                             </thead>
                             <tbody>
                                 {Projectfavorites.map((project) => {
-                                    const imageUrls = project.PropertyImageUrls
-                                        ? project.PropertyImageUrls.split(',').map(url => url.trim())
-                                        : project.ProjectImageUrls
-                                            ? project.ProjectImageUrls.split(',').map(url => url.trim())
-                                            : [];
+                                   const imageUrls = [
+                                    ...(project.ProjectImageUrls ? project.ProjectImageUrls.split(',').map(url => url.trim()) : []),
+                                    ...(project.PropertyImageUrls ? project.PropertyImageUrls.split(',').map(url => url.trim()) : [])
+                                  
+                                  ].filter(url => url);
+                                  
 
 
                                     const imagesToShow = imageUrls.length > 0 ? imageUrls : [defaultimg, defaultimg1];

@@ -107,6 +107,8 @@
 .dashboard-shortlist-button {
     cursor: pointer;
     font-size: 14px;
+    border: none !important;
+    background: none;
 }
 
 .dashboard-shortlist-icon {
