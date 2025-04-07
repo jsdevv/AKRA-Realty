@@ -20,3 +20,16 @@ body {
   bottom: 0px !important;
   background: #45454591 !important;
 }
+
+:root {
+  --toastify-color-success: #251841;
+  --toastify-z-index: 1000 ;
+}
+
+.mb-0 {
+  margin-bottom: 0 !important;
+}
+
+.mb-15 {
+  margin-bottom: 15px;
+}

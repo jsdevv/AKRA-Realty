@@ -12,26 +12,29 @@ import './Dashboard.css';
 const Dashboard = () => {
   const [showMap, setShowMap] = useState(false);
   const [selectedPropertyForMap, setSelectedPropertyForMap] = useState(null);
-  const [activeTab, setActiveTab] = useState('properties'); 
-   const dispatch = useDispatch();
+  const [activeTab, setActiveTab] = useState('properties');
+  const dispatch = useDispatch();
 
-      const handleEditClick = (property) => {
-          dispatch(setSelectedEditProperty(property)); 
-          setActiveTab('addlistings');
-      };
+  const handleEditClick = (property) => {
+    dispatch(setSelectedEditProperty(property));
+    setActiveTab('addlistings');
+  };
 
   // Render the active tab content
   const renderTabContent = () => {
     switch (activeTab) {
-        case 'Project':
-         return <div> <DashboardProjectFav propertyfavtype = "Project" /> </div>;
-        case 'Property':
-         return <div> <DashboardPropertyFav propertyfavtype = "Property"  /> </div>; 
-        case 'addlistings':
-         return <div> <AddListings /> </div>; 
-        case 'alerts':
-          return <div>Alerts Section</div>; 
-       case 'properties':
+      case 'Project':
+        return <div> <DashboardProjectFav propertyfavtype="Project" /> </div>;
+      case 'Property':
+        return <div> <DashboardPropertyFav propertyfavtype="Property" /> </div>;
+      case 'addlistings':
+        return <div> <AddListings /> </div>;
+      case 'Buy':
+        return <div>Buy Alerts Section</div>;
+      case 'Sell':
+        return <div>Sell Alerts Section</div>;
+
+      case 'properties':
       default:
         return (
           <>
@@ -53,8 +56,8 @@ const Dashboard = () => {
   };
   return (
     <div className="dashboard-container">
-    {/* Dashboard section */}
-   
+      {/* Dashboard section */}
+
       <div className="dashboard-tabs">
         <div className="dashboard-tab-group-left">
           <p
@@ -62,53 +65,54 @@ const Dashboard = () => {
             onClick={() => setActiveTab('properties')}
           >
             My Properties
-          </p>    
-       
-
-          <div className="dashboard-tab-toggle-container">
-
-          <p
-            className={`dashboard-tab property-fav ${activeTab === 'Property' ? 'active' : ''}`}
-            onClick={() => setActiveTab('Property')}
-          >
-           Property Favorites
           </p>
-              
-          <p
-            className={`dashboard-tab project-fav ${activeTab === 'Project' ? 'active' : ''}`}
-            onClick={() => setActiveTab('Project')}
-          >
-           Project Favorites
-          </p>
+
+
+
+          <div className="dashboard-tab-dropdown-container">
+            <select
+              className="dashboard-tab-dropdown"
+              value={activeTab === 'Property' || activeTab === 'Project' ? activeTab : ''}
+              onChange={(e) => setActiveTab(e.target.value)}
+            >
+              <option value="">Favorites</option>
+              <option value="Property">Property Favorite</option>
+              <option value="Project">Project Favorite</option>
+            </select>
           </div>
 
-       
-     
-     
-        <p
-            className={`dashboard-tab ${activeTab === 'alerts' ? 'active' : ''}`}
-            onClick={() => setActiveTab('alerts')}
-          >
-            Alerts
-          </p>
+
+
+          <div className="dashboard-tab-dropdown-container">
+            <select
+              className="dashboard-tab-dropdown"
+              value={activeTab === 'Buy' || activeTab === 'Sell' ? activeTab : ''}
+              onChange={(e) => setActiveTab(e.target.value)}
+            >
+              <option value="">Alerts</option>
+              <option value="Buy">Buy Alert</option>
+              <option value="Sell">Sell Alert</option>
+            </select>
+          </div>
+
 
           <p
-      role="tab"
-      aria-selected={activeTab === 'addlistings'}
-      className={`dashboard-tab add-listing ${activeTab === 'addlistings' ? 'active' : ''}`}
-      onClick={() => setActiveTab('addlistings')}
-    >
-      Add Listing
-    </p>
-      
+            role="tab"
+            aria-selected={activeTab === 'addlistings'}
+            className={`dashboard-tab add-listing ${activeTab === 'addlistings' ? 'active' : ''}`}
+            onClick={() => setActiveTab('addlistings')}
+          >
+            Add Listing
+          </p>
+
         </div>
 
         <div className="dashboard-tab-group-right">
 
-  </div>
+        </div>
       </div>
       {renderTabContent()}
-     
+
     </div>
   );
 };

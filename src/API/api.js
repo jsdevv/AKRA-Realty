@@ -180,7 +180,7 @@ export const fetchPropertyAlertAPI  = async (bearerToken, payload) => {
         'Authorization': `Bearer ${bearerToken}`,
       },
       body: JSON.stringify({
-        RequestParamType: 'AddPropertyAlert',
+        RequestParamType: 'AddSearchAlert',
         json: payload,
       }),
     });
@@ -818,7 +818,7 @@ export const fetchmapshapealert = async (bearerToken, circle,Id) => {
 
     // Prepare the payload
     const payload = {
-      RequestParamType: "AddAlert", // Request type for adding the alert
+      RequestParamType: "AddMapAlert", // Request type for adding the alert
       UserID: Id,
       ShapeType: "circle", // Set the shape type as 'circle'
       Latitude: latitude,
@@ -865,7 +865,7 @@ export const fetchgetmapshapealert = async (bearerToken) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          RequestParamType: `GetAlert`,
+          RequestParamType: `GetMapAlert`,
         }),
       }
     );

@@ -236,11 +236,11 @@ const propertySlice = createSlice({
             const matchesSearchTerm = [
               property.PropertyName,
               property.PropertyZipCode,
-              property.PropertyArea,
+              property.Locality,
               property.PropertyCity,
               property.PropertyState,
             ].some((field) =>
-              field && field.toLowerCase().includes(state.searchTerm.toLowerCase())
+              field && field.toLowerCase().includes(state.searchTerm.toLowerCase() || "")
             );
     
             const matchesFilters =

@@ -45,6 +45,8 @@ const Listings = () => {
     groupedProperties
   } = useSelector((state) => state.properties);
 
+  console.log(properties,"properties");
+
   useEffect(() => {
     if (bearerToken && !loading && properties.length === 0) {
       dispatch(fetchProperties(bearerToken));

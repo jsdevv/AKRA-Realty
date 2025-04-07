@@ -41,7 +41,7 @@
 .agent-properties-view__table  thead{
     position: sticky;
     top: 0px;
-    z-index: 100;
+    z-index: 1;
 }
   
   /* Table Header */
@@ -108,7 +108,7 @@
   .agent-properties-view__table th:nth-child(1),
   .agent-properties-view__table td:nth-child(1) {
   cursor: pointer;
-  width: 90px; /* Reduced width for images */
+  width: 90px;
   }
   
   .agent-properties-view__table th:nth-child(2),
@@ -141,29 +141,6 @@
   width: 90px; 
   }
   
-  /* .agent-properties-view__table th:nth-child(8),
-  .agent-properties-view__table td:nth-child(8) {
-  
-  width: 70px; 
-  } */
-  
-  /* .agent-properties-view__table th:nth-child(9),
-  .agent-properties-view__table td:nth-child(9) {
-    cursor: pointer;
-  width: 70px; 
-  }
-   */
-  /* .agent-properties-view__table th:nth-child(10),
-  .agent-properties-view__table td:nth-child(10) {
-  width: 90px;
-  } */
-  
-  /* .agent-properties-view__table th:nth-child(11),
-  .agent-properties-view__table td:nth-child(11) {
-  width: 90px;
-  }
-   */
-
   /* Button Container Styling */
   .agent-property-btn-container {
   display: flex;
@@ -182,4 +159,22 @@
   color: #2A3650; /* Change to desired hover color */
   }
   
-  
+
+
+.myslider {
+  width: 100px;
+  height: 70px;
+}
+
+
+.myproperty-table__image {
+  width: 100px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  cursor: pointer;
+}
+
+
+

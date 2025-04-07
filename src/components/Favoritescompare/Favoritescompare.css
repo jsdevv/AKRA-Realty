@@ -119,8 +119,8 @@
   z-index: 50;
   font-size: 13px;
   font-weight: 500;
-  min-width: 150px; /* Adjust width as needed */
-  max-width: 200px;
+  min-width: 100px; 
+  max-width: 100px;
   white-space: nowrap;
 
 }
@@ -128,12 +128,14 @@
 /* Table Cells */
 .favcomparison-table th,
 .favcomparison-table td {
-  padding: 12px;
+  padding: 10px;
   border: 1px solid #cecece;
   white-space: nowrap;
 }
 
 .favcomparison-table th {
+  min-width: 80px;
+  max-width: 180px;
   font-weight: 600;
   font-size: 13px;
   background-color: #007aff;
@@ -158,18 +160,22 @@
 
 /* Image Styling */
 .fav-comparison-image {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  width: 130px; /* Ensuring a consistent width */
+  justify-content: flex-start; /* Prevents extra spacing below */
+  width: 130px; /* Consistent width */
+  height: auto; /* Adjusts dynamically */
+  overflow: hidden; /* Prevents extra space */
 }
 
-
+/* Fix image size and prevent stretching */
 .fav-comparison-image img {
   width: 100%;
   height: 80px;
   object-fit: cover;
+  display: block; /* Removes any inline spacing issues */
 }
 
 
@@ -192,24 +198,7 @@
   word-wrap: break-word; /* Ensures long words wrap */
   overflow: visible; /* Prevents text truncation */
   max-width: 100%; /* Makes it responsive */
-  min-height: 35px; /* Ensures enough space for 2 lines of text */
-}
-
-/* .compare-location {
-  font-size: 11px;
-  color: #777;
-  white-space: nowrap;
-} */
-.compare-name {
-  font-weight: 500;
-  font-size: 12px;
-  width: 100%;
-  display: block;
-  text-align: center;
-  overflow: hidden; /* Prevents content from overflowing */
-  text-overflow: ellipsis; /* Adds '...' for very long text */
-  max-width: 150px; /* Prevents excessive stretching */
-  word-wrap: break-word; /* Ensures long words wrap */
+  min-height: 10px; 
 }
 
 

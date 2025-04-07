@@ -13,22 +13,23 @@ import Dashboardmap from '../Googlemap/Dashboardmap/Dashboardmap';
 import { useNavigate } from 'react-router-dom';
 import { fetchMyproperty } from '../../API/api';
 import Mypropertymodal from './Mypropertymodal/Mypropertymodal';
+import Slider from 'react-slick/lib/slider';
 
 const Myproperty = ({ showMap, setShowMap, handleEditClick }) => {
-      const bearerToken = useSelector((state) => state.auth.bearerToken);
+    const bearerToken = useSelector((state) => state.auth.bearerToken);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [myProperty, setMyproperty] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedPropertyForMap, setSelectedPropertyForMap] = useState(null);
-    const [showListingModal, setShowListingModal] = useState(false); 
+    const [showListingModal, setShowListingModal] = useState(false);
     const { selectedProperty, loading, error } = useSelector((state) => state.properties);
-   
-  
+
+
 
     useEffect(() => {
         dispatch(clearSelectedProperty());
-           dispatch(setSelectedAgentProperty(null)); 
+        dispatch(setSelectedAgentProperty(null));
         const fetchProperties = async () => {
             try {
                 const data = await fetchMyproperty(bearerToken);
@@ -39,7 +40,7 @@ const Myproperty = ({ showMap, setShowMap, handleEditClick }) => {
         };
         fetchProperties();
     }, [dispatch]);
-    
+
     const handleViewClick = (property) => {
         dispatch(setSelectedAgentProperty(property));
         navigate('/owner');
@@ -52,16 +53,16 @@ const Myproperty = ({ showMap, setShowMap, handleEditClick }) => {
         // Ensure valid latitude and longitude values
         const lat = parseFloat(property.PropertyLatitude);
         const lng = parseFloat(property.PropertyLongitude);
-    
+
         if (isNaN(lat) || isNaN(lng)) {
             console.error("Invalid latitude or longitude:", property.PropertyLatitude, property.PropertyLongitude);
             return;
         }
-    
+
         // Close both modals if they are open
         setShowListingModal(false);
         setModalOpen(false);
-    
+
         if (selectedPropertyForMap?.PropertyID === property.PropertyID) {
             setShowMap(false);
             setSelectedPropertyForMap(null);
@@ -75,7 +76,7 @@ const Myproperty = ({ showMap, setShowMap, handleEditClick }) => {
             });
         }
     };
-    
+
 
     const handleCloseMap = () => {
         setShowMap(false);
@@ -107,9 +108,9 @@ const Myproperty = ({ showMap, setShowMap, handleEditClick }) => {
         setShowMap(false);
         dispatch(setSelectedProperty(property));
         setShowListingModal(true);
-        setModalOpen(false); 
+        setModalOpen(false);
     };
-    
+
     return (
         <div className={`dashboard-content ${showMap ? 'show-map' : ''}`}>
             <div className="agent-properties-view__table-container">
@@ -135,65 +136,82 @@ const Myproperty = ({ showMap, setShowMap, handleEditClick }) => {
                                     <th>Facing</th>
                                     <th>Actions</th>
                                     <th>More</th>
-                                   
+
                                 </tr>
                             </thead>
                             <tbody>
                                 {myProperty.map((property) => {
-                                    
+
+                                    const settings = {
+                                        infinite: true,
+                                        speed: 500,
+                                        slidesToShow: 1,
+                                        slidesToScroll: 1,
+                                        arrows: false,
+                                    };
+
                                     return (
-                                           
-                                    <tr key={property.PropertyID}>
-                                        <td>
-                                            <img
-                                                 src={property.PropertyImageUrls.split(',')[0]} 
-                                                alt={property.PropertyName}
-                                                className="agent-property-table__image"
-                                                onClick={() => handlePropertyClick(property)} 
-                                            />
-                                        </td>
-                                        <td>{property.PropertyName}</td>
-                                        <td><FaRupeeSign style={{ fontSize: '9px' }}  /> {property.Amount}  {property.PriceUnit}</td>
-                                        <td>{property.PropertyType}</td>
-                                        <td>{property.PropertyStatus}</td>                     
-                                        <td>{property.PropertyCity}</td>
-                                        <td>{property.PropertyZipCode}</td>
-                                        <td>{property.SqFt} {property.MeasurementType}</td>
-                                        <td>{property.Bedrooms} BHK</td>
-                                        <td>{property.SubLocality}</td>
-                                        <td>{property.propertymainentrancefacing}</td>
-                                                      
-                                        <td>
-                                            <div className="agent-property-btn-container">
-                                                <FaEye
-                                                    className="agent-property-icon"
-                                                    title="View Property"
-                                                    onClick={() => handleViewClick(property)}
-                                                />
 
-                                                <FaMapMarkerAlt
-                                                    className="agent-property-icon"
-                                                    title="Location"
-                                                    onClick={() => handleLocationClick(property)}
-                                                />
-                                                 <FaEdit
-                                                    className="agent-property-icon"
-                                                    title="Edit"
-                                                    onClick={() => handleEditClick(property)}
-                                                />
+                                        <tr key={property.PropertyID}>
+                                            <td>
+                                                <Slider {...settings} className="myslider">
+                                                    {property.PropertyImageUrls.split(',').map((image, index) => (
+                                                        <div key={index}>
+                                                            <img
+                                                                src={image.trim()}
+                                                                alt={property.PropertyName}
+                                                                className="myproperty-table__image"
+                                                                loading="lazy"
+                                                              
+                                                                onClick={() => handlePropertyClick(property)}
+                                                            />
+                                                        </div>
+                                                    ))}
+                                                </Slider>
+                                            </td>
+                                            <td>{property.PropertyName}</td>
+                                            <td><FaRupeeSign style={{ fontSize: '9px' }} /> {property.Amount}  {property.PriceUnit}</td>
+                                            <td>{property.PropertyType}</td>
+                                            <td>{property.PropertyStatus}</td>
+                                            <td>{property.PropertyCity}</td>
+                                            <td>{property.PropertyZipCode}</td>
+                                            <td>{property.SqFt} {property.MeasurementType}</td>
+                                            <td>{property.Bedrooms} BHK</td>
+                                            <td>{property.SubLocality}</td>
+                                            <td>{property.propertymainentrancefacing}</td>
 
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <FaInfoCircle
-                                                className="info-icon"
-                                                title="View Value & Rental Details"
-                                                onClick={() => handleInfoIconClick(property)} 
-                                            />
-                                        </td>
+                                            <td>
+                                                <div className="agent-property-btn-container">
+                                                    <FaEye
+                                                        className="agent-property-icon"
+                                                        title="View Property"
+                                                        onClick={() => handleViewClick(property)}
+                                                    />
 
-                                    </tr>
-)})}
+                                                    <FaMapMarkerAlt
+                                                        className="agent-property-icon"
+                                                        title="Location"
+                                                        onClick={() => handleLocationClick(property)}
+                                                    />
+                                                    <FaEdit
+                                                        className="agent-property-icon"
+                                                        title="Edit"
+                                                        onClick={() => handleEditClick(property)}
+                                                    />
+
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <FaInfoCircle
+                                                    className="info-icon"
+                                                    title="View Value & Rental Details"
+                                                    onClick={() => handleInfoIconClick(property)}
+                                                />
+                                            </td>
+
+                                        </tr>
+                                    )
+                                })}
                             </tbody>
                         </table>
                     )
@@ -201,12 +219,12 @@ const Myproperty = ({ showMap, setShowMap, handleEditClick }) => {
             </div>
             {showMap && (
                 <div className="dashboard-map-container">
-                    { myProperty.length > 0 &&   <Dashboardmap onClose={handleCloseMap} myProperty={myProperty} /> }
+                    {myProperty.length > 0 && <Dashboardmap onClose={handleCloseMap} myProperty={myProperty} />}
                 </div>
             )}
-            { showListingModal  && selectedProperty && (
+            {showListingModal && selectedProperty && (
                 <ListingModal
-                    propertyType = "Property"
+                    propertyType="Property"
                     selectedProperty={selectedProperty}
                     onClose={handleCloseModal}
 

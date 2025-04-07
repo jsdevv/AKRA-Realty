@@ -140,13 +140,13 @@ const DashboardProjectFav = ({ propertyfavtype }) => {
                                         speed: 500,
                                         slidesToShow: 1,
                                         slidesToScroll: 1,
-                                        arrows: true,
+                                        arrows: false,
                                     };
                                     return (
                                         <tr key={project.ProjectID}>
                                             <td>
 
-                                                <Slider {...settings}>
+                                                <Slider {...settings} className="dashboardslider">
                                                     {imagesToShow.map((url, index) => (
                                                         <div key={index}
 
@@ -156,11 +156,7 @@ const DashboardProjectFav = ({ propertyfavtype }) => {
                                                                 alt={`Slide ${index + 1}`}
                                                                 className="favproperty-table__image"
                                                                 loading="lazy"
-                                                                style={{
-                                                                    maxWidth: "100%",
-                                                                    maxHeight: "200px",
-                                                                    objectFit: "cover",
-                                                                }}
+                                            
                                                             />
                                                         </div>
                                                     ))}

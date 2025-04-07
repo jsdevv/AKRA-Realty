@@ -483,33 +483,41 @@ const NavbarBottom = ({
       return `${minPrice}-${maxPrice}`;
   };
 
-    const handleSetAlert = (event) => {
-      event.preventDefault()
-      const priceRangeStr = getPriceRangeString();
-      const selectedLabels = selectedTypes.map(
+  const handleSetAlert = (event) => {
+    event.preventDefault();
+
+    if ( selectedTypes.length === 0 || selectedPriceRanges.length === 0) {
+        toast.error("Please select Property Type, status and price filter to set an alert.");
+        return;
+    }
+
+    const priceRangeStr = getPriceRangeString();
+    const selectedLabels = selectedTypes.map(
         (value) => homeTypeOptions.find((option) => option.value === value)?.label
     ).filter(Boolean);
 
     const selectedLabelsString = selectedLabels.join(", ");
 
-      dispatch(
+    dispatch(
         fetchPropertyAlert({
-          bearerToken,
-          payload: {
-            UserID: Id,
-            PropertyStatus: selectedStatus.label,
-            PropertyType: selectedLabelsString,
-            PriceRange: priceRangeStr,
-          },
+            bearerToken,
+            payload: {
+                UserID: Id,
+                PropertyStatus: selectedStatus.label,
+                PropertyType: selectedLabelsString,
+                PriceRange: priceRangeStr,
+            },
         })
-      );
-      toast.success("Alert set successfully!");
-    };
+    );
+
+    toast.success("Alert set successfully!");
+};
+
     
     
     return (
       <div className="navbar-bottom">
-         <ToastContainer position="top-right" autoClose={3000} />
+         
         <form className="search-container" onSubmit={handleAutoSuggestSearch}>
           <div className="search-input">
             <Autosuggest

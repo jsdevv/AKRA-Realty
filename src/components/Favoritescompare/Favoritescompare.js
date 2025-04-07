@@ -6,9 +6,8 @@ import defaultimg from "../../images/Apartment102.jpeg"
 
 
 const Favoritescompare = ({ properties, onClose, propertyType }) => {
-  console.log(properties,"table");
-  const [isShareOpen, setIsShareOpen] = useState(false);
 
+  const [isShareOpen, setIsShareOpen] = useState(false);
   const columns = useMemo(() => {
     // Define the base columns
     const baseColumns = [

@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { fetchgetmapshapealert } from "../../API/api";
 import { useSelector } from "react-redux";
-import { FaTimes } from "react-icons/fa";
+import { FaRupeeSign, FaTimes } from "react-icons/fa";
+import { APIProvider, Map, Marker } from "@vis.gl/react-google-maps";
 import "./Notification.css";
+
+const API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
 // Haversine formula for calculating distance between two lat/lon coordinates
 const haversineDistance = (lat1, lon1, lat2, lon2) => {
@@ -19,8 +22,9 @@ const haversineDistance = (lat1, lon1, lat2, lon2) => {
 const Notification = () => {
   const bearerToken = useSelector((state) => state.auth.bearerToken);
   const { filteredProperties } = useSelector((state) => state.properties);
-  console.log(filteredProperties,"data");
+  // console.log(filteredProperties,"data");
   const [notifications, setNotifications] = useState([]);
+  console.log(notifications,"notifications");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [activeRowIndex, setActiveRowIndex] = useState(null); // Track active row index
@@ -135,36 +139,73 @@ const Notification = () => {
                       </td>
                     </tr>
 
-                    {/* Only show listings for the active row */}
                     {activeRowIndex === index && (
-                      <tr>
-                        <td colSpan="7">
-                          <div className="property-notification-listing-container">
-                            <div className="property-notification-listing-header">
-                              <h2>Properties in Radius</h2>
-                              <FaTimes onClick={closePropertyList} />
-                            </div>
-                            <div className="property-notification-listing-cards">
-                              {notification.properties.map((property, propIndex) => (
-                                <div className="property-notification-card" key={propIndex}>
-                                  <img
-                                    src={property.imageUrl || "placeholder.jpg"}
-                                    alt={property.PropertyName}
-                                    className="property-notification-image"
-                                  />
-                                  <div className="property-notification-details">
-                                    <h3>{property.PropertyName}</h3>
-                                    <p>{property.PropertyLocation}</p>
-                                    <p>{property.Amount}</p>
-                                    <p>{property.sqFt} SqFt</p>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                    )}
+  <tr>
+    <td colSpan="7">
+      <div className="property-notifydetails-container">
+        <div className="property-notification-listing-header">
+          <h2>Properties in Radius</h2>
+          <FaTimes onClick={closePropertyList} />
+        </div>
+        <div className="property-details-content">
+          {/* Table (70%) */}
+          <div className="property-details-table-container">
+            <table className="property-details-table">
+              <thead>
+                <tr>
+                  <th>Property Name</th>
+                  <th>Amount</th>
+                  <th>Area</th>
+                  <th>Location</th>
+                 
+                 
+                  <th>Zipcode</th>
+                </tr>
+              </thead>
+              <tbody>
+                {notification.properties.map((property, propIndex) => (
+                  <tr key={propIndex}>
+                    <td>{property.PropertyName}</td>
+                    <td><FaRupeeSign style={{ fontSize: '10px' }} /> {property.Amount}</td>
+                    <td>{property.SqFt} </td>
+                    <td>{property.Locality}</td>
+                   
+                   
+                    <td>{property.PropertyZipCode}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Map (30%) */}
+          <div className="property-details-map-container">
+            <APIProvider apiKey={API_KEY}>
+              <Map
+                defaultCenter={{
+                  lat: parseFloat(notification.Latitude),
+                  lng: parseFloat(notification.Longitude),
+                }}
+                defaultZoom={12}
+                style={{ width: "100%", height: "100%" }}
+              >
+                {notification.properties.map((property, propIndex) => (
+                  <Marker
+                    key={propIndex}
+                    position={{
+                      lat: parseFloat(property.PropertyLatitude),
+                      lng: parseFloat(property.PropertyLongitude),
+                    }}
+                  />
+                ))}
+              </Map>
+            </APIProvider>
+          </div>
+        </div>
+      </div>
+    </td>
+  </tr>
+)}
                   </React.Fragment>
                 ))}
               </tbody>

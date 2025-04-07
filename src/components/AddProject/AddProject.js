@@ -64,7 +64,7 @@ const AddProject = () => {
   
   useEffect(() => {
     if (bearerToken) {
-      dispatch(fetchprojectnameData(bearerToken)); // Fetch projects only when a company is selected
+      dispatch(fetchprojectnameData(bearerToken)); 
     }
   }, [bearerToken, dispatch]);
 
@@ -247,8 +247,7 @@ const AddProject = () => {
         uploadPropertyImages(projectid);
         resetForm();
         setFormData(initialValues);
-
-
+        dispatch(fetchprojectnameData(bearerToken));  
         // Show success popup
         toast.success("Project added successfully!", {
           position: "top-right",
@@ -701,12 +700,20 @@ const AddProject = () => {
               </Grid>
           
               <TextField 
-                 sx={{
-                  mt: 2,
-                  "& .MuiInputBase-input::placeholder": {
-                    padding: "10px"   
-                  },
-                }}
+                  sx={{
+                    mt: 2,
+                    "& .MuiInputBase-input": {
+                      padding: "12px", // Ensures text inside the input is properly spaced
+                    },
+                    "& .MuiInputBase-input::placeholder": {
+                      padding: "0px", // Keep placeholder aligned with text
+                    },
+                    "& .MuiOutlinedInput-root": {
+                      "& textarea": {
+                        padding: "12px", // Ensures padding applies to multiline input
+                      }
+                    }
+                  }}
                 fullWidth
                 placeholder="Description"
                 name="description"

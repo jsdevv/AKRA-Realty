@@ -4,12 +4,13 @@
   display: flex;
   justify-content: space-between; /* Spread items to the left and right */
   align-items: center; /* Center-align the items vertically */
+  text-align: center;
 }
 
 .dashboard-tab-group-left {
   display: flex;
   justify-content: flex-start;
-  gap: 5px; /* Add space between tabs */
+  gap: 10px; /* Add space between tabs */
 }
 
 
@@ -19,21 +20,21 @@
 }
 
 .dashboard-tab.add-listing {
-  margin-left: 75px;  /* Push it to the right */
-
-
+  margin-left: 55px; 
 }
 
 .dashboard-tab {
   padding: 6px 12px;
-  margin: 0 4px;
+  margin: 0px;
   border: none;
-  border-radius: 4px;
+  border-radius: 3px;
   background-color: #ced4d5;
   color: #2c3e50;
   font-size: 12px;
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
+  align-items: center;
+
 }
 
 .dashboard-tab:hover{
@@ -47,46 +48,30 @@
 }
 
 
-.dashboard-tab-toggle-container {
+.dashboard-tab-dropdown-container {
   display: flex;
+  align-items: center;
+}
+
+.dashboard-tab-dropdown {
+  padding: 6px 0px;
+  font-size: 12px;
+  font-weight: 500;
+  border: none;
+  border-radius: 3px;
   background-color: #ced4d5;
-  border-radius: 4px;
-  overflow: hidden;
+  color: #2c3e50;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.3s, color 0.3s;
+  min-width: 80px;
 }
 
-
-.dashboard-tab.project-fav {
-  padding: 6px;
-  margin: 0; 
-  border-radius: 0;
-}
-
-.dashboard-tab.property-fav {
-  padding: 6px;
-  margin: 0; 
-  border-radius: 0;
-  border-right: 1px solid #ffffff;
-}
-
-.dashboard-tab.property-fav:first-child {
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
-}
-
-.dashboard-tab.project-fav:last-child {
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
-}
-
-.dashboard-tab.property-fav.active,
-.dashboard-tab.project-fav.active {
+.dashboard-tab-dropdown:hover {
   background-color: #2c3e50;
-  color: #ffffff;
+  color: #fff;
 }
 
-.dashboard-tab.property-fav:hover,
-.dashboard-tab.project-fav:hover {
-  background: linear-gradient(to right, #b3b3b3, #6c6c6c) !important;
-  color: #ffffff !important;
-  
+.dashboard-tab-dropdown:focus {
+  outline: none;
 }

@@ -26,6 +26,7 @@ import AddProject from './components/AddProject/AddProject';
 import Addcompany from './components/AddCompany/AddCompany';
 import Videos from './pages/Videos/Videos';
 import Favorites from './pages/Favorites/Favorites';
+import { ToastContainer } from 'react-toastify';
 
 
 
@@ -117,6 +118,7 @@ const App = () => {
 
   return (
     <div className="App">
+      <ToastContainer position="top-right" autoClose={3000} />
 
       <FavoritesProvider>
         <QueryClientProvider client={queryClient}>

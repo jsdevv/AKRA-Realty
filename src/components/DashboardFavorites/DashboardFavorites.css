@@ -5,7 +5,7 @@
 .dashboard-favorites-table-container {
     display: flex;
     align-items: flex-start;
-    width: 70%;
+    width: 65%;
     min-height: 60vh;
     height: 77vh;
     overflow-y: auto;
@@ -15,7 +15,7 @@
 }
 
 .dashboard-favorites-map-container {
-    width: 30%;
+    width: 35%;
     height: 77vh;
   }
   

@@ -53,16 +53,10 @@ const ScheduleTourForm = () => {
           // Reset form fields after successful submission
           resetForm();
       
-          // Show success notification after form submission
-          toast.success('Tour scheduled successfully!', {
-            className: 'toast-success',
-          });
         } catch (err) {
           // Use error from the store if exists
-          const errorMessage = err.message || error || 'An error occurred';
-          toast.error(`Failed to schedule the tour. Error: ${errorMessage}`, {
-            className: 'toast-error',
-          });
+          console.log(err,"error");
+    
         }
       },
       
@@ -70,7 +64,7 @@ const ScheduleTourForm = () => {
 
   return (
     <form onSubmit={formik.handleSubmit} className="tour-form">
-        <ToastContainer  autoClose={3000}/>
+  
       <div className='mb-15'>
         <input
           type="text"
