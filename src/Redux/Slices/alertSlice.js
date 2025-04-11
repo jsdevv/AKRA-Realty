@@ -1,9 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchPropertyAlertAPI } from '../../API/api';
+import { fetchPropertyAlertAPI,fetchgetmapalert } from '../../API/api';
 
 // Async thunk for fetching property alerts
-export const fetchPropertyAlert = createAsyncThunk(
-  'alert/fetchPropertyAlert',
+export const fetchAddAlert = createAsyncThunk(
+  'alert/fetchAddAlert',
   async ({ bearerToken, payload }, { rejectWithValue }) => {
     try {
       const data = await fetchPropertyAlertAPI(bearerToken, payload);
@@ -15,11 +15,26 @@ export const fetchPropertyAlert = createAsyncThunk(
   }
 );
 
+
+export const fetchGetAlert = createAsyncThunk(
+  'alert/fetchGetAlert',
+  async (bearerToken, { rejectWithValue }) => {
+    try {
+      const response = await fetchgetmapalert(bearerToken);
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+
 // Slice
 const alertSlice = createSlice({
   name: 'alert',
   initialState: {
     alerts: [],
+    getalerts:[],
     loading: false,
     error: null,
   },
@@ -31,15 +46,27 @@ const alertSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchPropertyAlert.pending, (state) => {
+      .addCase(fetchAddAlert.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchPropertyAlert.fulfilled, (state, action) => {
+      .addCase(fetchAddAlert.fulfilled, (state, action) => {
         state.loading = false;
         state.alerts = action.payload;
       })
-      .addCase(fetchPropertyAlert.rejected, (state, action) => {
+      .addCase(fetchAddAlert.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(fetchGetAlert.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchGetAlert.fulfilled, (state, action) => {
+        state.loading = false;
+        state.getalerts = action.payload;
+      })
+      .addCase(fetchGetAlert.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

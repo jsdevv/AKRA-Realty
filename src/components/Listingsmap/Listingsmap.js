@@ -20,7 +20,7 @@ import defaultimg1 from "../../images/Apartment102.jpeg"
 import defaultimg2 from "../../images/Apartment103.jpeg"
 import Slider from "react-slick";
 import { toast } from "react-toastify";
-import { fetchPropertyAlert } from "../../Redux/Slices/alertSlice";
+import { fetchAddAlert } from "../../Redux/Slices/alertSlice";
 
 const statusStyles = {
   "For Sale": { bgColor: "#A3000B", color: "white" },
@@ -597,7 +597,7 @@ const Listingsmap = ({ handlePropertyClick, bearerToken }) => {
           return;
         }
   
-        dispatch(fetchPropertyAlert({ bearerToken, payload }))
+        dispatch(fetchAddAlert({ bearerToken, payload }))
           .unwrap()
           .then((response) => {
             if (response?.ProcessCode === 151) {

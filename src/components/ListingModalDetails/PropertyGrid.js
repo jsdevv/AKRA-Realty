@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css"; 
@@ -10,48 +10,31 @@ import {
 import { MultiFilterModule,SetFilterModule } from 'ag-grid-enterprise'; 
 import { LiaRupeeSignSolid } from "react-icons/lia";
 import "./PropertyGrid.css"
-import { FaHeart, FaStar } from "react-icons/fa";
+import { FaHeart } from "react-icons/fa";
 import { useFavorites } from "../../context/FavoritesContext";
 import { toast } from "react-toastify";
-import {fetchAddpropertyFavorties,  fetchAddpropertyshortlist,  fetchDeletePropertyFavorties, fetchDeletePropertyshortlist } from "../../API/api";
+import {fetchAddpropertyFavorties,    fetchDeletePropertyFavorties } from "../../API/api";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPropertyViews } from "../../utils/fetchPropertyViews";
-import { fetchGetpropertyFavorites } from "../../Redux/Slices/propertySlice";
+
 
 ModuleRegistry.registerModules([AllCommunityModule,MultiFilterModule,SetFilterModule ]);
 
 const PropertyGrid = ({ groupedByBedroomsArray,selectedBedrooms,setSelectedPropertyForDetailHandler }) => {
+    console.log(groupedByBedroomsArray,"groupedByBedroomsArray ");
     const bearerToken = useSelector((state) => state.auth.bearerToken);
     const { Id } = useSelector((state) => state.auth.userDetails || {});
     const { favorites,favoriteColor, toggleFavorite } = useFavorites();
     const dispatch = useDispatch();
- 
-
-    // const toggleShortlist = async (Property, event) => {
-    //     event?.preventDefault(); 
-    //     event?.stopPropagation(); 
-    //     const isShortlisted = Property.ShortlistStatus === "Y";
-    //     const payload = { PropertyID: Property.PropertyID };
-    
-    //     try {
-    //         const response = isShortlisted
-    //             ? await fetchDeletePropertyshortlist(bearerToken, { ...payload, UserID: Id })
-    //             : await fetchAddpropertyshortlist(bearerToken, { ...payload, UserID: Id });
-
-    
-    //     } catch (error) {
-    //         console.error("Error toggling shortlist:", error);
-    //         toast.error("Failed to update shortlist.");
-    //     }
-    // };
     
     // Filter and clean the grouped array
     const cleanedGroupedByBedroomsArray = useMemo(() => {
         if (!Array.isArray(groupedByBedroomsArray)) return [];
         return groupedByBedroomsArray.filter(group => 
-            Number(group.Bedrooms) !== 0 && group.properties.every(property => Number(property.Bedrooms) === Number(group.Bedrooms))
+            group?.properties?.length > 0
         );
     }, [groupedByBedroomsArray]);
+    
 
     const defaultColDef = useMemo(() => ({
         sortable: true,
@@ -70,20 +53,22 @@ const PropertyGrid = ({ groupedByBedroomsArray,selectedBedrooms,setSelectedPrope
         if (!cleanedGroupedByBedroomsArray.length) return [];
     
         return cleanedGroupedByBedroomsArray
-            .filter(group => !selectedBedrooms || Number(group.Bedrooms) === Number(selectedBedrooms)) // Filter by selectedBedrooms
-            .flatMap(group => 
+            .filter(group => 
+                !selectedBedrooms || String(group.Bedrooms) === String(selectedBedrooms)
+            )
+            .flatMap(group =>
                 group.properties.map(property => ({
-                    Bedrooms: Number(group.Bedrooms),
-                    PropertyBathrooms: Number(property.PropertyBathrooms) || Number(0),
+                    Bedrooms: isNaN(Number(group.Bedrooms)) ? "N/A" : Number(group.Bedrooms),
+                    PropertyBathrooms: Number(property.PropertyBathrooms) || 0,
                     SqFt: property.SqFt ? parseInt(property.SqFt.replace(/\D/g, ""), 10) || 0 : 0,
                     PropertyType: property.PropertyType,
-                
                     PropertyMainEntranceFacing: property.PropertyMainEntranceFacing || "N/A",
                     Amount: property.Amount || "N/A",
                     fullPropertyData: property,
                 }))
             );
-    }, [cleanedGroupedByBedroomsArray, selectedBedrooms]); 
+    }, [cleanedGroupedByBedroomsArray, selectedBedrooms]);
+    
 
 
     const handlePropertyDetailsview = async (property) => {
@@ -214,12 +199,7 @@ const PropertyGrid = ({ groupedByBedroomsArray,selectedBedrooms,setSelectedPrope
                             style={{ color: isFavorited ? favoriteColor : "#bbb", cursor: "pointer" }}
                             onClick={() => handleToggleFavorite(params.value)}
                         />
-                        {/* Star Icon for Featured */}
-                        {/* <FaStar
-                           
-                            className={`staraction-icon ${params.value.ShortlistStatus === "Y" ? 'shortlisted' : ''}`}
-                            onClick={() => toggleShortlist(params.value)}
-                        /> */}
+
                     </div>
                 );
             },

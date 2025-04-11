@@ -74,8 +74,7 @@ const App = () => {
   const bearerToken = useSelector((state) => state.auth.bearerToken);
 
   useEffect(() => {
-    // Check if token exists in localStorage to persist login state
-    const token = localStorage.getItem('bearerToken');
+        const token = localStorage.getItem('bearerToken');
     if (token) {
       dispatch(setBearerToken(token));
       setIsLoggedIn(true);

@@ -12,7 +12,7 @@ import PropertyGrid from './PropertyGrid';
 import './ListingModalDetails.css';
 
 const ListingModalDetails = ({ selectedProperty, propertyCardData, propertyType }) => {
-   console.log(selectedProperty,"selectedProperty");
+
   const tabs = [
     { id: 'scheduleVisit', label: 'Schedule Visit' },
     { id: 'requestInfo', label: 'Request Info' },
@@ -89,24 +89,38 @@ const ListingModalDetails = ({ selectedProperty, propertyCardData, propertyType 
     }
   );
 
-  const groupedByBedroomsArray = Object.entries(
+  let groupedByBedroomsArray = Object.entries(
     relatedUnits?.UnitTypeDetails.reduce((acc, property) => {
       const { Bedrooms } = property;
-      if (!acc[Bedrooms]) {
-        acc[Bedrooms] = [];
+  
+      const normalizedBedrooms = isNaN(parseInt(Bedrooms)) ? 0 : parseInt(Bedrooms);
+      
+      if (!acc[normalizedBedrooms]) {
+        acc[normalizedBedrooms] = [];
       }
-      acc[Bedrooms].push(property);
+      acc[normalizedBedrooms].push(property);
       return acc;
     }, {}) ?? {}
   ).map(([Bedrooms, properties]) => ({
     Bedrooms: parseInt(Bedrooms, 10),
     properties,
   }));
+  
+  // ✅ Filter out any existing Bedrooms === 0 (avoid double "All")
+  groupedByBedroomsArray = groupedByBedroomsArray.filter(
+    (group) => group.Bedrooms !== 0
+  );
+  
+  // ✅ Add our single "All" group at the top
+  groupedByBedroomsArray.unshift({
+    Bedrooms: 0,
+    properties: relatedUnits?.UnitTypeDetails ?? [],
+  });
+  
 
+  // groupedByBedroomsArray = [{ Bedrooms: 0, properties: relatedUnits?.UnitTypeDetails ?? [] }];
 
-  // Sort the array by number of bedrooms
-  groupedByBedroomsArray.sort((a, b) => a.Bedrooms - b.Bedrooms);
-  groupedByBedroomsArray.splice(0, 0, { Bedrooms: 0, properties: relatedUnits?.UnitTypeDetails ?? [] });
+  
   let unitCount = relatedUnits?.UnitTypeDetails?.length ?? 0;
 
   if (propertyType === 'Property') {

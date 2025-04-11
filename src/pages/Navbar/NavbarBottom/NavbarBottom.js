@@ -29,7 +29,7 @@ import FiltersComponent from '../../../components/FiltersComponent/FiltersCompon
 import { TbFilterSearch } from "react-icons/tb";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { fetchPropertyAlert } from '../../../Redux/Slices/alertSlice';
+import { fetchAddAlert } from '../../../Redux/Slices/alertSlice';
 
 const priceRanges = [
   { value: 1, label: 'Below ₹ 10L', minPrice: 0, maxPrice: 1000000 },
@@ -248,7 +248,7 @@ const NavbarBottom = ({
             case 'For Sale':
                 statusClass = 'for-sale-marker';
                 break;
-            case 'PreLaunch':
+            case 'For Development':
                 statusClass = 'pre-launch-marker';
                 break;
             case 'Rental':
@@ -503,7 +503,7 @@ const NavbarBottom = ({
       SearchLocation: searchInput || "",
     };
   
-    dispatch(fetchPropertyAlert({ bearerToken, payload }))
+    dispatch(fetchAddAlert({ bearerToken, payload }))
       .unwrap()
       .then((response) => {
         if (response?.ProcessCode === 151) {

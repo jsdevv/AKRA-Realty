@@ -803,58 +803,8 @@ export const fetchFeedbackRefID = async (bearerToken) => {
     throw error;
   }
 };
-
-// export const fetchmapshapealert = async (bearerToken, circle,Id) => {
-//   try {
-//     // Get the center and radius of the circle
-//     const circleCenter = circle.getCenter();
-//     const circleRadius = circle.getRadius();
-
-//     // Convert the circle center to latitude and longitude
-//     const latitude = circleCenter.lat();
-//     const longitude = circleCenter.lng();
-
-//     console.log(circleRadius,"circleRadius")
-
-//     // Prepare the payload
-//     const payload = {
-//       RequestParamType: "AddMapAlert", // Request type for adding the alert
-//       UserID: Id,
-//       ShapeType: "circle", // Set the shape type as 'circle'
-//       Latitude: latitude,
-//       Longitude: longitude,
-//       Radius: circleRadius,
-//     };
-
-//     console.log(JSON.stringify(payload),"json");
-
-//     // API call
-//     const response = await fetch(AddData_API, {
-//       method: 'POST',
-//       headers: {
-//         Authorization: `Bearer ${bearerToken}`,
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify({
-//         RequestParamType: 'AddAlert',
-//         json:payload
-//     })
-     
-//     });
-
-//     if (!response.ok) {
-//       throw new Error('Failed to fetch: ' + response.statusText);
-//     }
-
-//     const data = await response.json();
-//     return data;
-//   } catch (error) {
-//     console.error('Error fetching property details:', error);
-//     throw error;
-//   }
-// };
-  
-export const fetchgetmapshapealert = async (bearerToken) => {
+ 
+export const fetchgetmapalert = async (bearerToken) => {
   try {
     const response = await fetch(
       API_URL,
@@ -865,7 +815,7 @@ export const fetchgetmapshapealert = async (bearerToken) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          RequestParamType: `GetMapAlert`,
+          RequestParamType: `GetSetAlert`,
         }),
       }
     );
@@ -875,7 +825,7 @@ export const fetchgetmapshapealert = async (bearerToken) => {
     }
 
     const data = await response.json();
-    console.log(data,"getshapedata");
+  
     return data;
   } catch (error) {
     console.error('Error fetching property details:', error);

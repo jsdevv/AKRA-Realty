@@ -1,0 +1,97 @@
+.custom-info-window {
+  width: 200px;
+  max-width: 90vw;
+  background: #fff;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.15);
+  font-family: 'Arial', sans-serif;
+  position: relative;
+  cursor: pointer;
+}
+
+.dashboard-favmap-close-btn{
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 10; /* Ensure it appears above other elements */
+}
+
+.dashboard-favmap-close-btn:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.info-window-slider {
+  width: 100%;
+  height: 110px;
+  margin-bottom: 6px;
+}
+
+.info-window-img {
+  width: 100%;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 0;
+}
+
+.info-window-details {
+  padding: 6px 8px;
+  background-color: #f9f9f9;
+}
+
+.info-window-details h3 {
+  font-size: 11px;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  color: #222;
+  line-height: 1.3;
+}
+
+.info-window-details p {
+  font-size: 10px;
+  margin: 0;
+  color: #555;
+  line-height: 1.3;
+}
+
+/* Responsive tweak for smaller devices */
+@media (max-width: 480px) {
+  .custom-info-window {
+    width: 90vw;
+  }
+
+  .info-window-slider {
+    height: 100px;
+  }
+
+  .info-window-img {
+    height: 100px;
+  }
+
+  .info-window-details h3 {
+    font-size: 11.5px;
+  }
+
+  .info-window-details p {
+    font-size: 10px;
+  }
+}
+
+  .fixed-circle-marker {
+    width: 10px;
+    height: 10px;
+    background-color: #A3000B; 
+    border: 2px solid white;
+    border-radius: 50%;
+  }

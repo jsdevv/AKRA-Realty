@@ -1,108 +1,164 @@
-.property-notification-container {
-  position: relative;
-  background-color: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  max-width: 100%;
-  padding: 5px;
+.alerts-container{
+  padding: 5px 10px 0px 10px;
 }
-
-
-.property-notification-table {
+.alerts-container h2{
+  font-size: 18px;
+  font-weight: 600;
+}
+.alerts-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
+  
 }
 
-.property-notification-table th,
-.property-notification-table td {
-  padding: 12px;
+.alerts-table th,
+.alerts-table td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  font-size: 13px;
   text-align: left;
-  border-bottom: 1px solid #ddd;
 }
 
-.property-notification-table th {
-  position: sticky;
-  top: -1px;
-  z-index: 1;
-  background-color: #f0f0f0;
-  font-weight: bold;
-  border: 1px solid #ccc;
-}
-
-.property-notification-table td {
-  font-size: 14px;
-  color: #666666;
-  border: 1px solid #ccc;
-}
-
-.property-notification-item {
+.alert-row:hover {
+  background-color: #f9f9f9;
   cursor: pointer;
-  text-decoration: underline;
 }
 
-.property-notification-table .highlighted-row {
-  background-color: #f0f8ff;
-  font-weight: bold;
+.active-row {
+  background-color: #eef6ff;
 }
 
-/* 🔹 New Styles for Table & Map Layout */
-.property-notifydetails-container {
+.nested-row td {
+  padding: 0;
+  background-color: #fafafa;
+}
+
+/* Layout container for properties and map */
+.nested-properties-layout {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  padding: 20px;
+  height: 67vh;
+}
+
+/* Property table (LEFT SIDE) */
+.nested-left {
+  flex: 0 0 70%;
   display: flex;
   flex-direction: column;
 }
 
-.property-details-content {
-  display: grid;
-  grid-template-columns: 60% 40%; /* 70% Table, 30% Map */
+/* Google Map (RIGHT SIDE) */
+.nested-right {
+  flex: 0 0 30%;
   width: 100%;
-  height: 67vh;
-}
-
-/* Table takes 70% width */
-.property-details-table-container {
-  width:100%;
-  height: 100%;
-  overflow-x: auto;
-}
-.property-details-table{
-  width: 100%;
-  border-collapse: collapse;
-}
-
-/* Map takes 30% width */
-.property-details-map-container {
-  width: 100%;
-  height: 100%; /* Adjust height as needed */
   overflow: hidden;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* 🔹 Header Styling */
-.property-notification-listing-header {
+#map{
+  width: 100%;
+ height: 100%;
+}
+
+/* Header inside the expanded row */
+.nested-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
-.property-notification-listing-header h2 {
+.nested-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
   margin: 0;
-  font-size: 16px;
 }
 
-.property-notification-listing-header .react-icons {
+.alertclose-btn {
+  background-color: transparent;
+  border: none;
+  color: #ff4d4f;
+  font-size: 0.95rem;
+  cursor: pointer;
+  padding: 5px 10px;
+  font-weight: bold;
+  transition: color 0.2s ease;
+}
+
+.alertclose-btn:hover {
+  color: #d9363e;
+  text-decoration: underline;
+}
+
+/* Nested table inside expanded alert */
+.nested-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.nested-table th,
+.nested-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.new-property-row {
+  background-color: #e6f7ff;
+}
+
+.no-alerts {
+  text-align: center;
+  padding: 20px;
+  color: #888;
+  font-style: italic;
+}
+
+/* Responsive behavior */
+@media (max-width: 768px) {
+  .nested-properties-layout {
+    flex-direction: column;
+  }
+
+  .nested-left,
+  .nested-right {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+
+  .nested-right {
+    min-height: 250px;
+  }
+}
+
+/* Style for 'Details' text to look like an active link */
+.nested-table td:hover {
   cursor: pointer;
 }
 
-/* 🔹 Remove Old Card View Styles */
-.property-notification-listing-cards {
-  display: none; /* Hide the old card layout */
+/* Details cell style */
+.details-link {
+  color: #586e86;
+  text-decoration: underline;
+  font-weight: 500;
 }
 
-.property-notification-empty {
-  text-align: center;
-  padding: 20px;
-  font-size: 16px;
-  color: #999;
+.details-link:hover {
+  color: #0056b3;
 }
+
+/* Location icon hover effect */
+.map-icon-btn {
+  color: #2A3650;
+  transition: color 0.2s ease-in-out;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.map-icon-btn:hover {
+  color: #d9534f; /* You can change this to any color you like */
+}
+
