@@ -5,7 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import "./Listingsmap.css";
 import { ClipLoader } from "react-spinners/ClipLoader";
 import { useFavorites } from "../../context/FavoritesContext";
-import { fetchmapshapealert } from "../../API/api";
+import { fetchPropertyHomeType } from "../../API/api";
+import { BLOB_BASE_URL } from '../../utils/config';
 import {
   setListingFilters,
   setMapBounds,
@@ -18,6 +19,8 @@ import "slick-carousel/slick/slick-theme.css";
 import defaultimg1 from "../../images/Apartment102.jpeg"
 import defaultimg2 from "../../images/Apartment103.jpeg"
 import Slider from "react-slick";
+import { toast } from "react-toastify";
+import { fetchPropertyAlert } from "../../Redux/Slices/alertSlice";
 
 const statusStyles = {
   "For Sale": { bgColor: "#A3000B", color: "white" },
@@ -36,10 +39,13 @@ const { DrawingManager } = await window.google.maps.importLibrary("drawing");
 
 const Listingsmap = ({ handlePropertyClick, bearerToken }) => {
     const {Id } = useSelector((state) => state.auth.userDetails  || {}); 
-  const { selectedProperty, visibleProperties, selectedCenterOfMap, groupedProperties } = useSelector(
-    (state) => state.properties
-  );
-
+  const { selectedProperty, 
+          visibleProperties, 
+          selectedCenterOfMap, 
+          groupedProperties,  
+          selectedPropertyStatus, 
+          selectedHomeTypes,
+          priceFilter } = useSelector((state) => state.properties);
   const { favorites } = useFavorites();
   const mapRef = useRef(null);
   const drawingManagerRef = useRef(null);
@@ -57,7 +63,41 @@ const Listingsmap = ({ handlePropertyClick, bearerToken }) => {
   const [showButton, setShowButton] = useState(false);
   const [circlePosition, setCirclePosition] = useState({ x: 0, y: 0 });
   const [AlertsuccessMsg, setAlertsuccessMsg] = useState(false);
-  const [AlerterrorMsg, setAlerterrorMsg] = useState(null);
+  const [homeTypes, setHomeTypes] = useState([]);
+
+  const getSelectedHomeTypeNames = () => {
+    const selectedTypes = homeTypes
+      .filter(type => selectedHomeTypes.includes(type.PropertyTypeID))
+      .map(type => type.PropertyType)
+      .join(",");
+    
+    return selectedTypes;
+  };
+
+  const getCombinedPriceRange = () => {
+    if (priceFilter && priceFilter.length > 0) {
+      const min = Math.min(...priceFilter.map(item => item.minPrice));
+      const max = Math.max(...priceFilter.map(item => item.maxPrice));
+      return `${min}-${max}`;
+    }
+    return "";
+  };
+  
+  const homeTypeString = getSelectedHomeTypeNames();
+  const prices = getCombinedPriceRange();
+
+  useEffect(() => {
+    const fetchHomeTypes = async () => {
+      try {
+        const options = await fetchPropertyHomeType(bearerToken);
+        setHomeTypes(options); // Store in state
+      } catch (error) {
+        console.error("Error fetching property home types:", error);
+      }
+    };
+  
+    fetchHomeTypes();
+  }, [bearerToken]);
 
   // Initialize Google Map
   const initializeMap = useCallback(() => {
@@ -211,7 +251,7 @@ const Listingsmap = ({ handlePropertyClick, bearerToken }) => {
       );
     };
   }, []);
-  const rootRefs = {}; 
+
   const convertToNumber = (value) => {
     let num = parseFloat(value);
     if (value.includes("Cr")) {
@@ -223,18 +263,21 @@ const Listingsmap = ({ handlePropertyClick, bearerToken }) => {
     }
     return num;
   };
+
   const showInfoWindow = useCallback(
     (map, marker, property, relatedUnits) => {
      
       if (infoWindowRef.current) {
         infoWindowRef.current.close();
       }
-
-        const propertyUrls = property.ProjectImageUrls ?? property.PropertyImageUrls;
-        const imageUrls = propertyUrls ? propertyUrls.split(',').map(url => url.trim()) : [];
-
-
-const imagesToShow = imageUrls.length > 0 ? imageUrls : [defaultimg1, defaultimg2];
+      const propertyUrls = property.ProjectImageUrls ?? property.PropertyImageUrls;
+      
+      const imageUrls = propertyUrls
+        ? propertyUrls.split(',').map(url => `${BLOB_BASE_URL}${url.trim()}`)
+        : [];
+      
+      const imagesToShow = imageUrls.length > 0 ? imageUrls : [defaultimg1, defaultimg2];
+      
 
       if(!relatedUnits){
         relatedUnits = {
@@ -356,7 +399,6 @@ const imagesToShow = imageUrls.length > 0 ? imageUrls : [defaultimg1, defaultimg
     },
     [handlePropertyClick]
   );
- 
   
   const renderFavorites = useCallback((favoriteProperties) => {
         const heartOverlays = []; // Store overlays for heart icons
@@ -487,13 +529,11 @@ const imagesToShow = imageUrls.length > 0 ? imageUrls : [defaultimg1, defaultimg
     [showInfoWindow, renderFavorites, favorites]
   );
 
-
   const clearMarkers = () => {
     markersRef.current.forEach((marker) => marker.setMap(null));
     markersRef.current = [];
   };
 
-  
 
   const filterPropertiesByPolygon = 
     (path) => {
@@ -511,30 +551,82 @@ const imagesToShow = imageUrls.length > 0 ? imageUrls : [defaultimg1, defaultimg
   };
 
   const handleButtonClick = () => {
-    if (drawnCircleRef.current) {
-      fetchmapshapealert(bearerToken, drawnCircleRef.current, Id)
-       .then((response) => {
-          
-          setAlertsuccessMsg(true);
-          
-          setTimeout(() => {
-            setAlertsuccessMsg(false);
-            setShowButton(false);  
-          }, 3000); 
-        })
-        .catch((error) => {
-          console.error("Error setting alert:", error);
-          setLoading(false);  // Stop loading on error
-        });
+    if (!drawnCircleRef.current) return;
+  
+    const circleCenter = drawnCircleRef.current.getCenter();
+    const radius = drawnCircleRef.current.getRadius();
+  
+    if (!circleCenter || radius == null) {
+      toast.error("Invalid circle data");
+      return;
+    }
+  
+    const latitude = circleCenter.lat();
+    const longitude = circleCenter.lng();
+  
+    const geocoder = new window.google.maps.Geocoder();
+  
+    geocoder.geocode({ location: { lat: latitude, lng: longitude } }, (results, status) => {
+      if (status === "OK" && results[0]) {
+        const addressComponents = results[0].address_components || [];
+  
+        const sublocality = addressComponents.find(comp =>
+          comp.types.includes("sublocality") || comp.types.includes("sublocality_level_1")
+        );
+  
+        const locality = addressComponents.find(comp =>
+          comp.types.includes("locality")
+        );
+  
+        const searchLocation = sublocality?.long_name || locality?.long_name || "";
+  
+        const payload = {
+          PropertyStatus: selectedPropertyStatus,
+          PropertyType: homeTypeString,
+          PriceRange: prices,
+          SearchLocation: searchLocation,
+          Latitude: latitude.toString(),
+          Longitude: longitude.toString(),
+          Radius: radius.toString()
+        };
+  
+        // ✅ Validate for empty string values
+        const hasEmptyField = Object.values(payload).some(val => val === "");
+        if (hasEmptyField) {
+            toast.error("Please select Property Type, status and price filter to set an alert.");
+          return;
+        }
+  
+        dispatch(fetchPropertyAlert({ bearerToken, payload }))
+          .unwrap()
+          .then((response) => {
+            if (response?.ProcessCode === 151) {
+                      toast.error("You can only set a maximum of 5 alerts.");
+                      return;
+              }
+            toast.success("Alert set successfully!");
+            setShowButton(false);
+         
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+           
+          });
+  
+      } else {
+        console.error("Geocoder failed due to:", status);
+        toast.error("Could not determine location");
       }
-
+    });
+    deleteDrawnShapes(); 
   };
-
+  
+  
   const deleteDrawnShapes = () => {
     dispatch(setMapCircleBounds(null));
     dispatch(setMapPolygonBounds(null));
     dispatch(setListingFilters());
-    setDrawingPath([]); // Reset drawing path immediately
+    setDrawingPath([]); 
     setShowButton(false);
 
     if (drawnPolygonRef.current) {
@@ -616,8 +708,6 @@ const imagesToShow = imageUrls.length > 0 ? imageUrls : [defaultimg1, defaultimg
                 Alert successfully set!
               </div>
             )}
-
-{AlerterrorMsg && <p className="error-msg">{AlerterrorMsg}</p>}
 
     </>
   );

@@ -74,9 +74,26 @@ const AddProject = () => {
     CompanyID: Yup.string().required("Company ID is required"),
     ProjectName: Yup.string()
     .required("Project Name is required")
-    .test("unique-project", "Project name already exists", (value) => {
-      return !projectData.some((project) => project.ProjectName.toLowerCase() === value?.toLowerCase());
-    }),
+    .test(
+      "unique-project",
+      "Project name already exists",
+      function (value) {
+        const { CompanyID } = this.parent;
+  
+        // If no value or company selected yet, skip validation
+        if (!value || !CompanyID) return true;
+  
+        const trimmedValue = value.trim().toLowerCase();
+  
+        return !projectData.some((project) => {
+          const projectName = project?.ProjectName?.trim()?.toLowerCase();
+          const companyId = project?.CompanyID;
+  
+          return projectName === trimmedValue && companyId === CompanyID;
+        });
+      }
+    ),
+  
     PropertyType: Yup.string().required("Property Type is required"),
     PropertyTypeID: Yup.string().required("Property Type ID is required"),
     ProjectStatus: Yup.string().required("Project Status is required"),
@@ -292,6 +309,8 @@ const AddProject = () => {
         initialValues={initialValues}
         validationSchema={validationSchema}
         enableReinitialize
+        validateOnChange={true}
+        validateOnBlur={true}
         onSubmit={handleSubmit}
       >
         {({ isSubmitting, resetForm, touched, values, errors, setFieldValue, setTouched, handleChange }) => {

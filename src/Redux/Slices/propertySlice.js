@@ -5,12 +5,10 @@ import { fetchListings,
          fetchPropertyHomeType, 
          fetchPremiumListings, 
          fetchPropertyView,  
-         fetchProjectView,
-         fetchPropertyAlertAPI,          
+         fetchProjectView,         
          fetchProjectFavorites,
          fetchPropertyFavorites
         } from '../../API/api';
-
 
 export const fetchProperties = createAsyncThunk(
   'properties/fetchProperties',
@@ -77,7 +75,6 @@ export const fetchPremiumListingsThunk = createAsyncThunk(
 );
 
 // views
-
 export const sendPropertyView = createAsyncThunk(
   "property/sendPropertyView",
   async ({ PropertyID, UserID, bearerToken }, { rejectWithValue }) => {
@@ -102,17 +99,7 @@ export const sendProjectView = createAsyncThunk(
   }
 );
 
-export const fetchPropertyAlert = createAsyncThunk(
-  'propertyAlert/fetchPropertyAlert',
-  async ({ bearerToken, payload }, { rejectWithValue }) => {
-    try {
-      const data = await fetchPropertyAlertAPI(bearerToken, payload);
-      return data;
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-);
+
 
 function isPointInBounds(point, bounds) {
   return (
@@ -234,11 +221,13 @@ const propertySlice = createSlice({
         return baseProperties
           .filter((property) => {
             const matchesSearchTerm = [
+              property.CompanyName,
+              property.ProjectName,
               property.PropertyName,
-              property.PropertyZipCode,
-              property.Locality,
+              property.Locality,       
               property.PropertyCity,
               property.PropertyState,
+              property.PropertyZipCode
             ].some((field) =>
               field && field.toLowerCase().includes(state.searchTerm.toLowerCase() || "")
             );
@@ -383,17 +372,6 @@ const propertySlice = createSlice({
         state.premiumListings = action.payload; // Store premium listings in state
       })
       .addCase(fetchPremiumListingsThunk.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-      .addCase(fetchPropertyAlert.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchPropertyAlert.fulfilled, (state, action) => {
-        state.loading = false;
-      })
-      .addCase(fetchPropertyAlert.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })

@@ -27,6 +27,7 @@ import Addcompany from './components/AddCompany/AddCompany';
 import Videos from './pages/Videos/Videos';
 import Favorites from './pages/Favorites/Favorites';
 import { ToastContainer } from 'react-toastify';
+import About from './pages/About/About';
 
 
 
@@ -41,7 +42,7 @@ const ConditionalNavbarBottom = ({
   handleSearchSubmit
 }) => {
   const location = useLocation();
-  const shouldDisplayNavbarBottom = ['/','/home','/owner', '/addproject', '/listedagents','/addlistings', '/forgot-password','/passwordreset', '/register', '/Notification', '/feedback', '/favorites', '/agents', '/services', '/investors', '/sell'].includes(location.pathname);
+  const shouldDisplayNavbarBottom = ['/','/home','/owner',"/about", '/addproject', '/listedagents','/addlistings', '/forgot-password','/passwordreset', '/register', '/Notification', '/feedback', '/favorites', '/agents', '/services', '/investors', '/sell'].includes(location.pathname);
 
   return !shouldDisplayNavbarBottom ?
     <NavbarBottom
@@ -181,6 +182,7 @@ const App = () => {
                 )
               }
             />
+      
             <Route path="/favorites" element={isLoggedIn ? (<Favorites bearerToken={bearerToken} />) : (
               <Navigate to="/" />
             )} />
@@ -234,6 +236,8 @@ const App = () => {
             <Route path="/addproject" element={<AddProject />} />
             <Route path="/addcompany" element={<Addcompany />} />
             <Route path="/videos" element={   isLoggedIn ? (<Videos />) : (   <Navigate to="/" /> )} />
+            <Route path="/about"  element={isLoggedIn ? (<About /> ) : (   <Navigate to="/" />  )} />
+           
           
           </Routes>
           <FeedbackWidget bearerToken={bearerToken} />

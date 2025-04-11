@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { FaHeart, FaTimes, FaChevronUp, FaChevronDown, FaHome, FaRegBell } from 'react-icons/fa'; // Import the close icon
 import { MdLocalPhone } from "react-icons/md";
 import './NavbarTop.css';
@@ -12,6 +12,7 @@ const NavbarTop = ({ handleLogout, handleLogin, propertyStatusOptions = [], onSe
   const [contactFormVisible, setContactFormVisible] = useState(false);
   const [activeLink, setActiveLink] = useState('home');
   const [moreDropdownOpen, setMoreDropdownOpen] = useState(false);
+  const location = useLocation();
   const dropdownRef = useRef(null);
 
   useEffect(() => {
@@ -45,14 +46,14 @@ const NavbarTop = ({ handleLogout, handleLogin, propertyStatusOptions = [], onSe
     setContactFormVisible(false);
   };
 
-  const handleLinkClick = (link) => {
-    setActiveLink(link); // Update active link state
+  // const handleLinkClick = (link) => {
+  //   setActiveLink(link); 
 
-  };
+  // };
 
 
   const handlemoreLinkClick = (link) => {
-    setActiveLink(link); // Update active link state
+    // setActiveLink(link);
     setMoreDropdownOpen(!moreDropdownOpen);
   };
 
@@ -67,69 +68,71 @@ const NavbarTop = ({ handleLogout, handleLogin, propertyStatusOptions = [], onSe
       <div className="navbar-left">
         <div className="navbar-logo">
           <Link to="/"
-            className={`navbar-centerlink  ${activeLink === 'logo' ? 'active' : ''}`}
-            onClick={() => handleLinkClick('logo')}
+            className="navbar-centerlink"
+
           >
-            {/* <img src={logo} alt="logo" /> */}
             TREALX
           </Link>
         </div>
       </div>
       <div className="navbar-center">
         <Link to="/"
-          className={`navbar-centerlink ${activeLink === 'home' ? 'active' : ''}`}
-          onClick={() => handleLinkClick('home')} >
+          className={`navbar-centerlink  ${location.pathname === '/' ? 'active' : ''}`}>
           <FaHome size={22} className="home-icon" />
         </Link>
         <Link to="/properties"
-          className={`navbar-centerlink ${activeLink === 'properties' ? 'active' : ''}`}
-          onClick={() => handleLinkClick('properties')}>
+          className={`navbar-centerlink ${location.pathname === "/properties" ? 'active' : ''}`}
+      >
           Properties
         </Link>
         <Link to="/Dashboard"
-          className={`navbar-centerlink ${activeLink === 'Dashboard' ? 'active' : ''}`}
-          onClick={() => handleLinkClick('Dashboard')}>
+          className={`navbar-centerlink ${location.pathname ===  '/Dashboard' ? 'active' : ''}`}
+      >
           Dashboard
         </Link>
         <Link to="/videos"
-          className={`navbar-centerlink ${activeLink === 'videos' ? 'active' : ''}`}
-          onClick={() => handleLinkClick('videos')}
+          className={`navbar-centerlink ${location.pathname ===  '/videos' ? 'active' : ''}`}
+      
         >Videos</Link>
         <Link to="/services"
-          className={`navbar-centerlink ${activeLink === 'services' ? 'active' : ''}`}
-          onClick={() => handleLinkClick('services')}
-        >Services</Link>
+          className={`navbar-centerlink ${location.pathname === '/services' ? 'active' : ''}`}
+      >Services</Link>
+
+<Link to="/about"
+          className={`navbar-centerlink ${location.pathname === '/about' ? 'active' : ''}`}
+      >About Us</Link>
+
               <Link
           to="/addlistings"
-          className={`navbar-centerlink ${activeLink === 'addlistings' ? 'active' : ''}`}
-          onClick={() => handleLinkClick('addlistings')}>
+          className={`navbar-centerlink ${location.pathname ===  '/addlistings' ? 'active' : ''}`}
+      >
           Add Listings
         </Link>
         {/* More Dropdown */}
         <div className="navbar-more" ref={dropdownRef}>
           <span className="more-link" onClick={toggleMoreDropdown}>
-            More&nbsp;{moreDropdownOpen ? <FaChevronUp /> : <FaChevronDown />}
+            More&nbsp;{moreDropdownOpen ? <FaChevronUp size={15} /> : <FaChevronDown size={15}  />}
           </span>
           {moreDropdownOpen && (
             <div className="more-dropdown">
 
               <Link
                 to="/offers"
-                className={`navbar-centerlink ${activeLink === 'offers' ? 'active' : ''}`}
+                className={`navbar-centerlink ${location.pathname ===  '/offers' ? 'active' : ''}`}
                 onClick={() => handlemoreLinkClick('offers')}
               >
                 Offers
               </Link>
               <Link
                 to="/learnings"
-                className={`navbar-centerlink ${activeLink === 'learning' ? 'active' : ''}`}
+                className={`navbar-centerlink ${location.pathname === '/learning' ? 'active' : ''}`}
                 onClick={() => handlemoreLinkClick('learning')}
               >
                 Learnings
               </Link>
               <Link
                 to="/blogs"
-                className={`navbar-centerlink ${activeLink === 'blogs' ? 'active' : ''}`}
+                className={`navbar-centerlink ${location.pathname === '/blogs' ? 'active' : ''}`}
                 onClick={() => handlemoreLinkClick('blogs')}
               >
                 Blogs
@@ -137,7 +140,7 @@ const NavbarTop = ({ handleLogout, handleLogin, propertyStatusOptions = [], onSe
 
               <Link
                 to="/listedagents"
-                className={`navbar-centerlink ${activeLink === 'listedagents' ? 'active' : ''}`}
+                className={`navbar-centerlink ${location.pathname === '/listedagents' ? 'active' : ''}`}
                 onClick={() => handlemoreLinkClick('listedagents')}
               >
                 Listed Agents
@@ -151,28 +154,26 @@ const NavbarTop = ({ handleLogout, handleLogin, propertyStatusOptions = [], onSe
       </div>
       <div className="navbar-right">
         <Link to="/investors"
-          className={`nav-link1 ${activeLink === 'investors' ? 'active' : ''}`}
-          onClick={() => handleLinkClick('investors')}
+          className={`nav-link1 ${location.pathname === '/investors' ? 'active' : ''}`}
+      
         >Investors Club</Link>
 
         <Link to="/favorites"
-          className={`nav-link ${activeLink === 'favorites' ? 'active' : ''}`}
-          onClick={() => handleLinkClick('favorites')}
+          className={`nav-link ${location.pathname === '/favorites' ? 'active' : ''}`}
+      
         >
           <FaHeart className="favorite-icon" />
         </Link>
         <Link to="/Notification"
-          className={`nav-link ${activeLink === 'notification' ? 'active' : ''}`}
-          onClick={() => handleLinkClick('notification')}
+          className={`nav-link ${location.pathname === '/Notification' ? 'active' : ''}`}
+      
         >
           <FaRegBell className="favorite-icon" />
         </Link>
 
         <Link
           to="/feedback"
-          className={`nav-link ${activeLink === 'feedback' ? 'active' : ''}`}
-
-          onClick={() => handleLinkClick('feedback')}
+          className={`nav-link ${location.pathname === '/feedback' ? 'active' : ''}`}
         >
           <RiFeedbackFill  className="favorite-icon"/>
         </Link>

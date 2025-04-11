@@ -12,8 +12,7 @@ import { fetchPropertyStatusOptions,
          fetchCustomPropertyTypes, 
          fetchPremiumbuilders 
         } from '../../../API/api';
-import { fetchPremiumListingsThunk, 
-         fetchPropertyAlert, 
+import { fetchPremiumListingsThunk,  
          setListingFilters, 
          setPriceFilter, 
          setSelectedBuilder, 
@@ -28,8 +27,9 @@ import Autosuggest from 'react-autosuggest';
 import './NavbarBottom.css';
 import FiltersComponent from '../../../components/FiltersComponent/FiltersComponent';
 import { TbFilterSearch } from "react-icons/tb";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { fetchPropertyAlert } from '../../../Redux/Slices/alertSlice';
 
 const priceRanges = [
   { value: 1, label: 'Below ₹ 10L', minPrice: 0, maxPrice: 1000000 },
@@ -84,6 +84,7 @@ const NavbarBottom = ({
     const customDropdownRef = useRef(null);
     const premiumBuildersRef = useRef(null);
     const filterDropdownRef = useRef(null);
+
     useEffect(() => {
       const handleClickOutside = (event) => {
         if (
@@ -149,7 +150,6 @@ const NavbarBottom = ({
       };
     }, []);
 
-
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -198,7 +198,7 @@ const NavbarBottom = ({
                     setHomeTypeOptions(mappedOptions);
                     const allTypes = mappedOptions.map(option => option.value);
                     setSelectedTypes(allTypes);
-                    dispatch(setSelectedHomeTypes(allTypes));
+                    dispatch(setSelectedHomeTypes(allTypes))
                     setSelectAll(true);
                     setIsInitialized(true); // Mark as initialized
                 }
@@ -231,7 +231,6 @@ const NavbarBottom = ({
         }
     }, [propertyStatusOptions, selectedStatus, dispatch]);
 
-
     // Toggle dropdown visibility
     const toggleDropdown = (dropdown) => {
         setDropdownsState(prevState => ({
@@ -239,7 +238,6 @@ const NavbarBottom = ({
             [dropdown]: !prevState[dropdown]
         }));
     };
-
 
     const handleStatusChange = useCallback((option) => {
         setSelectedStatus(option);
@@ -267,7 +265,8 @@ const NavbarBottom = ({
     }, [dispatch]);
 
     const handleTypeChange = (event) => {
-        const { value, checked } = event.target;
+        const { value,label, checked } = event.target;
+        console.log(label,"label");
 
         let updatedTypes;
         if (checked) {
@@ -403,8 +402,12 @@ const NavbarBottom = ({
         const matches = inputValue.length === 0
         ? []
         : filteredProperties.filter((property) =>
+            property.CompanyName?.toLowerCase().includes(inputValue) ||
+            property.ProjectName?.toLowerCase().includes(inputValue) ||
             property.PropertyName?.toLowerCase().includes(inputValue) ||
-            property.Locality?.toLowerCase().includes(inputValue) ||
+            property.Locality?.toLowerCase().includes(inputValue) || 
+            property.PropertyCity?.toLowerCase().includes(inputValue) || 
+            property.PropertyState?.toLowerCase().includes(inputValue) ||      
             property.PropertyZipCode?.toLowerCase().includes(inputValue)
         );
         return matches.reduce((acc, property) => {
@@ -446,7 +449,6 @@ const NavbarBottom = ({
 
     const handleAutoSuggestSearch = (e) => {
         handleSearchSubmit(e);
-        console.log(e);
         searchPlace(searchInput);
     }
 
@@ -473,46 +475,49 @@ const NavbarBottom = ({
 
     const getPriceRangeString = () => {
       if (selectedPriceRanges.length === 0) return "";
-
-      const minPrice = Math.min(...selectedPriceRanges.map(range => range.minPrice));
-      console.log(minPrice,",min");
+      const minPrice = Math.min(...selectedPriceRanges.map(range => range.minPrice)); 
       const maxPrice = Math.max(...selectedPriceRanges.map(range => range.maxPrice));
-
-      console.log(maxPrice,"maxprice");
-
       return `${minPrice}-${maxPrice}`;
   };
 
   const handleSetAlert = (event) => {
     event.preventDefault();
-
-    if ( selectedTypes.length === 0 || selectedPriceRanges.length === 0) {
-        toast.error("Please select Property Type, status and price filter to set an alert.");
-        return;
+ 
+    if (selectedTypes.length === 0 || selectedPriceRanges.length === 0) {
+      toast.error("Please select Property Type, status and price filter to set an alert.");
+      return;
     }
-
+  
     const priceRangeStr = getPriceRangeString();
-    const selectedLabels = selectedTypes.map(
-        (value) => homeTypeOptions.find((option) => option.value === value)?.label
-    ).filter(Boolean);
-
+  
+    const selectedLabels = selectedTypes
+      .map((value) => homeTypeOptions.find((option) => option.value === value)?.label)
+      .filter(Boolean);
+  
     const selectedLabelsString = selectedLabels.join(", ");
-
-    dispatch(
-        fetchPropertyAlert({
-            bearerToken,
-            payload: {
-                UserID: Id,
-                PropertyStatus: selectedStatus.label,
-                PropertyType: selectedLabelsString,
-                PriceRange: priceRangeStr,
-            },
-        })
-    );
-
-    toast.success("Alert set successfully!");
-};
-
+  
+    const payload = {
+      PropertyStatus: selectedStatus.label,
+      PropertyType: selectedLabelsString,
+      PriceRange: priceRangeStr,
+      SearchLocation: searchInput || "",
+    };
+  
+    dispatch(fetchPropertyAlert({ bearerToken, payload }))
+      .unwrap()
+      .then((response) => {
+        if (response?.ProcessCode === 151) {
+          toast.error("You can only set a maximum of 5 alerts.");
+          return;
+        }
+        toast.success("Alert set successfully!");
+      })
+      .catch((error) => {
+        console.error("Alert Error:", error);
+      });
+  };
+  
+  
     
     
     return (

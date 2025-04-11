@@ -48,7 +48,7 @@ export const fetchPremiumListings = async (bearerToken) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          RequestParamType: 'PremiumListings',
+          RequestParamType: 'PremiumList1',
         }),
       }
     );
@@ -180,7 +180,7 @@ export const fetchPropertyAlertAPI  = async (bearerToken, payload) => {
         'Authorization': `Bearer ${bearerToken}`,
       },
       body: JSON.stringify({
-        RequestParamType: 'AddSearchAlert',
+        RequestParamType: 'SetAlert',
         json: payload,
       }),
     });
@@ -804,55 +804,55 @@ export const fetchFeedbackRefID = async (bearerToken) => {
   }
 };
 
-export const fetchmapshapealert = async (bearerToken, circle,Id) => {
-  try {
-    // Get the center and radius of the circle
-    const circleCenter = circle.getCenter();
-    const circleRadius = circle.getRadius();
+// export const fetchmapshapealert = async (bearerToken, circle,Id) => {
+//   try {
+//     // Get the center and radius of the circle
+//     const circleCenter = circle.getCenter();
+//     const circleRadius = circle.getRadius();
 
-    // Convert the circle center to latitude and longitude
-    const latitude = circleCenter.lat();
-    const longitude = circleCenter.lng();
+//     // Convert the circle center to latitude and longitude
+//     const latitude = circleCenter.lat();
+//     const longitude = circleCenter.lng();
 
-    console.log(circleRadius,"circleRadius")
+//     console.log(circleRadius,"circleRadius")
 
-    // Prepare the payload
-    const payload = {
-      RequestParamType: "AddMapAlert", // Request type for adding the alert
-      UserID: Id,
-      ShapeType: "circle", // Set the shape type as 'circle'
-      Latitude: latitude,
-      Longitude: longitude,
-      Radius: circleRadius,
-    };
+//     // Prepare the payload
+//     const payload = {
+//       RequestParamType: "AddMapAlert", // Request type for adding the alert
+//       UserID: Id,
+//       ShapeType: "circle", // Set the shape type as 'circle'
+//       Latitude: latitude,
+//       Longitude: longitude,
+//       Radius: circleRadius,
+//     };
 
-    console.log(JSON.stringify(payload),"json");
+//     console.log(JSON.stringify(payload),"json");
 
-    // API call
-    const response = await fetch(AddData_API, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${bearerToken}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        RequestParamType: 'AddAlert',
-        json:payload
-    })
+//     // API call
+//     const response = await fetch(AddData_API, {
+//       method: 'POST',
+//       headers: {
+//         Authorization: `Bearer ${bearerToken}`,
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify({
+//         RequestParamType: 'AddAlert',
+//         json:payload
+//     })
      
-    });
+//     });
 
-    if (!response.ok) {
-      throw new Error('Failed to fetch: ' + response.statusText);
-    }
+//     if (!response.ok) {
+//       throw new Error('Failed to fetch: ' + response.statusText);
+//     }
 
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Error fetching property details:', error);
-    throw error;
-  }
-};
+//     const data = await response.json();
+//     return data;
+//   } catch (error) {
+//     console.error('Error fetching property details:', error);
+//     throw error;
+//   }
+// };
   
 export const fetchgetmapshapealert = async (bearerToken) => {
   try {

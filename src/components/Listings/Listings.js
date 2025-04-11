@@ -17,6 +17,7 @@ import defaultimg1 from "../../images/Apartment102.jpeg"
 import defaultimg2 from "../../images/Apartment103.jpeg"
 import "./Listings.css";
 import FavoriteIcon from "../FavoriteIcon/FavoriteIcon";
+import { BLOB_BASE_URL } from '../../utils/config';
 
 const Listings = () => {
   const bearerToken = useSelector((state) => state.auth.bearerToken);
@@ -44,8 +45,6 @@ const Listings = () => {
     visibleProperties,
     groupedProperties
   } = useSelector((state) => state.properties);
-
-  console.log(properties,"properties");
 
   useEffect(() => {
     if (bearerToken && !loading && properties.length === 0) {
@@ -154,9 +153,12 @@ const Listings = () => {
               <div className="propertyList">
                 {currentItems.map((property) => {
 
-                  const propertyUnit = property.UnitTypeDetails[0];                
+                  const propertyUnit = property.UnitTypeDetails[0];
                   const propertyUrls = propertyUnit.ProjectImageUrls ?? propertyUnit.PropertyImageUrls;
-                  const imageUrls = propertyUrls ? propertyUrls.split(',').map(url => url.trim()) : [];
+                  const imageUrls = propertyUrls
+                    ? propertyUrls.split(',').map((url) => `${BLOB_BASE_URL}${url.trim()}`)
+                    : [defaultimg1, defaultimg2];
+
 
                   const imagesToShow = imageUrls.length > 0 ? imageUrls : [defaultimg1, defaultimg2];
                   const propertyName = propertyUnit.PropertyName;
@@ -211,9 +213,12 @@ const Listings = () => {
                     arrows: true,
                     lazyLoad: true,
                     afterChange: (current) => {
+                      if (current === 1) {
+                        handlePropertymodalopen(propertyUnit);
+                      }
                       const lastIndex = imagesToShow.length - 1;
                       if (current === lastIndex) {
-                        handlePropertyClick(propertyUnit); 
+                        handlePropertyClick(propertyUnit);
                         setTimeout(() => {
                           if (sliderRefs.current[propertyUnit.PropertyID]) {
                             sliderRefs.current[propertyUnit.PropertyID].slickGoTo(0);
