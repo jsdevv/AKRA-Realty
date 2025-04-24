@@ -6,7 +6,8 @@ import { submitFeedback } from "../../Redux/Slices/feedbackSlice";
 import "./FeedbackWidget.css";
 import { useLocation } from "react-router-dom";
 
-const FeedbackWidget = ({ bearerToken }) => {
+const FeedbackWidget = () => {
+  const bearerToken = useSelector((state) => state.auth.bearerToken);
   const {UserEmail, firstName,lastName } = useSelector((state) => state.auth.userDetails  || {}); 
   const [isOpen, setIsOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");

@@ -74,7 +74,7 @@
 .dashboard-dropdown-menu {
   position: absolute;
   margin-top: 4px;
-  background-color: #fff;
+  background-color: #f3f3f3;
   border:none;
   border-radius: 6px;
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
@@ -100,4 +100,13 @@
 .dashboard-dropdown-menu button.active {
   background-color: #2c3e50;
   color: white;
+}
+.buyalert {
+  position: relative;
+  height: 76vh;
+  background-color: #f9f9f9; /* light background for better visibility */
+   overflow-y: auto; 
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.05); /* subtle shadow for depth */
+  margin: 10px;
 }

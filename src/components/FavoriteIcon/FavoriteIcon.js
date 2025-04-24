@@ -7,60 +7,86 @@ import {
     fetchDeleteProjectFavorties,
     fetchDeletePropertyFavorties 
 } from "../../API/api";
-import { useSelector } from "react-redux";
+import {setShowAuthPopup} from "../../Redux/Slices/authPopupSlice"
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import "./FavoriteIcon.css";
+import { checkAuthAndPopup } from "../../utils/authUtils";
 
-const FavoriteIcon = ({ groupproperty }) => {
-
+const FavoriteIcon = ({ property }) => {
+    const dispatch = useDispatch();
     const bearerToken = useSelector((state) => state.auth.bearerToken);
+    
     const { Id } = useSelector((state) => state.auth.userDetails || {});
     const { favorites, toggleFavorite, favoriteColor } = useFavorites();
-    const property = groupproperty?.UnitTypeDetails?.[0];
     const [isFavorited, setIsFavorited] = useState(false);
 
     useEffect(() => {
         if (property) {
-            setIsFavorited(favorites.some((fav) => fav.PropertyID === property.PropertyID));
+            // Check if the property or project is favorited in local storage or context
+            const isFavorite = favorites.some(
+                (fav) => 
+                    (fav.PropertyID === property.propertyID) || 
+                    (fav.ProjectID === property.projectID)
+            );
+            setIsFavorited(isFavorite);
         }
     }, [favorites, property]);
+    
 
     if (!property) return null;
 
     const handleToggleFavorite = async (e) => {
         e.stopPropagation();
 
-        const isSingleProperty = Array.isArray(groupproperty.Amount) && groupproperty.Amount.length === 1;
+        const isAllowed = checkAuthAndPopup({
+            token: bearerToken,
+            setShowAuthPopup,
+            dispatch,
+          });
+        
+          if (!isAllowed) return;
+    
+        const isSingleProperty = property.found <= 1;
+        const isProject = !isSingleProperty;
+    
         const payload = isSingleProperty
-            ? { PropertyID: property.PropertyID }
-            : { ProjectID: property.ProjectID };
+            ? { PropertyID: property.propertyID }
+            : { ProjectID: property.projectID };
 
         try {
             let response;
+    
             if (!isFavorited) {
-                response = isSingleProperty
-                    ? await fetchAddpropertyFavorties(bearerToken, payload)
-                    : await fetchAddprojectFavorties(bearerToken, payload);
+                response = isProject
+                    ? await fetchAddprojectFavorties(bearerToken, payload)
+                    : await fetchAddpropertyFavorties(bearerToken, payload);
             } else {
-                response = isSingleProperty
-                    ? await fetchDeletePropertyFavorties(bearerToken, { ...payload, UserID: Id })
-                    : await fetchDeleteProjectFavorties(bearerToken, { ...payload, UserID: Id });
+                const deletePayload = { ...payload, UserID: Id };
+                response = isProject
+                    ? await fetchDeleteProjectFavorties(bearerToken, deletePayload)
+                    : await fetchDeletePropertyFavorties(bearerToken, deletePayload);
             }
-
-        const errorMessage = response?.processMessage?.includes("ERROR")
-            ? response.processMessage.replace(/^ERROR:\s*/, "").trim()
-            : "An error occurred, please try again.";
-
+    
+            const errorMessage = response?.processMessage?.includes("ERROR")
+                ? response.processMessage.replace(/^ERROR:\s*/, "").trim()
+                : "An error occurred, please try again.";
+    
             if (response?.ProcessCode === 101 || response?.processMessage?.includes("ERROR")) {
                 toast.error(errorMessage);
+                setIsFavorited((prev) => !prev); 
             } else {
+                
+
                 toggleFavorite(property);
             }
         } catch (error) {
             const errorMessage = error?.response?.data?.processMessage || "Something went wrong. Please try again.";
             toast.error(errorMessage);
+            setIsFavorited((prev) => !prev); 
         }
     };
+    
 
     return (
         <MdOutlineFavorite

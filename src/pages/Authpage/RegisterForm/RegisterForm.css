@@ -1,13 +1,12 @@
 /* Container Styles */
 .register-form-container {
   width: 100%;
-  max-width: 240px;
 }
 
 .register-form {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 14px;
 }
 
 /* Input Field Styles */
@@ -38,6 +37,23 @@
   outline: none;
 }
 
+.register-form-input2 {
+  width: 55%;
+  padding: 12px;
+  font-size: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #fff;
+  transition: border-color 0.3s;
+}
+
+.register-form-input2:focus{
+  border-color: #2a3650;
+  outline: none;
+}
+
+
+
 .register-form-input1 {
   width: 90%;
   padding: 12px;
@@ -53,6 +69,38 @@
 .register-form-input-half {
   width: 48%;  /* Ensures each input takes up about half of the row */
 }
+
+.passwordinput-wrapper {
+  display: flex;
+  position: relative;
+  width: 100%;
+}
+
+.register-form-password {
+  width: 98%;
+  padding: 12px 40px 12px 12px; /* padding-right for eye icon */
+  font-size: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #fff;
+  transition: border-color 0.3s;
+}
+
+.register-form-password:focus{
+  border-color: #2a3650;
+  outline: none;
+}
+
+.eye-icon {
+  position: absolute;
+  top: 52%;
+  right: 16px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #888;
+  font-size: 18px;
+}
+
 
 /* Phone Number Group Styles */
 .phone-group {
@@ -84,7 +132,7 @@
 .user-type-heading-container {
   position: relative;
   left: 4px;
-  gap: 10px;
+  gap: 18px;
   display: flex;
   margin-top: -12px;
   align-items: center;
@@ -176,7 +224,7 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   .register-form-row {
-    flex-direction: column;  /* Stacks inputs vertically on smaller screens */
+    flex-direction: column; 
   }
 
   .phone-group {

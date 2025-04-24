@@ -108,7 +108,7 @@
 
 .propertyCard .propertyDetails {
   padding: 0px 12px; 
- 
+  text-transform: capitalize;
 }
 
 .propertyCard .propertyDetails p {

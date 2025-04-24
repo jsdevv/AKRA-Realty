@@ -482,9 +482,11 @@ const NavbarBottom = ({
 
   const handleSetAlert = (event) => {
     event.preventDefault();
+
+    const isSearchEmpty = typeof searchInput === "string" ? searchInput.trim() === "" : !searchInput;
  
-    if (selectedTypes.length === 0 || selectedPriceRanges.length === 0) {
-      toast.error("Please select Property Type, status and price filter to set an alert.");
+    if (selectedTypes.length === 0 || selectedPriceRanges.length === 0 || isSearchEmpty) {
+      toast.error("Please select Search Location, Property Type, status and price filter to set an alert.");
       return;
     }
   
@@ -500,7 +502,7 @@ const NavbarBottom = ({
       PropertyStatus: selectedStatus.label,
       PropertyType: selectedLabelsString,
       PriceRange: priceRangeStr,
-      SearchLocation: searchInput || "",
+      SearchLocation: searchInput,
     };
   
     dispatch(fetchAddAlert({ bearerToken, payload }))

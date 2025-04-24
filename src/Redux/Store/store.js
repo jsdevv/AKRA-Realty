@@ -13,10 +13,12 @@ import registrationReducer from '../Slices/registrationSlice';
 import resetPasswordReducer from '../Slices/resetPasswordSlice';
 import imageUploadReducer from '../Slices/imageUploadSlice'; 
 import videosReducer from '../Slices/videosSlice'; 
+import authPopupReducer from '../Slices/authPopupSlice';
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
+    authPopup: authPopupReducer,
     properties: propertiesReducer,
     listings: listingsReducer,
     agentProperties: agentPropertyReducer,
@@ -30,5 +32,6 @@ export const store = configureStore({
     resetPassword: resetPasswordReducer,
     imageUpload: imageUploadReducer,
     videos: videosReducer,
+
   },
 });

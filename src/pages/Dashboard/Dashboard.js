@@ -9,6 +9,7 @@ import DashboardPropertyFav from '../../components/DashboardPropertyFav/Dashboar
 import './Dashboard.css';
 import { FaChevronDown } from 'react-icons/fa';
 import { Menu } from '@headlessui/react';
+import Notification from '../notification/Notification';
 
 const Dashboard = () => {
   const [showMap, setShowMap] = useState(false);
@@ -54,7 +55,7 @@ const Dashboard = () => {
       case 'addlistings':
         return <div> <AddListings /> </div>;
       case 'Buy':
-        return <div>Buy Alerts Section</div>;
+        return <div className='buyalert'><Notification/></div>;
       case 'Sell':
         return <div>Sell Alerts Section</div>;
 

@@ -1,0 +1,189 @@
+/* Fullscreen overlay */
+.authpopup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Make sure it's on top */
+  }
+  
+  /* Centered modal */
+  .authpopup-modal {
+    background-color: #fff;
+    width: 100%;
+    max-width: 400px;
+    padding: 34px;
+    border-radius: 10px;
+    position: relative;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    animation: slideInFromTop 0.4s ease;
+    box-sizing: border-box;
+  }
+
+  @keyframes slideInFromTop {
+    0% {
+      opacity: 0;
+      transform: translateY(-50px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  
+  /* Close button */
+  .authpopup-close-btn {
+    margin-top: 2px;
+    position: absolute;
+    top: 5px;
+    right: 15px;
+    font-size: 22px;
+    background: none;
+    border: none;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+  }
+  
+  .authpopup-close-btn:hover {
+    background-color: #2a3650;
+    color: #fff;
+    transform: scale(1.1) rotate(90deg);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  
+  
+  /* Tabs container */
+  .navbartopdropdown-tabs {
+    display: flex;
+    justify-content: space-evenly; /* Even space between tabs */
+    align-items: center; /* Center items vertically */
+    margin-bottom: 10px;
+    padding-bottom: 5px; /* Add some space below */
+    border-bottom: 2px solid #f1f1f1; /* Subtle border at the bottom */
+    flex-wrap: wrap; /* Allow wrapping on small screens */
+  }
+  
+  /* Individual tab styles */
+  .navbartopdropdown-item {
+    color: #2a3650;
+    flex: 1; /* Equal width for each tab */
+    text-align: center; /* Center text within the tab */
+    padding: 12px 0; /* Add vertical padding for better touch areas */
+    cursor: pointer;
+    font-size: 14px; /* Adjusted font size for clarity */
+    transition: background-color 0.3s, color 0.3s, font-weight 0.3s; /* Smooth transition for hover and active states */
+  }
+  
+  /* Hover effect for tabs */
+  .navbartopdropdown-item:hover {
+    background-color: #f1f1f1; /* Subtle hover effect */
+    color: #2a3650; /* Keep text color consistent on hover */
+  }
+  
+  /* Active tab styling */
+  .navbartopdropdown-item.active {
+    font-weight: bold;
+    color: #2a3650; /* Keep the active tab color consistent */
+    border-bottom: 3px solid #2a3650; /* Bold bottom border to highlight the active tab */
+    background-color: #f1f1f1; /* Slight background change for active tab */
+  }
+  
+  /* Back to Login Button */
+  .back-to-login-btn {
+    display: block;
+    padding: 10px 15px;
+    color: #2a3650;
+    border: none;
+    background-color: white;
+    cursor: pointer;
+    margin-top: 10px;
+    width: 100%; /* Make it full width on mobile */
+    text-align: center;
+  }
+  
+  .back-to-login-btn:hover {
+    font-weight: bold;
+    text-decoration: underline;
+  }
+  
+  /* User icon styling */
+  .navbartop-icon {
+    cursor: pointer;
+  }
+  
+  /* Navbar item container */
+  .navbaritem-container {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Navbar items */
+  .navbaritem-container p {
+    margin: 0;
+    padding: 10px 15px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #2a3650;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  /* Hover effect for the items */
+  .navbaritem-container p:hover {
+    background-color: #f1f1f1;
+    color: #1a1a1a;
+    font-weight: 600;
+  }
+  
+  /* Media Queries for Responsiveness */
+  
+  /* Adjust modal width on smaller screens */
+  @media (max-width: 768px) {
+    .authpopup-modal {
+      max-width: 90%; /* Allow the modal to take up 90% of the screen width on smaller devices */
+      padding: 15px;
+    }
+  
+    .navbartopdropdown-item {
+      font-size: 16px; /* Make the font slightly bigger on smaller screens */
+      padding: 10px 0;
+    }
+  
+    .back-to-login-btn {
+      width: 100%;
+      padding: 12px 20px; /* Ensure enough padding for touch devices */
+      text-align: center;
+    }
+  }
+  
+  /* Further adjustments for very small screens (e.g., mobile devices) */
+  @media (max-width: 480px) {
+    .navbartopdropdown-tabs {
+      flex-direction: column; /* Stack tabs vertically */
+      align-items: stretch; /* Ensure tabs take full width */
+    }
+  
+    .navbartopdropdown-item {
+      width: 100%; /* Make tabs full width on very small screens */
+      padding: 14px 0; /* Add more padding for better touch areas */
+      font-size: 18px; /* Increase font size for readability */
+    }
+  
+    .authpopup-close-btn {
+      top: 10px;
+      right: 10px;
+    }
+  }
+  

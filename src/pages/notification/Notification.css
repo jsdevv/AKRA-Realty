@@ -21,12 +21,13 @@
 
 .alert-row:hover {
   background-color: #f9f9f9;
-  cursor: pointer;
+
 }
 
 .active-row {
   background-color: #eef6ff;
 }
+
 
 .nested-row td {
   padding: 0;
@@ -106,10 +107,6 @@
   padding: 8px;
 }
 
-.new-property-row {
-  background-color: #e6f7ff;
-}
-
 .no-alerts {
   text-align: center;
   padding: 20px;
@@ -152,7 +149,6 @@
 
 /* Location icon hover effect */
 .map-icon-btn {
-  color: #2A3650;
   transition: color 0.2s ease-in-out;
   cursor: pointer;
   font-size: 13px;
@@ -161,4 +157,24 @@
 .map-icon-btn:hover {
   color: #d9534f; /* You can change this to any color you like */
 }
+
+/* Style for clickable cells */
+.clickable-cell {
+  cursor: pointer;
+  cursor: pointer;  /* Makes it look like a link */
+  transition: background-color 0.3s ease, color 0.3s ease;  /* Smooth transition */
+  text-decoration: none;  /* Ensures no underline by default */
+  text-decoration: underline;
+  color: #007b8f;
+  font-weight: 500;
+ font-size: 13px;
+}
+
+/* Hover effect for clickable cells */
+.clickable-cell:hover {
+  background-color: #e0f7fa;  /* Light blue hover background */
+  color: #007b8f;  /* Dark blue text color on hover */
+  text-decoration: underline;  /* Underline text on hover to make it look like a link */
+}
+
 

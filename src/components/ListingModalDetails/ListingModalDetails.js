@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector } from "react-redux";
-import {  FaEye, FaMapMarkerAlt, FaBed, FaBath, FaHome, FaWarehouse, FaCalendar, FaInfoCircle } from 'react-icons/fa';
+import { FaEye, FaMapMarkerAlt, FaBed, FaBath, FaHome, FaWarehouse, FaCalendar, FaInfoCircle } from 'react-icons/fa';
 import { MdSquareFoot, MdLocalFireDepartment, MdAcUnit, MdKitchen, MdBalcony } from 'react-icons/md';
 import ScheduleTourForm from '../ListingspopupForms/ScheduleTourForm/ScheduleTourForm';
 import Requestinfo from '../ListingspopupForms/Requestinfo/Requestinfo';
@@ -11,7 +11,7 @@ import ListingModal from '../ListingModal/ListingModal';
 import PropertyGrid from './PropertyGrid';
 import './ListingModalDetails.css';
 
-const ListingModalDetails = ({ selectedProperty, propertyCardData, propertyType }) => {
+const ListingModalDetails = ({ selectedProperty, propertyCardData, propertyType, propertyToOpen }) => {
 
   const tabs = [
     { id: 'scheduleVisit', label: 'Schedule Visit' },
@@ -52,7 +52,7 @@ const ListingModalDetails = ({ selectedProperty, propertyCardData, propertyType 
     setActiveTab(tab);
   };
 
-  const setSelectedPropertyForDetailHandler = (property) => {
+  const setSelectedPropertyForDetailHandler = (property) => { 
     setSelectedPropertyForDetail(property);
     setShowModal(true);
   };
@@ -75,53 +75,100 @@ const ListingModalDetails = ({ selectedProperty, propertyCardData, propertyType 
   };
 
   const groupKey = `${selectedProperty.PropertyLatitude ?? selectedProperty.Propertylatitude}_${selectedProperty.PropertyLongitude ?? selectedProperty.Propertylongitude}`;
-  const relatedUnits = groupedProperties[groupKey];
-  const minMax = relatedUnits?.Amount.reduce(
-    (acc, value) => {
-      const num = convertToNumber(value);
-      if (num < acc.min.value) acc.min = { value: num, original: value };
-      if (num > acc.max.value) acc.max = { value: num, original: value };
-      return acc;
-    },
-    {
-      min: { value: Infinity, original: null },
-      max: { value: -Infinity, original: null },
-    }
-  );
+  let relatedUnits = groupedProperties[groupKey];
+  let unitCount = 0;
+  let minMax = {min:{value:Infinity,original:null},max:{value:-Infinity,original:null}};
+  let groupedByBedroomsArray = [];
 
-  let groupedByBedroomsArray = Object.entries(
-    relatedUnits?.UnitTypeDetails.reduce((acc, property) => {
-      const { Bedrooms } = property;
-  
-      const normalizedBedrooms = isNaN(parseInt(Bedrooms)) ? 0 : parseInt(Bedrooms);
-      
-      if (!acc[normalizedBedrooms]) {
-        acc[normalizedBedrooms] = [];
+  if (propertyToOpen) {
+    const originalMinMaxFormatted = propertyToOpen.formattedAmount
+      .split("-")
+      .map((value) => value.trim());
+    minMax = {
+      min: {
+        value: propertyToOpen.minAmount,
+        original: originalMinMaxFormatted[0],
+      },
+      max: {
+        value: propertyToOpen.maxAmount,
+        original: originalMinMaxFormatted[1],
+      },
+    };
+    unitCount = propertyToOpen.found;
+    relatedUnits = {
+      UnitTypeDetails: propertyToOpen.relatedUnits.map((f) => {
+        f.Bedrooms = f.bedrooms;
+        f.PropertyBathrooms = f.propertyBathrooms;
+        f.SqFt = f.sqFt + "";
+        f.PropertyType = f.propertyType;
+        f.PropertyMainEntranceFacing = f.propertyMainEntranceFacing;
+        f.Amount = f.formattedAmount;
+        f.PropertyID = f.propertyID;
+        return f;
+      }),
+    };
+  } else {
+    unitCount = relatedUnits?.UnitTypeDetails?.length ?? 0;
+    minMax = relatedUnits?.Amount.reduce(
+      (acc, value) => {
+        const num = convertToNumber(value);
+        if (num < acc.min.value) acc.min = { value: num, original: value };
+        if (num > acc.max.value) acc.max = { value: num, original: value };
+        return acc;
+      },
+      {
+        min: { value: Infinity, original: null },
+        max: { value: -Infinity, original: null },
       }
-      acc[normalizedBedrooms].push(property);
-      return acc;
-    }, {}) ?? {}
-  ).map(([Bedrooms, properties]) => ({
-    Bedrooms: parseInt(Bedrooms, 10),
+    );
+    
+  }
+
+  // First group by Bedrooms
+  const groupedByBedroomsMap =
+  relatedUnits?.UnitTypeDetails.reduce((acc, property) => {
+    const { Bedrooms } = property;
+    const normalizedBedrooms = isNaN(parseFloat(Bedrooms))
+      ? 0
+      : parseFloat(Bedrooms);
+
+    if (!acc[normalizedBedrooms]) {
+      acc[normalizedBedrooms] = [];
+    }
+    acc[normalizedBedrooms].push(property);
+
+    return acc;
+  }, {}) ?? {};
+
+// Convert grouped object to array
+groupedByBedroomsArray = Object.entries(groupedByBedroomsMap)
+  .map(([Bedrooms, properties]) => ({
+    Bedrooms: parseFloat(Bedrooms, 10),
     properties,
-  }));
-  
-  // ✅ Filter out any existing Bedrooms === 0 (avoid double "All")
-  groupedByBedroomsArray = groupedByBedroomsArray.filter(
-    (group) => group.Bedrooms !== 0
-  );
-  
-  // ✅ Add our single "All" group at the top
-  groupedByBedroomsArray.unshift({
-    Bedrooms: 0,
-    properties: relatedUnits?.UnitTypeDetails ?? [],
-  });
-  
+  }))
+  .sort((a, b) => a.Bedrooms - b.Bedrooms);
 
-  // groupedByBedroomsArray = [{ Bedrooms: 0, properties: relatedUnits?.UnitTypeDetails ?? [] }];
+// ✅ Filter out Bedrooms === 0 (avoid double "All")
+groupedByBedroomsArray = groupedByBedroomsArray.filter(
+  (group) => group.Bedrooms !== 0
+);
 
-  
-  let unitCount = relatedUnits?.UnitTypeDetails?.length ?? 0;
+// ✅ Unique properties from Bedrooms === 0 group
+const uniqueProperties = (groupedByBedroomsMap["0"] || []).reduce(
+  (accum, current) => {
+    if (!accum.some((item) => item.PropertyID === current.PropertyID)) {
+      accum.push(current);
+    }
+    return accum;
+  },
+  []
+);
+
+// ✅ Add back a grouped item with Bedrooms: 0 (representing "All")
+groupedByBedroomsArray.unshift({
+  Bedrooms: 0,
+  properties: uniqueProperties,
+});
 
   if (propertyType === 'Property') {
     unitCount = 1;
@@ -137,12 +184,9 @@ const ListingModalDetails = ({ selectedProperty, propertyCardData, propertyType 
 
           <span className="property-info">
             <FaEye aria-label="Number of views" /> &nbsp;{" "}
-            { unitCount === 1 ?  selectedProperty.PropertyViewCount : selectedProperty.ProjectViewCount} views
+            {unitCount === 1 ? selectedProperty.PropertyViewCount : selectedProperty.ProjectViewCount} views
           </span>
-          {/* <span className="property-info">
-            <RiShareForwardFill aria-label="Number of views" /> &nbsp;{" "}
-            {selectedProperty.Shares} Shares
-          </span> */}
+    
         </div>
 
         <div className="listingmodal-container">
@@ -164,8 +208,6 @@ const ListingModalDetails = ({ selectedProperty, propertyCardData, propertyType 
             ) : (
               <p>₹ {selectedProperty.Amount}</p>
             )}
-            {/* <p>₹ {selectedProperty.Amount}</p> */}
-            {/* <span className="price-per-sqft">{formatPrice(9350)}/SqFt</span> */}
           </div>
         </div>
 
@@ -192,11 +234,11 @@ const ListingModalDetails = ({ selectedProperty, propertyCardData, propertyType 
               ))}
             </div>
             <div className="bedroom-tab-details">
-             
-           <PropertyGrid  
-           groupedByBedroomsArray={groupedByBedroomsArray} 
-           selectedBedrooms={selectedBedrooms} 
-           setSelectedPropertyForDetailHandler={setSelectedPropertyForDetailHandler}/>
+
+              <PropertyGrid
+                groupedByBedroomsArray={groupedByBedroomsArray}
+                selectedBedrooms={selectedBedrooms}
+                setSelectedPropertyForDetailHandler={setSelectedPropertyForDetailHandler} />
             </div>
           </div>
         )}
@@ -230,10 +272,10 @@ const ListingModalDetails = ({ selectedProperty, propertyCardData, propertyType 
             ))}
           </div>
         </div>
-        <Nearbyplacemap
+        {/* <Nearbyplacemap
           selectedProperty={selectedProperty}
           propertyCardData={propertyCardData}
-        />
+        />  */}
       </div>
 
       <div className="right-section">
@@ -269,6 +311,7 @@ const ListingModalDetails = ({ selectedProperty, propertyCardData, propertyType 
 
       {showModal && selectedProperty && (
         <ListingModal
+          propertyToOpen={propertyToOpen}
           propertyType="Property"
           selectedProperty={selectedPropertyForDetail}
           onClose={handleCloseModal}

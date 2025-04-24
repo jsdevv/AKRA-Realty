@@ -1,0 +1,14 @@
+.mappopup-amount {
+    font-size: 13px;
+    font-weight: bold;
+    margin: 0px;
+  
+  }
+  
+  /* Text for the property address */
+  .mappopup-address {
+    font-size: 11px;
+    color: #888;
+    margin-top: 3px;
+  }
+  

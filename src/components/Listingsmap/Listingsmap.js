@@ -21,6 +21,7 @@ import defaultimg2 from "../../images/Apartment103.jpeg"
 import Slider from "react-slick";
 import { toast } from "react-toastify";
 import { fetchAddAlert } from "../../Redux/Slices/alertSlice";
+import { createPayloadAndSendAlert } from "../../utils/createPayloadAndSendAlert";
 
 const statusStyles = {
   "For Sale": { bgColor: "#A3000B", color: "white" },
@@ -177,12 +178,51 @@ const Listingsmap = ({ handlePropertyClick, bearerToken }) => {
       drawnCircleRef.current = circle;
       filterPropertiesByCircle(circle);
       drawingManager.setDrawingMode(null);
-      circle.addListener('rightclick', (event) => {
-        const position = event.latLng;
-        setCirclePosition({ x: position.lng(), y: position.lat() }); 
-        setShowButton(true);
+    
+      // Create the payload and send it to the utility function
+      const circleCenter = drawnCircleRef.current.getCenter();
+      const radius = drawnCircleRef.current.getRadius();
+    
+      if (!circleCenter || radius == null) {
+        toast.error("Invalid circle data");
+        return;
+      }
+    
+      const latitude = circleCenter.lat();  // Get latitude from circle center
+      const longitude = circleCenter.lng(); // Get longitude from circle center
+    
+      const geocoder = new window.google.maps.Geocoder();
+      
+      geocoder.geocode({ location: { lat: latitude, lng: longitude } }, (results, status) => {
+        if (status === "OK" && results[0]) {
+          const addressComponents = results[0].address_components || [];
+          const sublocality = addressComponents.find(comp =>
+            comp.types.includes("sublocality") || comp.types.includes("sublocality_level_1")
+          );
+          const locality = addressComponents.find(comp =>
+            comp.types.includes("locality")
+          );
+          const searchLocation = sublocality?.long_name || locality?.long_name || "";
+    
+          const payload = {
+            PropertyStatus: selectedPropertyStatus,
+            PropertyType: homeTypeString,
+            PriceRange: prices,
+            SearchLocation: searchLocation,
+            Latitude: latitude.toString(),
+            Longitude: longitude.toString(),
+            Radius: radius.toString()
+          };
+    
+          // Call the utility function to send the alert
+          createPayloadAndSendAlert(dispatch, bearerToken,payload);
+        } else {
+          console.error("Geocoder failed due to:", status);
+          toast.error("Could not determine location");
+        }
       });
     };
+    
 
     window.google.maps.event.addListener(
       drawingManager,
@@ -590,7 +630,6 @@ const Listingsmap = ({ handlePropertyClick, bearerToken }) => {
           Radius: radius.toString()
         };
   
-        // ✅ Validate for empty string values
         const hasEmptyField = Object.values(payload).some(val => val === "");
         if (hasEmptyField) {
             toast.error("Please select Property Type, status and price filter to set an alert.");
@@ -698,10 +737,10 @@ const Listingsmap = ({ handlePropertyClick, bearerToken }) => {
           <RiDeleteBin6Line />
         </button>
       </div>
-      {showButton && (
+      {/* {showButton && (
             <button className="alert-button" onClick={handleButtonClick}>Set Alert </button>
         
-          )}
+          )} */}
 
 {AlertsuccessMsg && (
               <div className="AlertsuccessMsg">

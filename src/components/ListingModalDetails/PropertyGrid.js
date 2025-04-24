@@ -1,30 +1,27 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css"; 
-import {
-         AllCommunityModule, 
-         ModuleRegistry 
-        } 
-         from "ag-grid-community";
+import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
 import { MultiFilterModule,SetFilterModule } from 'ag-grid-enterprise'; 
 import { LiaRupeeSignSolid } from "react-icons/lia";
-import "./PropertyGrid.css"
 import { FaHeart } from "react-icons/fa";
 import { useFavorites } from "../../context/FavoritesContext";
 import { toast } from "react-toastify";
-import {fetchAddpropertyFavorties,    fetchDeletePropertyFavorties } from "../../API/api";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPropertyViews } from "../../utils/fetchPropertyViews";
-
+import { usePropertyFavorite } from "../../customHooks/usePropertyFavorite";
+import "./PropertyGrid.css"
+import { setCameFromDetails } from "../../Redux/Slices/propertySlice";
 
 ModuleRegistry.registerModules([AllCommunityModule,MultiFilterModule,SetFilterModule ]);
 
 const PropertyGrid = ({ groupedByBedroomsArray,selectedBedrooms,setSelectedPropertyForDetailHandler }) => {
-    console.log(groupedByBedroomsArray,"groupedByBedroomsArray ");
+ 
     const bearerToken = useSelector((state) => state.auth.bearerToken);
     const { Id } = useSelector((state) => state.auth.userDetails || {});
     const { favorites,favoriteColor, toggleFavorite } = useFavorites();
+    const [localFavorites, setLocalFavorites] = useState(favorites); 
     const dispatch = useDispatch();
     
     // Filter and clean the grouped array
@@ -59,8 +56,8 @@ const PropertyGrid = ({ groupedByBedroomsArray,selectedBedrooms,setSelectedPrope
             .flatMap(group =>
                 group.properties.map(property => ({
                     Bedrooms: isNaN(Number(group.Bedrooms)) ? "N/A" : Number(group.Bedrooms),
-                    PropertyBathrooms: Number(property.PropertyBathrooms) || 0,
-                    SqFt: property.SqFt ? parseInt(property.SqFt.replace(/\D/g, ""), 10) || 0 : 0,
+                    PropertyBathrooms: Number(property.PropertyBathrooms) || "N/A",
+                    SqFt: property.SqFt,
                     PropertyType: property.PropertyType,
                     PropertyMainEntranceFacing: property.PropertyMainEntranceFacing || "N/A",
                     Amount: property.Amount || "N/A",
@@ -73,47 +70,19 @@ const PropertyGrid = ({ groupedByBedroomsArray,selectedBedrooms,setSelectedPrope
 
     const handlePropertyDetailsview = async (property) => {
         try {
-            if (!property || !property.ProjectID) {
+            if (!property || !property.PropertyID) {
                 toast.error("Invalid property data");
                 return;
             }
             await fetchPropertyViews(dispatch, property.PropertyID, Id, bearerToken);
+            dispatch(setCameFromDetails(true));
             setSelectedPropertyForDetailHandler(property); // Update selected property
         } catch (error) {
-            console.error("Error fetching project views:", error);
             toast.error("Failed to fetch project views.");
         }
     };
 
-    const handleToggleFavorite = async (property) => {
-        console.log(property, "grid");
-        
-        const payload = { PropertyID: property.PropertyID };
-    
-        try {
-            let response;
-            const isFavorited = favorites.some(fav => fav.PropertyID === property.PropertyID);
-    
-            if (!isFavorited) {
-                response = await fetchAddpropertyFavorties(bearerToken, payload);
-            } else {
-                response = await fetchDeletePropertyFavorties(bearerToken, { ...payload, UserID: Id });
-            }
-    
-            const errorMessage = response?.processMessage?.includes("ERROR")
-                ? response.processMessage.replace(/^ERROR:\s*/, "").trim()
-                : "An error occurred, please try again.";
-    
-            if (response?.ProcessCode === 101 || response?.processMessage?.includes("ERROR")) {
-                toast.error(errorMessage);
-            } else {
-                toggleFavorite(property);
-            }
-        } catch (error) {
-            const errorMessage = error?.response?.data?.processMessage || "Something went wrong. Please try again.";
-            toast.error(errorMessage);
-        }
-    };
+    const handleToggleFavorite = usePropertyFavorite(localFavorites, toggleFavorite, bearerToken, Id, setLocalFavorites);
     
     const columnDefs = useMemo(() => [
         { 
@@ -141,7 +110,27 @@ const PropertyGrid = ({ groupedByBedroomsArray,selectedBedrooms,setSelectedPrope
             headerName: "Area", 
             field: "SqFt",
             flex: 0.7, 
-            valueFormatter: params => params.value ? `${params.value.toLocaleString()} SqFt` : "N/A", 
+            valueFormatter: params => {
+                const value = Number(params.value);
+                if (!value) return "N/A";
+            
+                const propertyType = params.data?.PropertyType?.toLowerCase();
+            
+                if (!propertyType) return `${value.toLocaleString()} SqFt`;
+            
+                if (propertyType === "farm lands") {
+                  const acres = (value / 43560).toFixed(2); // 1 Acre = 43,560 SqFt
+                  return `${acres} Acres`;
+                }
+            
+                const sqydTypes = ["lands", "plots"];
+                if (sqydTypes.includes(propertyType)) {
+                  const sqYds = (value / 9).toFixed(2); // 1 SqYd = 9 SqFt
+                  return `${Number(sqYds).toLocaleString()} SqYds`;
+                }
+            
+                return `${value.toLocaleString()} SqFt`;
+              },
             filter: "agSetColumnFilter", 
              headerClass: "custom-header"
         },
@@ -157,7 +146,11 @@ const PropertyGrid = ({ groupedByBedroomsArray,selectedBedrooms,setSelectedPrope
           headerName: "BHK", 
           field: "Bedrooms", 
           flex: 0.6, 
-          filter: "agSetColumnFilter", 
+          filter: "agSetColumnFilter",
+          valueFormatter: (params) => {
+            const value = params.value;
+            return value === 0 || value === "0" || value === null || value === undefined ? "N/A" : value;
+          }, 
           headerClass: "custom-header" 
         },
         {
@@ -190,7 +183,7 @@ const PropertyGrid = ({ groupedByBedroomsArray,selectedBedrooms,setSelectedPrope
             cellRenderer: params => {
                 
                 if (!params.value) return "N/A"; // Prevent undefined error
-                const isFavorited = favorites.some(fav => fav.PropertyID === params.value.PropertyID);
+                const isFavorited = localFavorites.some(fav => fav.PropertyID === params.value.PropertyID);
                 return (
                     <div style={{ display: "flex", gap: "10px" }}>
                         {/* Heart Icon for Favorite */}
@@ -206,10 +199,9 @@ const PropertyGrid = ({ groupedByBedroomsArray,selectedBedrooms,setSelectedPrope
             headerClass: "custom-header"
         }
         
-    ], [favorites]); 
+    ], [localFavorites]); 
     
  
-
     const onGridReady = params => {
         params.api.sizeColumnsToFit();
     };

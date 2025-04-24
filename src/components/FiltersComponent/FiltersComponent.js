@@ -7,11 +7,7 @@ import {
   InputAdornment,
   Typography,
   FormControlLabel,
-  Checkbox,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem
+  Checkbox
 } from '@mui/material';
 import { FaRupeeSign } from '../../assets/icons/Icons';
 import './FiltersComponent.css';

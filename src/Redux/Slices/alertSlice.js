@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchPropertyAlertAPI,fetchgetmapalert } from '../../API/api';
+import { fetchAlertPropertySeen, fetchPropertyAlertAPI,fetchgetmapalert } from '../../API/api';
 
 // Async thunk for fetching property alerts
 export const fetchAddAlert = createAsyncThunk(
@@ -7,6 +7,19 @@ export const fetchAddAlert = createAsyncThunk(
   async ({ bearerToken, payload }, { rejectWithValue }) => {
     try {
       const data = await fetchPropertyAlertAPI(bearerToken, payload);
+      return data;
+    } catch (error) {
+      console.error("Error fetching property alert:", error);
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+
+export const fetchAlertSeen = createAsyncThunk(
+  'alert/fetchAlertSeen',
+  async ({ bearerToken, payload }, { rejectWithValue }) => {
+    try {
+      const data = await fetchAlertPropertySeen(bearerToken, payload);
       return data;
     } catch (error) {
       console.error("Error fetching property alert:", error);
@@ -35,6 +48,7 @@ const alertSlice = createSlice({
   initialState: {
     alerts: [],
     getalerts:[],
+    Seen:[],
     loading: false,
     error: null,
   },
@@ -67,6 +81,18 @@ const alertSlice = createSlice({
         state.getalerts = action.payload;
       })
       .addCase(fetchGetAlert.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(fetchAlertSeen.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchAlertSeen.fulfilled, (state, action) => {
+        state.loading = false;
+        state.Seen = action.payload;
+      })
+      .addCase(fetchAlertSeen.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

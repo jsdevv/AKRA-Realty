@@ -51,13 +51,12 @@ const ForgotPassword = () => {
         {success && (
           <p className="forgot-password-success" aria-live="assertive">
                 Password reset email sent successfully! Please check your email for the reset link.
-            <button onClick={handleReset} className="reset-button">Reset</button>
           </p>
         )}
 
         {error && (
           <p className="forgot-password-error" aria-live="assertive">
-            {error || 'Failed to send reset email. Please try again later.'}
+            {error || 'Unable to send reset email. Please try again later.'}
             <button onClick={handleReset} className="reset-button">Try Again</button>
           </p>
         )}

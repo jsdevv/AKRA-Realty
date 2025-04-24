@@ -2,7 +2,6 @@
 .login-container {
   border-radius: 6px;
   width: 100%;
-  max-width: 300px;
 }
 
 /* Styling for the top <p> tag (text above the form) */
@@ -35,8 +34,8 @@
 }
 
 /* Error Messages */
-.error-msg {
-  color: #ff4d4d;
+.login-container .loginerror-msg {
+  color: #ff4d4d !important;
   font-size: 12px;
   margin-top: 5px;
   display: block;

@@ -7,7 +7,7 @@
     align-items: center;
     width: 100%;
     padding: 8px 20px;
-    background-color: #2A3650;
+    background: #121212;
     color: whitesmoke;
     box-sizing: border-box;
     border-bottom: 1px solid #1F4B43;
@@ -22,9 +22,9 @@
 
 
 .navbar-logo a{
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 500;
-    color: whitesmoke;
+    color: #d4af37;
     letter-spacing: 1px;
     cursor: pointer;
     transition: color 0.3s ease;
@@ -35,7 +35,7 @@
 }
 
 .navbar-logo a:hover {
-    color: #26C6DA;
+    color: #d4af37;
 }
 
 .navbar-center a {
@@ -43,23 +43,27 @@
     text-decoration: none;
     color: whitesmoke;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 500;
     letter-spacing: 1px;
     margin: 0 20px;
     transition: color 0.3s ease; /* Smooth color transition */
   }
+
+  .navbar-center a:hover {
+    color: #d4af37;
+  }
   
-  .navbar-center a::after {
+  /* .navbar-center a::after {
     content: "";
     position: absolute;
     left: 0;
     bottom: -4px;
     width: 0;
     height: 2px; 
-    background-color: #26C6DA; 
+    background-color: whitesmoke; 
     transition: width 0.3s ease; 
   }
-  
+   */
   .navbar-center a:hover::after {
     width: 100%; 
   }
@@ -99,8 +103,8 @@
 }
 
 .nav-link1:hover {
-    color: whitesmoke;
-    background-color: #2A3650;
+    color: #121212;
+    background-color: #d4af37;
 }
 
 .favorite-icon,
@@ -115,7 +119,8 @@
 .favorite-icon:hover,
 .navbartop-icon:hover {
     background-color: whitesmoke;
-    color: #2A3650;
+    color: #d4af37;
+ ;
 }
 
   .dropdown-close-icon {
@@ -127,7 +132,8 @@
   
 .topdropdown-item:hover {
     color: whitesmoke;
-    background-color: #2A3650;
+    background-color: #d4af37;
+ ;
 }
 
 
@@ -192,7 +198,8 @@
 }
 
 .contact-form-close:hover {
-    color: #26C6DA;
+    color: #d4af37;
+ ;
 }
 
 .navcontact-form h3 {
@@ -238,7 +245,8 @@
 }
 
 .navcontact-form button:hover {
-    background-color: #26C6DA;
+    background-color: #d4af37;
+ ;
 }
 
 /* more */
@@ -274,8 +282,14 @@
   }
 
   .navbar-centerlink.active, .nav-link.active, .nav-link1.active {
-    color: #26C6DA; /* Color when active */
-    font-weight: bold; /* Optional to make it bold when active */
+    color: #d4af37;
+    font-weight: bold;
+  }
+
+  .nav-link.active, .nav-link1.active {
+    color: #d4af37;
+    background-color: #121212;
+    font-weight: bold;
   }
   
 
@@ -292,5 +306,5 @@
   }
   
   .more-dropdown .navbar-centerlink:hover {
-    background-color: #f4f4f4;
+    background-color: #ececec;
   }

@@ -6,24 +6,29 @@ import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { useFavorites } from '../../context/FavoritesContext';
 import { fetchAddprojectFavorties, fetchAddpropertyFavorties, fetchDeleteProjectFavorties, fetchDeletePropertyFavorties, fetchPropertiesDetails } from '../../API/api';
-import { AiOutlineClose } from 'react-icons/ai';
+import { AiOutlineArrowLeft, AiOutlineClose } from 'react-icons/ai';
 import ListingModalDetails from '../ListingModalDetails/ListingModalDetails';
 import { useSelector } from 'react-redux';
 import './ListingModal.css';
 import { MdOutlineFavorite } from 'react-icons/md';
 import { toast } from 'react-toastify';
+import { useTypesense } from '../PropertiesListing/context/TypesenseContext';
 
 
-const ListingModal = ({ selectedProperty, onClose, propertyType }) => {
- 
+const ListingModal = ({ selectedProperty, onClose,   propertyType, onPropertyClose, propertyToOpen }) => {
+
   const bearerToken = useSelector((state) => state.auth.bearerToken);
   const { Id } = useSelector((state) => state.auth.userDetails || {});
+     const {cameFromDetails } = useSelector((state) => state.properties);
   const { favorites, toggleFavorite, favoriteColor } = useFavorites();
   const [showSharePopup, setShowSharePopup] = useState(false);
   const [propertyDetails, setPropertyDetails] = useState(null);
   const [showCarousel, setShowCarousel] = useState(false);
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [isFavorited, setIsFavorited] = useState(false);
+  const { openPropertyModal } = useTypesense();
+
+  console.log(selectedProperty,"selectedproperty");
 
   useEffect(() => {
     if (selectedProperty) {
@@ -60,7 +65,7 @@ const ListingModal = ({ selectedProperty, onClose, propertyType }) => {
     ...(propertyDetails.ProjectImageUrls?.split(',').map(url => url.trim()) || []),
     ...(propertyDetails.PropertyImageUrls?.split(',').map(url => url.trim()) || [])
   ];
-  
+
   const propertyImages = imageNames.map((imageName) => `${imageName}`);
 
   const handleToggleFavorite = async () => {
@@ -109,25 +114,35 @@ const ListingModal = ({ selectedProperty, onClose, propertyType }) => {
     setShowSharePopup(false);
   };
 
+
+
   return (
     <div className="modalOverlay" onClick={onClose}>
       <div className="modalContent" onClick={e => e.stopPropagation()}>
         <div className="modalHeader">
+
+
           <div className="modalActions">
 
-            <MdOutlineFavorite
-              className="actionButton"
-              style={{ color: isFavorited ? favoriteColor : "#888" }}
-              onClick={handleToggleFavorite}
-            />
+            <div className="rightAlignedButtons">
+              <button
+                className="actionButton"
+                onClick={handleToggleFavorite}
+                aria-label={isFavorited ? "Unfavorite" : "Favorite"}
+              >
+                <MdOutlineFavorite style={{ color: isFavorited ? favoriteColor : "#888" }} />
+              </button>
 
-            <button className="actionButton" onClick={handleShareClick}>
-              <FaShareAlt />
-            </button>
-            <button className="actionButton" onClick={onClose}>
-              <FaTimes />
-            </button>
+              <button className="actionButton" onClick={handleShareClick} aria-label="Share">
+                <FaShareAlt />
+              </button>
+
+              <button className="actionButton" onClick={onClose} aria-label="Close">
+                <FaTimes />
+              </button>
+            </div>
           </div>
+
         </div>
         <div className="propertyDetails">
           <div className="imagesContainer">
@@ -197,11 +212,12 @@ const ListingModal = ({ selectedProperty, onClose, propertyType }) => {
               </>
             )}
           </div>
-          <ListingModalDetails 
-            propertyType={propertyType}  
-            selectedProperty={propertyDetails} 
-            propertyCardData={selectedProperty} 
-            />
+          <ListingModalDetails
+            propertyToOpen={propertyToOpen}
+            propertyType={propertyType}
+            selectedProperty={propertyDetails}
+            propertyCardData={selectedProperty}
+          />
         </div>
       </div>
 

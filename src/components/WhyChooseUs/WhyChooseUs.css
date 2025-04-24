@@ -1,12 +1,14 @@
 .why-choose-us-section {
     text-align: center;
-    padding: 4rem 1rem;
-    background-color: #f9f9f9;
+    padding: 1rem;
+    background-color: #F0F0F0;
   }
+
+  /* #a38937 */
   
   .why-choose-us-title {
-    font-size: 1.5rem; /* Increased font size for the main title */
-    font-weight: 600;
+    font-size: 2.0rem;
+    font-weight: 400;
     margin-bottom: 2.5rem;
     color: #333;
   }
@@ -30,9 +32,9 @@
   }
   
   .why-choose-us-icon {
-    font-size: 3.5rem; /* Slightly increased icon size */
+    font-size: 3.0rem; /* Slightly increased icon size */
     margin-bottom: 1.5rem;
-    color: #2A3650; /* Added color for consistency */
+    color: #f97316; /* Added color for consistency */
   }
   
   .why-choose-us-feature-title {

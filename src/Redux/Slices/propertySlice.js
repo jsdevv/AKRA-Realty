@@ -164,6 +164,7 @@ const propertySlice = createSlice({
     selectedCenterOfMap: null,
     Projectfavorites: [],
     Propertyfavorites: [],
+    cameFromDetails: false
   },
   reducers: {
     setSelectedBuilder: (state, action) => {
@@ -207,6 +208,9 @@ const propertySlice = createSlice({
     },
     setFilteredProperties(state, action) {
       state.filteredProperties = action.payload;
+    },
+    setCameFromDetails: (state, action) => {
+      state.cameFromDetails = action.payload;
     },
     setListingFilters(state, action) {
       const getProperties = () => {
@@ -441,6 +445,7 @@ export const {
   toggleShowPremiumListings,
   setSelectedAgentProperty,
   clearSelectedAgentProperty,
+  setCameFromDetails 
 } = propertySlice.actions;
 
 export default propertySlice.reducer;

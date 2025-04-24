@@ -8,7 +8,7 @@ const Navbar = () => {
         <nav className="navbar">
             <NavbarTop  />
             <div className="separator"></div>
-            <NavbarBottom />
+            {/* <NavbarBottom /> */}
         </nav>
     );
 };

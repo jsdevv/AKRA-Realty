@@ -8,27 +8,29 @@
 
 /* Carousel Heading */
 .carousel-heading {
-    font-size: 1.5rem;
+    font-size: 2.0rem;
+    font-weight: 400;
     color: #333;
     margin-bottom: 20px;
-    font-weight: 600;
     letter-spacing: 1px;
 }
 
 /* Carousel Container */
 .carousel-box {
-    display: flex;
-    gap: 15px;
-}
+    display: grid;
+    gap: 25px;
+    grid-template-columns: repeat(3, 1fr); /* 3 equal-width columns */
+  }
+  
 
 /* Carousel Items */
 .carousel-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center; /* Center content vertically */
-    width: 250px; /* Fixed width for consistent size */
-    height: 180px; /* Fixed height for consistent size */
+    justify-content: center;
+    width: 250px;
+    height: 180px; 
     padding: 20px;
     background: #ffffff;
     border-radius: 12px;
@@ -45,15 +47,15 @@
 
 /* Carousel Icons */
 .carousel-icon {
-    font-size: 2.5rem;
-    color: #2A3650; 
+    font-size: 1.5rem;
+    color: #a38937; 
     margin-bottom: 10px;
     transition: color 0.3s ease, transform 0.3s ease;
 }
 
 /* Carousel Text */
 .carousel-text {
-    font-size: 1rem;
+    font-size: 0..8rem;
     color: #333;
     font-weight: 500;
 }

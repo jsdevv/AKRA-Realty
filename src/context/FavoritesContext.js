@@ -81,18 +81,43 @@ export const FavoritesProvider = ({ children }) => {
         };
         
         
-              // Toggle favorite property
-              const toggleFavorite = (property) => {
+        // Toggle favorite property
+        const toggleFavorite = (property) => {
+                if (property?.propertyID) {
+                    property.PropertyID = property.propertyID;
+                }
+                if (property?.projectID) {
+                    property.ProjectID = property.projectID;
+                }
+            
                 setFavorites((prevFavorites) => {
-                    const isFavorite = prevFavorites.some((fav) => fav.PropertyID === property.PropertyID);
-                    const updatedFavorites = isFavorite
-                        ? prevFavorites.filter((fav) => fav.PropertyID !== property.PropertyID) // Remove
-                        : [...prevFavorites, property]; // Add
-        
-                    localStorage.setItem("favorites", JSON.stringify(updatedFavorites)); // Sync with storage
+                    const isFavorite = prevFavorites.some((fav) =>
+                        (fav.PropertyID && fav.PropertyID === property.PropertyID) ||
+                        (fav.ProjectID && fav.ProjectID === property.ProjectID)
+                    );
+            
+                    let updatedFavorites;
+                    if (isFavorite) {
+                        updatedFavorites = prevFavorites.filter(
+                            (fav) =>
+                                (property.PropertyID && fav.PropertyID !== property.PropertyID) &&
+                                (property.ProjectID && fav.ProjectID !== property.ProjectID)
+                        );
+                    } else {
+                        updatedFavorites = [
+                            ...prevFavorites,
+                            {
+                                ...(property.PropertyID && { PropertyID: property.PropertyID }),
+                                ...(property.ProjectID && { ProjectID: property.ProjectID }),
+                            },
+                        ];
+                    }
+            
+                    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
                     return updatedFavorites;
                 });
             };
+            
 
     // Remove a favorite
  const removeFavorite = (propertyID) => {
@@ -103,20 +128,6 @@ export const FavoritesProvider = ({ children }) => {
         return updatedFavorites;
     });
 };
-
-// const toggleShortlist = (propertyID) => {
-//     setFavorites((prevFavorites) => {
-//         const updatedFavorites = prevFavorites.map((property) =>
-//             property.PropertyID === propertyID
-//                 ? { ...property, shortlisted: !property.shortlisted }
-//                 : property
-//         );
-//         localStorage.setItem("favorites", JSON.stringify(updatedFavorites)); // Sync with localStorage
-//         return updatedFavorites;
-//     });
-// };
-
-
 
     return (
         <FavoritesContext.Provider value={{ favorites, toggleFavorite, removeFavorite, favoriteColor,updateFavoriteColor  }}>

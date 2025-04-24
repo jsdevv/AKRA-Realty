@@ -1,0 +1,378 @@
+.landpage-container {
+    display: flex;
+    flex-direction: column;
+    height: 85vh;
+    color: white;
+    background-color: #f8f8f8;
+}
+
+.homelanding {
+    position: relative;
+    top: 12%;
+    display: flex;
+    grid-template-columns: repeat(2,1fr);
+    gap: 10px;
+    justify-content: space-between;
+    align-items: flex-start;
+    height: 80vh;
+    text-align: left;
+    color:  #373a3f;;
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    
+}
+
+
+.text-container {
+    position: relative;
+    top: 7%;
+    left: 5%;
+    flex: 1;
+    width: 50%;
+    text-align: left;
+}
+
+
+
+.small-text {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.landbold-text {
+    margin-top: 0;
+    margin-bottom: 5px;
+    line-height: 1.2;
+}
+
+.landbold-line {
+    font-size:3.0rem;
+    font-weight: 800;
+    color: #1E1E2F;
+    margin-bottom: 10px !important;
+}
+
+.bold-line1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: #1E1E2F;
+}
+
+
+@keyframes text-clip {
+    100% {
+        background-position: -100% 0;
+    }
+    0% {
+        background-position: 100% 0;
+    }
+}
+
+.loginform-container {
+    position: relative;
+    margin-right: 8%;
+    display: flex;
+    justify-content: center;
+}
+.landpage-search {
+    display: flex;
+    width: 100%; 
+    max-width: 380px; 
+}
+
+.search-field {
+    padding: 15px;
+    border: none;
+    font-size: 0.8rem;
+    outline: none;
+    flex: 1; 
+    border-radius: 8px 0 0 8px; 
+    background-color: #F0F0F0;
+}
+
+.search-icon11 {
+    padding: 13px;
+    background-color: #F0F0F0;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    right: 2%;
+    border-radius: 0 8px 8px 0; 
+    color: #1E1E2F;
+}
+
+.search-icon11:hover {
+    background-color: #1E1E2F;
+    color: #ffffff;
+}
+
+
+.landview-listings-button {
+    padding: 14px 12px ;
+    color: white;
+    font-weight: 600;
+    background-color: #121212;
+    border: 1px solid white;
+    font-size: 0.7rem;
+    cursor: pointer;
+    letter-spacing: 1px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.landview-listings-button:hover {
+    background-color: white;
+    color: #2a3650;
+    border: 1px solid #2a3650;
+
+}
+
+.landinvestor-button {
+    padding: 14px 12px ;
+    color: white;
+    font-weight: 600;
+    background-color: #a38937;
+    border: 1px solid #a38937;
+    font-size: 0.7rem;
+    cursor: pointer;
+    letter-spacing: 1px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.landinvestor-button:hover {
+    background-color: white;
+   color: #a38937;
+    border: 1px solid #121212;
+
+}
+
+.hero-stats {
+    display: flex;
+    gap: 80px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    justify-items: center;
+    padding:10px;
+  
+}
+
+.landstat-box {
+
+    color: #1E1E2F;
+    text-align: center;
+    min-width: 120px;
+}
+
+.landstat-box h2 {
+    font-size: 24px;
+    margin: 0;
+    font-weight: 650;
+    color: #a38937;
+}
+
+.landstat-box p {
+    margin: 5px 0 0 0;
+    font-size: 20px;
+    font-weight: 650;
+    color: #373a3f;
+}
+
+
+.search-icon11 svg {
+    font-size: 1.0rem;
+}
+@media (max-width: 768px) {
+    .mainpage-search {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .search-field, .search-icon11 {
+        width: 100%; 
+        margin-bottom: 10px;
+    }
+}
+
+.carousel-heropage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    background: #F0F0F0;
+}
+
+
+
+.footer {
+    background-color: #1A1A2E;
+    color: #ffffff;
+    text-align: center;
+    padding: 15px 0;
+}
+
+@media (max-width: 768px) {
+    .landing-content {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .text-container {
+        max-width: 90%;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .bold-text {
+        font-size: 2.5rem;
+    }
+
+
+    .landview-listings-button {
+        padding: 10px 18px;
+        font-size: 0.9rem;
+    }
+
+    .loginform-container {
+        position: relative;
+        margin-right: 9%;
+        display: flex;
+        justify-content: center;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .landing-content {
+        flex-direction: row;
+        gap: 40px;
+    }
+
+    .text-container {
+        max-width: 70%;
+    }
+
+ 
+
+}
+
+@media (min-width: 1025px) {
+    .landing-content {
+        flex-direction: row;
+    }
+
+    .text-container {
+        max-width: 50%;
+    }
+
+}
+
+.formnav{
+    display: flex;
+
+}
+
+.aboutland{
+    background-color: whitesmoke;
+}
+
+.image-container {
+    flex: 1;
+    width: 50%;
+    height: 60vh; 
+}
+
+
+/* Custom styling for the slider */
+.custom-slick-slider .slick-slide img.hero-image {
+    width: 90%;
+    height: 60vh;
+    object-fit: fill;
+    border-radius: 16px;
+    z-index: 0;
+    text-align: center;
+  }
+
+  .slide-text {
+    position: absolute;
+    bottom: 6px;
+    text-align: center;
+    color: white;
+    z-index: 2; /* Ensure text is above image */
+    background: rgba(0, 0, 0, 0.4); 
+    /* border-radius: 12px; */
+    border-radius: 0px 12px 0px 12px;
+    padding: 10px 20px;
+  }
+  
+  .slide-text h2, .slide-text p {
+    margin: 0;
+    padding: 5px 0;
+  }
+  
+  .custom-slick-slider .slick-prev, .custom-slick-slider .slick-next {
+    /* Customize arrows if needed */
+    background-color: #a38937;
+    border-radius: 50%;
+  }
+  
+  .custom-slick-slider .slick-dots {
+    bottom: 20px;
+  }
+  
+  .custom-slick-slider .slick-dots li button {
+    background-color: #a38937;
+  }
+  
+  .custom-slick-slider .slick-dots li.slick-active button {
+    background-color: #1E1E2F;
+  }
+
+  .dreamhome{
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  .dreamhome p{
+     font-size: 18px;
+     font-weight: 600;
+     letter-spacing: 1px;
+  }
+  .Unique-text{
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1.0px;
+    margin-top: 20px;
+  }
+
+  .mainpage-search {
+    display: flex;
+    width: 100%; /* Allow the container to take full width */
+    max-width: 450px; /* Optional: Set a max-width if you want a limit */
+}
+
+/* Increase width of the search input and the button together */
+.search-field {
+    padding: 15px;
+    border: none;
+    font-size: 1rem;
+    outline: none;
+    flex: 1; /* Make the search field take up available space */
+    border-radius: 8px 0 0 8px; /* Rounded corners on the left */
+} 

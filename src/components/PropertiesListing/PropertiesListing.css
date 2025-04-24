@@ -1,0 +1,206 @@
+.properties-layout{
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    height: calc(100vh - 103px);
+}
+.map-container{
+    width: 100%;
+    height: 100%;
+    z-index: 1 !important;
+}
+.w-full{
+    width: 100%;
+}
+.h-full{
+    height: 100%;
+}
+.flex{
+    display: flex;
+}
+.flex-col{
+    flex-direction: column;
+}
+.flex-row{
+    flex-direction: row;
+}
+.flex-wrap{
+    flex-wrap: wrap;
+}
+.flex-1{
+    flex: 1;
+}
+.jsutify-center{
+    justify-content: center;
+}
+.items-center{
+    align-items: center;
+}
+.absolute{
+    position: absolute;
+}
+.relative{
+    position: relative;
+}
+
+.property-marker {
+    background-color: rgb(163, 0, 11);
+}
+.property-marker.show-min-price {
+    border-radius: 12px !important;
+    border: none !important;
+    color: white;
+    font-size: 10px;
+    text-align: center;
+    position: absolute;
+    white-space: nowrap;
+    cursor: pointer;
+    left: -25px;
+    width: auto !important;
+    height: auto !important;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+.property-price-label{
+    font-size: 10px;
+    padding: 2px 5px;
+}
+.aa-InputWrapperPrefix, .aa-DetachedSearchButton, .aa-InputWrapperSuffix{
+    display: none !important;
+}
+.aa-Panel{
+    position: absolute;
+    background: white;
+}
+.aa-Form{
+    border: none !important;
+}
+.aa-Input{
+    height: 34px !important;
+}
+.units-available{
+     background: #ffffff; 
+   color: rgb(163, 0, 11);
+    border-radius: 12px;
+    padding: 2px 5px;
+    /* color: #a3000b; */
+     /* color: #ffff; */
+    border: 1px solid #ab3a41;
+    position: absolute;
+    right: 0;
+    top: -15px;
+    display: flex;
+    gap: 2px;
+    align-items: center;
+    font-size: 10px;
+    font-weight: 600;
+}
+[data-radix-popper-content-wrapper]
+{
+    z-index: 1 !important;
+}
+.tooltip-content {
+    background: white;
+    padding: 4px 8px;
+    color: black;
+    border-radius: 4px;
+    box-shadow: 0px 0px 2px;
+    font-weight: bold;
+}
+
+.show-units-available {
+    /* left: -47px !important; */
+}
+.popover-card-content{
+    width: 235px !important;
+    /* height: 223px; */
+}
+.popover-card-content .propertyCard{
+    width: 100% !important;
+}
+
+.propertyCard.mappopup-content{
+    background: white !important;
+    width: 235px !important;
+}
+
+.autocomplete-container {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.autocomplete-input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    outline: none;
+    box-shadow: none;
+    transition: border-color 0.2s ease-in-out;
+}
+
+.autocomplete-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 4px;
+    z-index: 1000;
+    max-height: 200px;
+    overflow-y: auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    list-style: none; /* Remove bullets */
+    padding: 0;
+}
+
+.autocomplete-suggestion-item {
+    padding: 8px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.autocomplete-suggestion-item:hover {
+    background-color: #f5f5f5;
+}
+
+.autocomplete-suggestion-item:active {
+    background-color: #eaeaea;
+}
+
+.autocomplete-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.autocomplete-clear-button {
+    position: absolute;
+    right: 10px;
+    button{
+        background: none;
+    border: none;
+    font-size: 16px;
+    color: #999;
+    cursor: pointer;
+    outline: none;
+    padding: 0;
+    &btn-search{
+        font-size: 13px;
+        margin-left: 10px;
+    }
+    }
+}
+
+.autocomplete-clear-button:hover {
+    color: #666;
+}
+.mappopup-close-button{
+    z-index: 1000000;
+}

@@ -46,14 +46,7 @@ const NavbarTop = ({ handleLogout, handleLogin, propertyStatusOptions = [], onSe
     setContactFormVisible(false);
   };
 
-  // const handleLinkClick = (link) => {
-  //   setActiveLink(link); 
-
-  // };
-
-
   const handlemoreLinkClick = (link) => {
-    // setActiveLink(link);
     setMoreDropdownOpen(!moreDropdownOpen);
   };
 
@@ -67,51 +60,29 @@ const NavbarTop = ({ handleLogout, handleLogin, propertyStatusOptions = [], onSe
     <div className="navbar-top">
       <div className="navbar-left">
         <div className="navbar-logo">
-          <Link to="/"
-            className="navbar-centerlink"
-
-          >
-            TREALX
-          </Link>
+          <Link to="/" className="navbar-centerlink"> TREALX </Link>
         </div>
       </div>
       <div className="navbar-center">
-        <Link to="/"
-          className={`navbar-centerlink  ${location.pathname === '/' ? 'active' : ''}`}>
+        <Link to="/" className={`navbar-centerlink  ${location.pathname === '/' ? 'active' : ''}`}>
           <FaHome size={22} className="home-icon" />
         </Link>
-        <Link to="/properties"
-          className={`navbar-centerlink ${location.pathname === "/properties" ? 'active' : ''}`}
-      >
-          Properties
-        </Link>
-        <Link to="/Dashboard"
-          className={`navbar-centerlink ${location.pathname ===  '/Dashboard' ? 'active' : ''}`}
-      >
+        <Link to="/properties-new" className={`navbar-centerlink ${location.pathname ===  '/properties-new' ? 'active' : ''}`} >
+            Properties
+          </Link>
+          <Link to="/videos" className={`navbar-centerlink ${location.pathname ===  '/videos' ? 'active' : ''}`} >Videos</Link>
+        <Link to="/Dashboard" className={`navbar-centerlink ${location.pathname ===  '/Dashboard' ? 'active' : ''}`}>
           Dashboard
         </Link>
-        <Link to="/videos"
-          className={`navbar-centerlink ${location.pathname ===  '/videos' ? 'active' : ''}`}
-      
-        >Videos</Link>
-        <Link to="/services"
-          className={`navbar-centerlink ${location.pathname === '/services' ? 'active' : ''}`}
-      >Services</Link>
-
-<Link to="/about"
-          className={`navbar-centerlink ${location.pathname === '/about' ? 'active' : ''}`}
-      >About Us</Link>
-
-              <Link
-          to="/addlistings"
-          className={`navbar-centerlink ${location.pathname ===  '/addlistings' ? 'active' : ''}`}
-      >
+     
+        <Link to="/services" className={`navbar-centerlink ${location.pathname === '/services' ? 'active' : ''}`}>Services</Link>
+        <Link to="/addlistings" className={`navbar-centerlink ${location.pathname ===  '/addlistings' ? 'active' : ''}`}>
           Add Listings
         </Link>
         {/* More Dropdown */}
         <div className="navbar-more" ref={dropdownRef}>
           <span className="more-link" onClick={toggleMoreDropdown}>
-            More&nbsp;{moreDropdownOpen ? <FaChevronUp size={15} /> : <FaChevronDown size={15}  />}
+            More &nbsp;{moreDropdownOpen ? <FaChevronUp size={15} /> : <FaChevronDown size={15}  />}
           </span>
           {moreDropdownOpen && (
             <div className="more-dropdown">
@@ -153,7 +124,7 @@ const NavbarTop = ({ handleLogout, handleLogin, propertyStatusOptions = [], onSe
   
       </div>
       <div className="navbar-right">
-        <Link to="/investors"
+        <Link to='/investors'
           className={`nav-link1 ${location.pathname === '/investors' ? 'active' : ''}`}
       
         >Investors Club</Link>

@@ -187,10 +187,10 @@ body.sold-marker .property-marker.sold-marker {
 
 
 body.show-circle-marker .property-marker {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
-  border: 2px solid white;
+  border: 1px solid white;
   cursor: pointer;
 }
 

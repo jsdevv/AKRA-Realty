@@ -36,7 +36,6 @@ const LoginForm = ({handleLogin,toggleForgotPassword}) => {
 
         const data = await response.json();
         dispatch(setBearerToken(data.BearerToken));
-        console.log(data,"data");
         dispatch(setUserDetails({
           UserEmail: data.Email,
           Id:data.Id,
@@ -52,10 +51,17 @@ const LoginForm = ({handleLogin,toggleForgotPassword}) => {
           setSuccessMessage(''); // Clear the success message after a delay
         }, 2000); // Clears after 3 seconds (adjust as needed)
       } catch (error) {
-        const message = error.message.includes('401')
-          ? 'Invalid email or password'
-          : 'Invalid email or password';
-        setStatus(message);  // Handle general form error globally
+        if (error.message) {
+          try {
+            const errorData = JSON.parse(error.message); // Parse the response into a JSON object
+            if (errorData.Errors && errorData.Errors.length > 0) {
+              const errorMessage = errorData.Errors[0].Message; // Extract the error message
+              setStatus(errorMessage); 
+            }
+          } catch (parseError) {
+            setStatus('An unknown error occurred. Please try again.');
+          }
+        }
       }
     },
   });
@@ -76,7 +82,7 @@ const LoginForm = ({handleLogin,toggleForgotPassword}) => {
             aria-describedby="emailError"
           />
           {formik.touched.email && formik.errors.email && (
-            <span id="emailError" className="error-msg">
+            <span id="emailError" className="loginerror-msg">
               {formik.errors.email}
             </span>
           )}
@@ -94,7 +100,7 @@ const LoginForm = ({handleLogin,toggleForgotPassword}) => {
             aria-describedby="passwordError"
           />
           {formik.touched.password && formik.errors.password && (
-            <span id="passwordError" className="error-msg">
+            <span id="passwordError" className="loginerror-msg">
               {formik.errors.password}
             </span>
           )}
@@ -108,7 +114,7 @@ const LoginForm = ({handleLogin,toggleForgotPassword}) => {
       </form>
 
       {formik.status && (
-          <div aria-live="polite" className="error-msg">
+          <div aria-live="polite" className="loginerror-msg">
             {formik.status}
           </div>
         )}

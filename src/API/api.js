@@ -180,7 +180,36 @@ export const fetchPropertyAlertAPI  = async (bearerToken, payload) => {
         'Authorization': `Bearer ${bearerToken}`,
       },
       body: JSON.stringify({
-        RequestParamType: 'SetAlert',
+        RequestParamType: 'SetAlertTest',
+        json: payload,
+      }),
+    });
+
+    if (!response.ok) {
+      // If the response is not successful, throw an error with the response status
+      const errorMessage = await response.text();
+      throw new Error(errorMessage || 'Failed to add alert. Please try again.');
+    }
+
+    const data = await response.json();
+    return data; // Return the response data
+
+  } catch (error) {
+    console.error('Error in set alert:', error);
+    throw new Error(error.message || 'Failed to add alert.');
+  }
+};
+
+export const fetchAlertPropertySeen  = async (bearerToken, payload) => {
+  try {
+    const response = await fetch(AddData_API, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${bearerToken}`,
+      },
+      body: JSON.stringify({
+        RequestParamType: 'MarkSeenAlertTest',
         json: payload,
       }),
     });
@@ -815,7 +844,7 @@ export const fetchgetmapalert = async (bearerToken) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          RequestParamType: `GetSetAlert`,
+          RequestParamType: `GetSetAlertTest`,
         }),
       }
     );

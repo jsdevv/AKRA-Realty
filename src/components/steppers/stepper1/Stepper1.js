@@ -98,24 +98,25 @@ const Stepper1 = () => {
   setFieldValue("PropertyName", "");
   };
 
-
   const handleProjectChange = (event, newValue) => {
-    setSelectedProject(newValue || "");
-    const selectedProject = projectData.find(project => project.ProjectName === newValue);
-    const projectID = newValue ? selectedProject?.ProjectID : null;
+    setSelectedProject(newValue || null);
+  
+    const projectID = newValue ? newValue.ProjectID : null;
+    const projectName = newValue?.ProjectName || "";
+  
     setFieldValue("ProjectID", projectID);
-    setFieldValue("ProjectName", selectedProject.ProjectName);
-    
-    if(selectedProject.Amenities){
-      setFieldValue("PropertyAmenities", selectedProject.Amenities) 
+    setFieldValue("ProjectName", projectName);
+  
+    if (newValue?.Amenities) {
+      setFieldValue("PropertyAmenities", newValue.Amenities);
     }
-
-    // Always update PropertyName to ProjectName and remove spaces
-    if (newValue) {
-      const propertyName = newValue.replace(/\s+/g, ""); // Clean up the property name if necessary
+  
+    if (projectName) {
+      const propertyName = projectName.replace(/\s+/g, "");
       setFieldValue("PropertyName", propertyName);
     }
   };
+  
 
   const clearPropertyFields = (fileds) => {
     fileds.forEach((field) => {
@@ -195,9 +196,10 @@ const Stepper1 = () => {
               <Autocomplete
                 className="autocomplete-root"
                 name="ProjectName"
-                value={values.ProjectName || selectedProject}
+                value={selectedProject}
                 onChange={handleProjectChange}
-                options={filteredProjects.map((project) => project.ProjectName)} // Use filteredProjects
+                options={filteredProjects || []} 
+                getOptionLabel={(option) => option?.ProjectName || ""}
                 renderInput={(params) => <TextField {...params} placeholder="Select Project" />}
                 required
                 key={(project) => project.ProjectID}
@@ -274,7 +276,7 @@ const Stepper1 = () => {
                   setFieldValue("PropertyTypeID", newValue ? newValue.value : propertyTypes[0].value);
                 }}
                 options={propertyTypes}
-                getOptionLabel={(option) => option.label}
+                getOptionLabel={(option) => option.label || ''}
                 error={errors.PropertyType}
                 isOptionEqualToValue={(option, value) => option.label === value?.label} // Compare label instead of value
                 renderInput={(params) => <TextField {...params} placeholder="Select Property Type" />}
@@ -382,7 +384,7 @@ const Stepper1 = () => {
                     transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
                     '& .MuiOutlinedInput-root': {
                       '&:hover fieldset': {
-                        borderColor: '#ccc', // Hover color
+                        borderColor: '#ccc', 
                       },
                       '&.Mui-focused fieldset': {
                         borderColor: '#ccc', // Focused color

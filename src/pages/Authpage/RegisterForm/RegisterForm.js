@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
+import { FiEye, FiEyeOff } from "react-icons/fi";
 import * as Yup from 'yup';
-import { registerUser, resetState } from '../../../Redux/Slices/registrationSlice';
+import { registeragent, registerUser, resetState } from '../../../Redux/Slices/registrationSlice';
 import './RegisterForm.css';
 
 const countryCodes = [
@@ -16,8 +17,8 @@ const RegisterForm = () => {
   const dispatch = useDispatch();
   const { loading, error, success } = useSelector((state) => state.registration);
 
-  console.log(success,"successmsg");
-
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [countryCode, setCountryCode] = useState('+91');
 
   useEffect(() => {
@@ -35,9 +36,21 @@ const RegisterForm = () => {
       lastName: '',
       email: '',
       phoneNumber: '',
+      password: '',
+      confirmPassword: '',
       role: '',
     },
     validationSchema: Yup.object({
+      password: Yup.string()
+      .min(10, 'Password must be at least 10 characters')
+      .matches(/[A-Z]/, 'Must contain at least one uppercase letter')
+      .matches(/[a-z]/, 'Must contain at least one lowercase letter')
+      .matches(/\d/, 'Must contain at least one number')
+      .matches(/[!@#$%^&*]/, 'Must contain at least one special character')
+      .required('Password is required'),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref('password'), null], 'Passwords do not match')
+            .required('Confirm Password is required'),
       firstName: Yup.string()
       .required('First Name is required')
       .test('no-only-spaces', 'First Name cannot be empty or spaces only', (value) => value && value.trim().length > 0)
@@ -65,9 +78,16 @@ const RegisterForm = () => {
         lastName: values.lastName,
         phoneNumber: values.phoneNumber,
         countryCode: countryCode,
+        Password: values.password, 
+        ConfirmPassword: values.confirmPassword, 
         role: values.role,
       };
-      dispatch(registerUser(payload));
+      if (values.role === 'User') {
+        dispatch(registerUser(payload)); 
+      } else if (values.role === 'Agent') {
+        dispatch(registeragent(payload)); 
+      }
+
     },
   });
 
@@ -92,6 +112,41 @@ const RegisterForm = () => {
   return (
     <div className="register-form-container">
       <form onSubmit={formik.handleSubmit} className="register-form">
+
+            {/* User Type */}
+            <div className="register-form-group user-type-group">
+          <div className="user-type-heading-container">
+            <p className="user-type-heading">User Type</p>
+            <div className="user-type-options">
+              <label>
+                <input
+                  type="radio"
+                  name="role"
+                  value="User"
+                  onChange={formik.handleChange}
+                  checked={formik.values.role === 'User'}
+                  disabled={loading}
+                />
+                User
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="role"
+                  value="Agent"
+                  onChange={formik.handleChange}
+                  checked={formik.values.role === 'Agent'}
+                  disabled={loading}
+                />
+                Agent
+              </label>
+            </div>
+          </div>
+          {formik.touched.role && formik.errors.role && (
+            <div className="error-message">{formik.errors.role}</div>
+          )}
+        </div>
+
         {/* First Name */}
         <div className="register-form-row">
           <div className="register-form-group">
@@ -169,7 +224,7 @@ const RegisterForm = () => {
               value={formik.values.phoneNumber}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              className="register-form-input"
+              className="register-form-input2"
               disabled={loading}
             />
           </div>
@@ -178,10 +233,60 @@ const RegisterForm = () => {
           )}
         </div>
 
+        <div className="register-form-group">
+      <div className="passwordinput-wrapper">
+        <input
+          type={showPassword ? "text" : "password"}
+          name="password"
+          placeholder="Password"
+          value={formik.values.password}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          className="register-form-password"
+          disabled={loading}
+        />
+        <span
+          className="eye-icon"
+          onClick={() => setShowPassword((prev) => !prev)}
+        >
+          {showPassword ? <FiEyeOff /> : <FiEye />}
+        </span>
+      </div>
+      {formik.touched.password && formik.errors.password && (
+        <div className="error-message">{formik.errors.password}</div>
+      )}
+    </div>
+
+    {/* Confirm Password */}
+    <div className="register-form-group">
+      <div className="passwordinput-wrapper">
+        <input
+          type={showConfirmPassword ? "text" : "password"}
+          name="confirmPassword"
+          placeholder="Confirm Password"
+          value={formik.values.confirmPassword}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          className="register-form-password"
+          disabled={loading}
+        />
+        <span
+          className="eye-icon"
+          onClick={() => setShowConfirmPassword((prev) => !prev)}
+        >
+          {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
+        </span>
+      </div>
+      {formik.touched.confirmPassword && formik.errors.confirmPassword && (
+        <div className="error-message">{formik.errors.confirmPassword}</div>
+      )}
+    </div>
+
+
         {/* Document Valid ID */}
         <div className="register-form-group">
   <label htmlFor="documentValidId" className="custom-file-upload">
-    <span>Upload Document ID</span>
+    <span>Upload ID</span>
   </label>
   <input
     type="file"
@@ -195,42 +300,6 @@ const RegisterForm = () => {
     {/* Error message */}
   </div>
 </div>
-
-
-
-        {/* User Type */}
-        <div className="register-form-group user-type-group">
-          <div className="user-type-heading-container">
-            <p className="user-type-heading">User Type</p>
-            <div className="user-type-options">
-              <label>
-                <input
-                  type="radio"
-                  name="role"
-                  value="User"
-                  onChange={formik.handleChange}
-                  checked={formik.values.role === 'User'}
-                  disabled={loading}
-                />
-                User
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="role"
-                  value="Agent"
-                  onChange={formik.handleChange}
-                  checked={formik.values.role === 'Agent'}
-                  disabled={loading}
-                />
-                Agent
-              </label>
-            </div>
-          </div>
-          {formik.touched.role && formik.errors.role && (
-            <div className="error-message">{formik.errors.role}</div>
-          )}
-        </div>
 
         {/* Submit and Cancel Buttons */}
         <div className="register-submit">
