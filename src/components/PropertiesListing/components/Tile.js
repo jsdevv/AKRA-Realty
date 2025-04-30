@@ -14,6 +14,7 @@ export default function Tile({ property, small }) {
     ...(projectImageUrls || []),
     ...(propertyImageUrls || []),
   ];
+  
   imagesToShow = imagesToShow.map((url) => blobBaseUrl + url);
   if (imagesToShow.length === 0) {
     imagesToShow = [defaultimg1, defaultimg2];
@@ -36,11 +37,7 @@ export default function Tile({ property, small }) {
     }  
   };
 
-  const line3 = property.propertyCardLine3
-    .split("|")
-    .map((x) => x.trim())
-    .filter((x) => x)
-    .join(" | ");
+  const line3 = property.propertyAddressLine;
 
   return (
     <div
@@ -98,7 +95,7 @@ export default function Tile({ property, small }) {
           {line3 && (
             <>
               <br />
-              {property.propertyType} | {line3}
+              {line3}
             </>
           )}
         </p>

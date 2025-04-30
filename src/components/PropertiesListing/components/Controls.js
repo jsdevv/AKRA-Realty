@@ -5,6 +5,7 @@ import {
   useCustomList,
   useMenu,
   useRefinementList,
+  useToggleFilter,
 } from "../context/TypesenseContext";
 
 export function DropdownFilter({ attribute, options }) {
@@ -174,6 +175,34 @@ export function CustomMultiselectFilter({
           ))}
         </div>
       )}
+    </div>
+  );
+}
+
+export function ToggleFilter({ label, attribute, icon, defaultChecked = false, onToggle }) {
+  const { value, toggle } = useToggleFilter({
+    attribute: attribute,
+    defaultChecked: defaultChecked,
+  });
+  
+  const handleChange = () => {
+    toggle();
+    if (onToggle) {
+      onToggle(!value); // Pass the new value (opposite of current value)
+    }
+  };
+  
+  return (
+    <div className="premium-builders-switch">
+      <span>{label}</span>
+      <label className="premium-toggle-switch">
+        <input
+          type="checkbox"
+          checked={value}
+          onChange={handleChange}
+        />
+        <span className="premium-slider" />
+      </label>
     </div>
   );
 }

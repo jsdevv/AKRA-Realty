@@ -1,0 +1,237 @@
+.add-order-images {
+  padding: 20px;
+}
+
+.add-order-images-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0px 0px 10px 0px;
+}
+
+.orderprojecttable-container {
+  width: 100%;
+  overflow-x: auto;
+  max-height: 80vh; /* Set max height to allow scrolling inside */
+  position: relative;
+}
+
+.orderprojectsearch-bar {
+  margin:  15px 15px 15px 0px;
+  padding: 6px 10px;
+  width: 250px; /* smaller width */
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.excel-style-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+}
+
+.excel-style-table th{
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+  font-size: 10px;
+  background: #fff;
+}
+
+
+.excel-style-table td {
+  border: 1px solid #ccc;
+  padding: 0px 10px;
+  text-align: left;
+  font-size: 10px;
+  background: #fff;
+}
+
+.excel-style-table th {
+  position: sticky;
+  top: 0;
+  background-color: #f8f8f8;
+  z-index: 2;
+  font-weight: bold;
+  border-bottom: 2px solid #999;
+}
+
+.excel-style-table tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+/* The rest (already good) */
+.add-order-images-main-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.add-order-images-left {
+  width: 100%;
+}
+
+.add-order-images-heading {
+  position: sticky;
+  top: 0px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.add-order-images-heading  h3{
+ font-size: 16px;
+}
+
+.add-order-images-back-button {
+  padding: 8px 16px;
+  background-color: #181724;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.add-order-images-back-button:hover {
+  color: #181724;
+  background-color: white;
+ border: 1px solid #181724;
+}
+
+.add-order-images-card {
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.add-order-images-card-info {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 12px;
+  padding: 2px 8px;
+  box-sizing: border-box; 
+}
+
+
+.add-order-images-submit-button-wrapper {
+  margin-top: 20px;
+  text-align: right;
+}
+
+.add-order-images-submit-button {
+  padding: 10px 20px;
+  background-color: #181724;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.add-order-images-submit-button:hover {
+  color: #181724;
+  background-color: white;
+  border: 1px solid #181724;
+}
+
+.addorder-editbtn{
+  font-size: 12px;
+  color: #181724;
+
+  cursor: pointer;
+}
+
+.addorder-editbtn:hover {
+  color: #181724;
+  text-decoration: underline;
+
+}
+
+.add-order-images-image-list {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+  border: 1px solid #ddd;
+  padding: 10px;
+  max-height: 64vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+
+.add-order-images-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.add-order-images-preview {
+  width: 100%;
+  max-width: 240px;
+  height: 150px;
+  object-fit: cover;
+ border-top-right-radius: 5px;
+ border-top-left-radius: 5px;
+ border-bottom-left-radius: 0px;
+ border-bottom-right-radius: 0px;
+}
+
+
+.add-order-images-card-order-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.add-order-images-card-order-input-wrapper span {
+  margin-right: 5px;
+}
+
+.add-order-images-order-input {
+  width: 15%;
+  padding: 5px 5px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 12px;
+  text-align: center;
+}
+
+.add-order-images-submit-button-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .add-order-images-image-list {
+    grid-template-columns: repeat(3, 1fr); /* 3 cards per row */
+  }
+
+  .add-order-images-card {
+    width: 100%; /* Full width */
+  }
+
+  .add-order-images-left {
+    padding-right: 0; /* Remove right padding */
+  }
+}
+
+@media (max-width: 480px) {
+  .add-order-images-image-list {
+    grid-template-columns: 1fr; /* 1 card per row */
+  }
+
+  .add-order-images-card {
+    width: 100%;
+  }
+
+  .add-order-images-submit-button-wrapper {
+    justify-content: center;
+  }
+}

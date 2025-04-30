@@ -86,6 +86,7 @@
     display: flex;
     align-items: center;
     gap: 10px; /* Consistent gap for better spacing */
+    flex: 1;
 }
 
 .dropdown-toggle {

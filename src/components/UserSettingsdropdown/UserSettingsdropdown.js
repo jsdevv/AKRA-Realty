@@ -4,11 +4,31 @@ import './UserSettingsdropdown.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { checkAuthAndPopup } from "../../utils/authUtils";
-import {setShowAuthPopup} from "../../Redux/Slices/authPopupSlice"
+import { setShowAuthPopup } from "../../Redux/Slices/authPopupSlice"
+import { fetchListingsAuthority } from '../../API/api';
 
 const UserSettingsdropdown = ({ handleLogout, onClose }) => {
 
   const bearerToken = useSelector((state) => state.auth.bearerToken);
+  const [authority, setAuthority] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await fetchListingsAuthority(bearerToken);
+        setAuthority(data);
+      } catch (err) {
+        setError(err.message || 'Something went wrong');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [bearerToken]);
+
   const { firstName } = useSelector((state) => state.auth.userDetails || {});
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -41,16 +61,22 @@ const UserSettingsdropdown = ({ handleLogout, onClose }) => {
       setShowAuthPopup,
       dispatch,
     });
-  
+
     if (!isAllowed) return; // block dropdown if not logged in
-  
+
     setDropdownOpen((prev) => !prev);
   };
-  
+
 
   const handlenavproject = () => {
     navigate('/addproject');
-    setDropdownOpen(false); // Close dropdown after navigation
+    setDropdownOpen(false);
+  };
+
+
+  const handlenavOrderImages = () => {
+    navigate('/addorderimages');
+    setDropdownOpen(false);
   };
 
   const handlenavcompany = () => {
@@ -70,8 +96,13 @@ const UserSettingsdropdown = ({ handleLogout, onClose }) => {
         <div className="navbartopdropdown-menu">
           <div className='navbaritem-container'>
             <p>{firstName}</p>
-            <p onClick={handlenavcompany}>Add Company</p>
-            <p onClick={handlenavproject}>Add Project</p>
+            {authority?.[0]?.Authority === "Yes" && (
+              <>
+                <p onClick={handlenavcompany}>Add Company</p>
+                <p onClick={handlenavproject}>Add Project</p>
+                <p onClick={handlenavOrderImages}>Add Order Images</p>
+              </>
+            )}
             <p onClick={handleLogout}>Sign Out</p>
           </div>
         </div>

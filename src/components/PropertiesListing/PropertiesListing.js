@@ -2,6 +2,7 @@ import {
   CustomMultiselectFilter,
   DropdownFilter,
   MultiselectFilter,
+  ToggleFilter
 } from "./components/Controls";
 import { Map, TileList } from "./components";
 import "./PropertiesListing.css";
@@ -29,6 +30,13 @@ const PropertiesListing = (bearerToken) => {
   const [propertyStatuses, setPropertyStatuses] = useState();
   const [propertyTypes, setPropertyTypes] = useState();
   const [customTypes, setCustomTypes] = useState();
+  const [showPremiumBuilders, setShowPremiumBuilders] = useState(false);
+  const { updateFilters } = useTypesense();
+
+  // Toggle handler to update local state for conditional rendering of premium builders filter
+  const handlePremiumToggle = (isChecked) => {
+    setShowPremiumBuilders(isChecked);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,7 +44,9 @@ const PropertiesListing = (bearerToken) => {
         const propertyStatuses = await fetchPropertyStatusOptions(bearerToken);
         const propertyTypes = await fetchPropertyHomeType(bearerToken);
         const customTypes = await fetchCustomPropertyTypes(bearerToken);
-        setPropertyStatuses(propertyStatuses.map((status) => status.PropertyStatus));
+        setPropertyStatuses(
+          propertyStatuses.map((status) => status.PropertyStatus)
+        );
         setPropertyTypes(propertyTypes.map((type) => type.PropertyType));
         setCustomTypes(customTypes.map((type) => type.CustomPropertyTypes));
       } catch (error) {
@@ -56,13 +66,20 @@ const PropertiesListing = (bearerToken) => {
         </div>
 
         <div className="dropdowns-container">
-          {propertyStatuses && <DropdownFilter attribute={"propertyStatus"} options={propertyStatuses} /> }
-          {propertyTypes && <MultiselectFilter
-            attribute={"propertyType"}
-            label="Select Type"
-            options={propertyTypes}
-            icon={<FaHome className="fa-home" />}
-          /> }
+          {propertyStatuses && (
+            <DropdownFilter
+              attribute={"propertyStatus"}
+              options={propertyStatuses}
+            />
+          )}
+          {propertyTypes && (
+            <MultiselectFilter
+              attribute={"propertyType"}
+              label="Select Type"
+              options={propertyTypes}
+              icon={<FaHome className="fa-home" />}
+            />
+          )}
           <CustomMultiselectFilter
             attribute={"amount"}
             label="Price Range"
@@ -70,12 +87,29 @@ const PropertiesListing = (bearerToken) => {
             icon={<HiCurrencyRupee className="fa-home" />}
             isNumericRange={true}
           />
-          { customTypes && <MultiselectFilter
-            attribute={"customStatus"}
-            label="Custom Type"
-            options={customTypes}
-            icon={<MdBusiness className="fa-home" />}
-          /> }
+          {customTypes && (
+            <MultiselectFilter
+              attribute={"customStatus"}
+              label="Custom Type"
+              options={customTypes}
+              icon={<MdBusiness className="fa-home" />}
+            />
+          )}
+
+          <div className="ml-auto flex items-center gap-16">
+            {showPremiumBuilders && (
+              <MultiselectFilter
+                attribute={"companyName"}
+                label="Premium Builders"
+              />
+            )}
+            <ToggleFilter
+              label="Premium"
+              attribute="isPremiumProject"
+              defaultChecked={showPremiumBuilders}
+              onToggle={handlePremiumToggle}
+            />
+          </div>
         </div>
       </div>
       <div className="properties-layout">
@@ -112,7 +146,7 @@ const PropertiesDetails = () => {
       }
     }
   }, [propertyToOpen]);
-  
+
   if (!propertyToOpen) return null;
   return (
     <ListingModal

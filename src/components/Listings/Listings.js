@@ -61,7 +61,7 @@ const Listings = () => {
   // Use useEffect to dispatch filtered properties
   useEffect(() => {
     dispatch(setListingFilters());
-    setIsFiltering(false); // Update filtering status
+    setIsFiltering(false); 
   }, [
     searchTerm,
     selectedPropertyStatus,

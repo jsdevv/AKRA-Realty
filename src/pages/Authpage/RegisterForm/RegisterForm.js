@@ -20,6 +20,7 @@ const RegisterForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [countryCode, setCountryCode] = useState('+91');
+  const [successMessage, setSuccessMessage] = useState('');
 
   useEffect(() => {
     if (success) {
@@ -42,28 +43,28 @@ const RegisterForm = () => {
     },
     validationSchema: Yup.object({
       password: Yup.string()
-      .min(10, 'Password must be at least 10 characters')
-      .matches(/[A-Z]/, 'Must contain at least one uppercase letter')
-      .matches(/[a-z]/, 'Must contain at least one lowercase letter')
-      .matches(/\d/, 'Must contain at least one number')
-      .matches(/[!@#$%^&*]/, 'Must contain at least one special character')
-      .required('Password is required'),
-    confirmPassword: Yup.string()
-      .oneOf([Yup.ref('password'), null], 'Passwords do not match')
-            .required('Confirm Password is required'),
+        .min(10, 'Password must be at least 10 characters')
+        .matches(/[A-Z]/, 'Must contain at least one uppercase letter')
+        .matches(/[a-z]/, 'Must contain at least one lowercase letter')
+        .matches(/\d/, 'Must contain at least one number')
+        .matches(/[!@#$%^&*]/, 'Must contain at least one special character')
+        .required('Password is required'),
+      confirmPassword: Yup.string()
+        .oneOf([Yup.ref('password'), null], 'Passwords do not match')
+        .required('Confirm Password is required'),
       firstName: Yup.string()
-      .required('First Name is required')
-      .test('no-only-spaces', 'First Name cannot be empty or spaces only', (value) => value && value.trim().length > 0)
-      .matches(/^[A-Za-z]+(?: [A-Za-z]+)*$/, 'First Name can only contain alphabets and spaces')
-      .min(2, 'First Name must be at least 2 characters')
-      .max(50, 'First Name must be at most 50 characters'),
-  
-    lastName: Yup.string()
-      .required('Last Name is required')
-      .test('no-only-spaces', 'Last Name cannot be empty or spaces only', (value) => value && value.trim().length > 0)
-      .matches(/^[A-Za-z]+(?: [A-Za-z]+)*$/, 'Last Name can only contain alphabets and spaces')
-      .min(2, 'Last Name must be at least 2 characters')
-      .max(50, 'Last Name must be at most 50 characters'),
+        .required('First Name is required')
+        .test('no-only-spaces', 'First Name cannot be empty or spaces only', (value) => value && value.trim().length > 0)
+        .matches(/^[A-Za-z]+(?: [A-Za-z]+)*$/, 'First Name can only contain alphabets and spaces')
+        .min(2, 'First Name must be at least 2 characters')
+        .max(50, 'First Name must be at most 50 characters'),
+
+      lastName: Yup.string()
+        .required('Last Name is required')
+        .test('no-only-spaces', 'Last Name cannot be empty or spaces only', (value) => value && value.trim().length > 0)
+        .matches(/^[A-Za-z]+(?: [A-Za-z]+)*$/, 'Last Name can only contain alphabets and spaces')
+        .min(2, 'Last Name must be at least 2 characters')
+        .max(50, 'Last Name must be at most 50 characters'),
       email: Yup.string().email('Invalid email address').required('Email is required'),
       phoneNumber: Yup.string()
         .matches(/^[0-9]{10}$/, 'Phone Number must be 10 digits')
@@ -71,21 +72,20 @@ const RegisterForm = () => {
       role: Yup.string().required('Please select a user type'),
     }),
     onSubmit: (values) => {
-      console.log(values, 'formvalues');
       const payload = {
         email: values.email,
         firstName: values.firstName,
         lastName: values.lastName,
         phoneNumber: values.phoneNumber,
         countryCode: countryCode,
-        Password: values.password, 
-        ConfirmPassword: values.confirmPassword, 
+        Password: values.password,
+        ConfirmPassword: values.confirmPassword,
         role: values.role,
       };
       if (values.role === 'User') {
-        dispatch(registerUser(payload)); 
+        dispatch(registerUser(payload));
       } else if (values.role === 'Agent') {
-        dispatch(registeragent(payload)); 
+        dispatch(registeragent(payload));
       }
 
     },
@@ -93,17 +93,29 @@ const RegisterForm = () => {
 
   useEffect(() => {
     if (success) {
+      setSuccessMessage('Registration successful!');
       formik.resetForm();
-      setTimeout(() => {
+  
+      // Clear message after 2 seconds
+      const timer = setTimeout(() => {
+        setSuccessMessage('');
         dispatch(resetState());
-      }, 3000);
+      }, 2000);
+  
+      return () => clearTimeout(timer);
     }
-  }, [success, dispatch]);
+  
+    if (error) {
+      setSuccessMessage('');
+    }
+  }, [success, error, dispatch]);
+  
+
 
   useEffect(() => {
     dispatch(resetState());
   }, [formik.values.email, formik.values.phoneNumber]);
-  
+
   const handleCancel = () => {
     formik.resetForm();
     dispatch(resetState());
@@ -113,8 +125,8 @@ const RegisterForm = () => {
     <div className="register-form-container">
       <form onSubmit={formik.handleSubmit} className="register-form">
 
-            {/* User Type */}
-            <div className="register-form-group user-type-group">
+        {/* User Type */}
+        <div className="register-form-group user-type-group">
           <div className="user-type-heading-container">
             <p className="user-type-heading">User Type</p>
             <div className="user-type-options">
@@ -234,72 +246,72 @@ const RegisterForm = () => {
         </div>
 
         <div className="register-form-group">
-      <div className="passwordinput-wrapper">
-        <input
-          type={showPassword ? "text" : "password"}
-          name="password"
-          placeholder="Password"
-          value={formik.values.password}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          className="register-form-password"
-          disabled={loading}
-        />
-        <span
-          className="eye-icon"
-          onClick={() => setShowPassword((prev) => !prev)}
-        >
-          {showPassword ? <FiEyeOff /> : <FiEye />}
-        </span>
-      </div>
-      {formik.touched.password && formik.errors.password && (
-        <div className="error-message">{formik.errors.password}</div>
-      )}
-    </div>
+          <div className="passwordinput-wrapper">
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Password"
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              className="register-form-password"
+              disabled={loading}
+            />
+            <span
+              className="eye-icon"
+              onClick={() => setShowPassword((prev) => !prev)}
+            >
+              {showPassword ? <FiEyeOff /> : <FiEye />}
+            </span>
+          </div>
+          {formik.touched.password && formik.errors.password && (
+            <div className="error-message">{formik.errors.password}</div>
+          )}
+        </div>
 
-    {/* Confirm Password */}
-    <div className="register-form-group">
-      <div className="passwordinput-wrapper">
-        <input
-          type={showConfirmPassword ? "text" : "password"}
-          name="confirmPassword"
-          placeholder="Confirm Password"
-          value={formik.values.confirmPassword}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          className="register-form-password"
-          disabled={loading}
-        />
-        <span
-          className="eye-icon"
-          onClick={() => setShowConfirmPassword((prev) => !prev)}
-        >
-          {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
-        </span>
-      </div>
-      {formik.touched.confirmPassword && formik.errors.confirmPassword && (
-        <div className="error-message">{formik.errors.confirmPassword}</div>
-      )}
-    </div>
+        {/* Confirm Password */}
+        <div className="register-form-group">
+          <div className="passwordinput-wrapper">
+            <input
+              type={showConfirmPassword ? "text" : "password"}
+              name="confirmPassword"
+              placeholder="Confirm Password"
+              value={formik.values.confirmPassword}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              className="register-form-password"
+              disabled={loading}
+            />
+            <span
+              className="eye-icon"
+              onClick={() => setShowConfirmPassword((prev) => !prev)}
+            >
+              {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
+            </span>
+          </div>
+          {formik.touched.confirmPassword && formik.errors.confirmPassword && (
+            <div className="error-message">{formik.errors.confirmPassword}</div>
+          )}
+        </div>
 
 
         {/* Document Valid ID */}
-        <div className="register-form-group">
-  <label htmlFor="documentValidId" className="custom-file-upload">
-    <span>Upload ID</span>
-  </label>
-  <input
-    type="file"
-    name="documentValidId"
-    id="documentValidId"
-    className="register-form-input"
-    disabled 
-  />
-  {/* You can add error messages here if needed */}
-  <div className="error-message">
-    {/* Error message */}
-  </div>
-</div>
+        {/* <div className="register-form-group">
+          <label htmlFor="documentValidId" className="custom-file-upload">
+            <span>Upload ID</span>
+          </label>
+          <input
+            type="file"
+            name="documentValidId"
+            id="documentValidId"
+            className="register-form-input"
+            disabled
+          />
+      
+          <div className="error-message">
+
+          </div>
+        </div> */}
 
         {/* Submit and Cancel Buttons */}
         <div className="register-submit">
@@ -312,7 +324,13 @@ const RegisterForm = () => {
         </div>
 
         {/* Success/Error Messages */}
-        {success && <div className="register-form-success-message">Registration successful!</div>}
+        {/* {success && <div className="register-form-success-message">Registration successful!</div>} */}
+        {successMessage && (
+          <div className="register-form-success-message">
+            {successMessage}
+          </div>
+        )}
+
         {error && <div className="register-form-error-message">{error}</div>}
       </form>
     </div>

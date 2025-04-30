@@ -66,6 +66,7 @@
   padding: 2px 4px;
   cursor: pointer;
   border-radius: 4px;
+  white-space: nowrap;
 }
 .listing-container .listcount:hover{
   background-color: #2A3650;

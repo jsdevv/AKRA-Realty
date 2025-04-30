@@ -7,7 +7,8 @@ import { fetchListings,
          fetchPropertyView,  
          fetchProjectView,         
          fetchProjectFavorites,
-         fetchPropertyFavorites
+         fetchPropertyFavorites,
+         fetchpropertyVideos
         } from '../../API/api';
 
 export const fetchProperties = createAsyncThunk(
@@ -99,6 +100,18 @@ export const sendProjectView = createAsyncThunk(
   }
 );
 
+export const fetchVideos = createAsyncThunk(
+  'videos/fetchVideos',
+  async (bearerToken, { rejectWithValue }) => {
+    try {
+      const response = await fetchpropertyVideos(bearerToken);
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 
 
 function isPointInBounds(point, bounds) {
@@ -139,7 +152,9 @@ const propertySlice = createSlice({
   name: 'properties',
   initialState: {
     properties: [],
+    videos: [],
     filteredProperties: [],
+    filteredVideos:[],
     premiumListings: [], // Add a new state for premium listings
     selectedBuilder:'',
     selectedProperty: null,
@@ -156,6 +171,7 @@ const propertySlice = createSlice({
     propertyStatusOptions: [],
     homeTypeOptions: [],
     visibleProperties: [],
+    visibleVideos: [],
     groupedProperties: {},
     mapBounds: null,
     mapCircleBounds: null,
@@ -164,7 +180,8 @@ const propertySlice = createSlice({
     selectedCenterOfMap: null,
     Projectfavorites: [],
     Propertyfavorites: [],
-    cameFromDetails: false
+ 
+
   },
   reducers: {
     setSelectedBuilder: (state, action) => {
@@ -209,9 +226,6 @@ const propertySlice = createSlice({
     setFilteredProperties(state, action) {
       state.filteredProperties = action.payload;
     },
-    setCameFromDetails: (state, action) => {
-      state.cameFromDetails = action.payload;
-    },
     setListingFilters(state, action) {
       const getProperties = () => {
         const baseProperties = state.showPremiumListings
@@ -221,7 +235,7 @@ const propertySlice = createSlice({
               )  // Filter by selected builder
             : state.premiumListings) 
           : state.properties;
-    
+
         return baseProperties
           .filter((property) => {
             const matchesSearchTerm = [
@@ -319,7 +333,42 @@ const propertySlice = createSlice({
       state.visibleProperties = visibleProperties;
       state.groupedProperties = groupProperties(visibleProperties);
     },
+
+    setFilteredVideos(state,action) {
+      const filteredVideos = state.videos.filter((video) => {
+      
+        const matchesSearchTerm = [
+          video.CompanyName,
+          video.ProjectName,
+          video.PropertyName,
+          video.Locality,
+          video.PropertyCity,
+          video.PropertyState,
+          video.PropertyZipCode
+        ].some((field) =>
+          field && field.toLowerCase().includes(state.searchTerm.toLowerCase())
+        );
     
+        const matchesFilters =
+          (!state.selectedPropertyStatus || video.PropertyStatus === state.selectedPropertyStatus) &&
+          (state.selectedHomeTypes.length === 0 || state.selectedHomeTypes.includes(String(video.PropertyTypeID))) &&
+          (state.selectedcustomStatus.length === 0 || state.selectedcustomStatus.some((cs) =>
+            video.CustomStatus?.includes(cs)
+          )) &&
+          (state.priceFilter.length === 0 ||
+            state.priceFilter.some(
+              (price) =>
+                video.DisplayAmount >= price.minPrice &&
+                video.DisplayAmount <= price.maxPrice
+            ));
+    
+        return matchesSearchTerm && matchesFilters;
+      });
+    
+      state.visibleVideos = filteredVideos;
+  
+    },
+
     toggleShowPremiumListings(state) {
       state.showPremiumListings = !state.showPremiumListings; // Toggle premium listings view
   },
@@ -422,7 +471,21 @@ const propertySlice = createSlice({
   .addCase(fetchGetpropertyFavorites.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
-  });
+  })
+  .addCase(fetchVideos.pending, (state) => {
+          state.loading = true;
+          state.error = null;
+        })
+        .addCase(fetchVideos.fulfilled, (state, action) => {
+          state.loading = false;
+          state.videos = action.payload;
+          state.visibleVideos = action.payload;
+        })
+        .addCase(fetchVideos.rejected, (state, action) => {
+          state.loading = false;
+          state.error = action.payload;
+        });
+  ;
   },
 });
 
@@ -439,13 +502,13 @@ export const {
   setMapPolygonBounds,
   setFilteredProperties,
   setListingFilters,
+  setFilteredVideos,
   setSelectedProperty,
   setSelectedCenterOfMap,
   clearSelectedProperty,
   toggleShowPremiumListings,
   setSelectedAgentProperty,
-  clearSelectedAgentProperty,
-  setCameFromDetails 
+  clearSelectedAgentProperty 
 } = propertySlice.actions;
 
 export default propertySlice.reducer;

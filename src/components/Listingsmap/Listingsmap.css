@@ -109,7 +109,7 @@ button.gm-ui-hover-effect{
   font-size: 18px;
   color: red;
   animation: pulse 1s infinite ease-in-out;
-  z-index: 10; /* Ensure heart overlay is above marker */
+  z-index: 10; 
 }
 
 @keyframes pulse {

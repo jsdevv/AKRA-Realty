@@ -36,6 +36,7 @@ const LoginForm = ({handleLogin,toggleForgotPassword}) => {
 
         const data = await response.json();
         dispatch(setBearerToken(data.BearerToken));
+        console.log(data.BearerToken,"data");
         dispatch(setUserDetails({
           UserEmail: data.Email,
           Id:data.Id,

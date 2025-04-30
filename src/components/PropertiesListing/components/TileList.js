@@ -3,27 +3,42 @@ import { useTypesense } from "../context/TypesenseContext";
 import Pagination from "../../Pagination/Pagination";
 import Tile from "./Tile";
 
-export default function TileList({setShowAuthPopup}) {
+export default function TileList() {
   const { results, getGroupedDetailsByIds } = useTypesense();
   const [currentPage, setCurrentPage] = useState(1);
   const [currentItems, setCurrentItems] = useState([]);
   const itemsPerPage = 12;
 
   useEffect(() => {
+    // Reset to first page when results change (filters applied)
+    setCurrentPage(1);
+  }, [results?.found_docs]);
+
+  useEffect(() => {
     const fetchDetails = async () => {
+      if (!results?.hits?.length) return;
+      
       const startIndex = (currentPage - 1) * itemsPerPage;
-      if(startIndex >= results.hits.length) {
+      // Ensure we don't go beyond available results
+      if (startIndex >= results.hits.length) {
         setCurrentPage(1);
         return;
-      };
-      const endIndex = startIndex + itemsPerPage;
+      }
+      
+      const endIndex = Math.min(startIndex + itemsPerPage, results.hits.length);
       const ids = results.hits.slice(startIndex, endIndex).map((hit) => hit.groupKey);
-      const details = await getGroupedDetailsByIds(ids);
-      setCurrentItems(details);
+      
+      if (ids.length > 0) {
+        const details = await getGroupedDetailsByIds(ids);
+        setCurrentItems(details || []);
+      } else {
+        setCurrentItems([]);
+      }
     };
-    if (results && results.hits && results.hits.length > 0) {
+    
+    setTimeout(() => {
       fetchDetails();
-    }
+    }, 500);
   }, [results, getGroupedDetailsByIds, currentPage]);
 
   if (!results || !results.hits) return null;

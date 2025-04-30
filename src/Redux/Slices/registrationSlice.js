@@ -19,53 +19,74 @@ const initialState = {
 // Async thunk for registration API call
 export const registerUser = createAsyncThunk(
   'registration/registerUser',
-  async ({ firstName, lastName, email, phoneNumber,role,countryCode,Password,ConfirmPassword  }, { rejectWithValue }) => {
+  async ({ firstName, lastName, email, phoneNumber, role, countryCode, Password, ConfirmPassword }, { rejectWithValue }) => {
     try {
-      const response = await formRegistrationAPI(firstName, lastName, email, phoneNumber,role,countryCode,Password,ConfirmPassword );
+      const { status, data } = await formRegistrationAPI(firstName, lastName, email, phoneNumber, role, countryCode, Password, ConfirmPassword);
 
-      // Check for specific error messages and handle accordingly
-      if (response.Errors) {
-        const emailError = response.Errors.find((error) => error.PropertyName === 'DuplicateEmail');
-        if (emailError) {
-          return rejectWithValue(emailError.Message);
-        }
-        const phoneError = response.Errors.find((error) => error.PropertyName === 'DuplicatePhoneNumber');
-        if (phoneError) {
-          return rejectWithValue(phoneError.Message);
-        }
+      // Check for errors in the response
+      if (status !== 200 && data.Errors) {
+        const emailError = data.Errors.find((error) => error.PropertyName === 'DuplicateEmail');
+        if (emailError) return rejectWithValue(emailError.Message);
+
+        const phoneError = data.Errors.find((error) => error.PropertyName === 'DuplicatePhoneNumber');
+        if (phoneError) return rejectWithValue(phoneError.Message);
       }
 
-      return response;
+      return data; // Success case
     } catch (error) {
       return rejectWithValue(error.message || 'Something went wrong');
     }
   }
 );
+
 
 export const registeragent = createAsyncThunk(
   'registration/registeragent',
-  async ({ firstName, lastName, email, phoneNumber,role,countryCode,Password,ConfirmPassword  }, { rejectWithValue }) => {
+  async ({ firstName, lastName, email, phoneNumber, role, countryCode, Password, ConfirmPassword }, { rejectWithValue }) => {
     try {
-      const response = await formRegistrationAgentAPI(firstName, lastName, email, phoneNumber,role,countryCode,Password,ConfirmPassword );
+      const { status, data } = await formRegistrationAgentAPI(firstName, lastName, email, phoneNumber, role, countryCode, Password, ConfirmPassword);
 
-      // Check for specific error messages and handle accordingly
-      if (response.Errors) {
-        const emailError = response.Errors.find((error) => error.PropertyName === 'DuplicateEmail');
-        if (emailError) {
-          return rejectWithValue(emailError.Message);
-        }
-        const phoneError = response.Errors.find((error) => error.PropertyName === 'DuplicatePhoneNumber');
-        if (phoneError) {
-          return rejectWithValue(phoneError.Message);
-        }
+      // Check for errors in the response
+      if (status !== 200 && data.Errors) {
+        const emailError = data.Errors.find((error) => error.PropertyName === 'DuplicateEmail');
+        if (emailError) return rejectWithValue(emailError.Message);
+
+        const phoneError = data.Errors.find((error) => error.PropertyName === 'DuplicatePhoneNumber');
+        if (phoneError) return rejectWithValue(phoneError.Message);
       }
 
-      return response;
+      return data; // Success case
     } catch (error) {
       return rejectWithValue(error.message || 'Something went wrong');
     }
   }
 );
+
+
+// export const registeragent = createAsyncThunk(
+//   'registration/registeragent',
+//   async ({ firstName, lastName, email, phoneNumber,role,countryCode,Password,ConfirmPassword  }, { rejectWithValue }) => {
+//     try {
+//       const response = await formRegistrationAgentAPI(firstName, lastName, email, phoneNumber,role,countryCode,Password,ConfirmPassword );
+
+//       // Check for specific error messages and handle accordingly
+//       if (response.Errors) {
+//         const emailError = response.Errors.find((error) => error.PropertyName === 'DuplicateEmail');
+//         if (emailError) {
+//           return rejectWithValue(emailError.Message);
+//         }
+//         const phoneError = response.Errors.find((error) => error.PropertyName === 'DuplicatePhoneNumber');
+//         if (phoneError) {
+//           return rejectWithValue(phoneError.Message);
+//         }
+//       }
+
+//       return response;
+//     } catch (error) {
+//       return rejectWithValue(error.message || 'Something went wrong');
+//     }
+//   }
+// );
 
 const registrationSlice = createSlice({
   name: 'registration',
@@ -90,6 +111,7 @@ const registrationSlice = createSlice({
     builder
       .addCase(registerUser.pending, (state) => {
         state.loading = true;
+        state.success = false;
       })
       .addCase(registerUser.fulfilled, (state) => {
         state.loading = false;
@@ -99,6 +121,7 @@ const registrationSlice = createSlice({
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+        state.success = false;
       })
       .addCase(registeragent.pending, (state) => {
         state.loading = true;

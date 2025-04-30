@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector } from "react-redux";
 import { FaEye, FaMapMarkerAlt, FaBed, FaBath, FaHome, FaWarehouse, FaCalendar, FaInfoCircle } from 'react-icons/fa';
-import { MdSquareFoot, MdLocalFireDepartment, MdAcUnit, MdKitchen, MdBalcony } from 'react-icons/md';
+import { MdSquareFoot } from 'react-icons/md';
 import ScheduleTourForm from '../ListingspopupForms/ScheduleTourForm/ScheduleTourForm';
 import Requestinfo from '../ListingspopupForms/Requestinfo/Requestinfo';
 import Nearbyplacemap from '../Googlemap/Nearbyplacemap/Nearbyplacemap';
@@ -10,6 +10,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import ListingModal from '../ListingModal/ListingModal';
 import PropertyGrid from './PropertyGrid';
 import './ListingModalDetails.css';
+import { GoDotFill } from "react-icons/go";
 
 const ListingModalDetails = ({ selectedProperty, propertyCardData, propertyType, propertyToOpen }) => {
 
@@ -38,21 +39,22 @@ const ListingModalDetails = ({ selectedProperty, propertyCardData, propertyType,
     { icon: <FaInfoCircle size={25} />, label: 'Status', value: selectedProperty.PropertyPossessionStatus }
   ];
 
+  //  const amenities = selectedProperty?.Amenities ? selectedProperty.Amenities.split(',').map(a => a.trim()) : [];
 
-  const amenitiesdetails = selectedProperty.AmenitiesDetails.split(',').map(amenity => amenity.trim());
-  const amenities = [
-    { icon: <MdBalcony size={25} />, label: amenitiesdetails[0] },
-    { icon: <MdLocalFireDepartment size={25} />, label: amenitiesdetails[1] },
-    { icon: <MdAcUnit size={25} />, label: amenitiesdetails[2] },
-    { icon: <MdKitchen size={25} />, label: amenitiesdetails[3] }
-  ];
+  const amenitiesRaw = selectedProperty.units === 1
+    ? selectedProperty?.PropertyAmenities
+    : selectedProperty?.Amenities;
+
+  const amenities = amenitiesRaw
+    ? amenitiesRaw.split(',').map(a => a.trim())
+    : [];
 
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
 
-  const setSelectedPropertyForDetailHandler = (property) => { 
+  const setSelectedPropertyForDetailHandler = (property) => {
     setSelectedPropertyForDetail(property);
     setShowModal(true);
   };
@@ -77,7 +79,7 @@ const ListingModalDetails = ({ selectedProperty, propertyCardData, propertyType,
   const groupKey = `${selectedProperty.PropertyLatitude ?? selectedProperty.Propertylatitude}_${selectedProperty.PropertyLongitude ?? selectedProperty.Propertylongitude}`;
   let relatedUnits = groupedProperties[groupKey];
   let unitCount = 0;
-  let minMax = {min:{value:Infinity,original:null},max:{value:-Infinity,original:null}};
+  let minMax = { min: { value: Infinity, original: null }, max: { value: -Infinity, original: null } };
   let groupedByBedroomsArray = [];
 
   if (propertyToOpen) {
@@ -121,54 +123,54 @@ const ListingModalDetails = ({ selectedProperty, propertyCardData, propertyType,
         max: { value: -Infinity, original: null },
       }
     );
-    
+
   }
 
   // First group by Bedrooms
   const groupedByBedroomsMap =
-  relatedUnits?.UnitTypeDetails.reduce((acc, property) => {
-    const { Bedrooms } = property;
-    const normalizedBedrooms = isNaN(parseFloat(Bedrooms))
-      ? 0
-      : parseFloat(Bedrooms);
+    relatedUnits?.UnitTypeDetails.reduce((acc, property) => {
+      const { Bedrooms } = property;
+      const normalizedBedrooms = isNaN(parseFloat(Bedrooms))
+        ? 0
+        : parseFloat(Bedrooms);
 
-    if (!acc[normalizedBedrooms]) {
-      acc[normalizedBedrooms] = [];
-    }
-    acc[normalizedBedrooms].push(property);
+      if (!acc[normalizedBedrooms]) {
+        acc[normalizedBedrooms] = [];
+      }
+      acc[normalizedBedrooms].push(property);
 
-    return acc;
-  }, {}) ?? {};
+      return acc;
+    }, {}) ?? {};
 
-// Convert grouped object to array
-groupedByBedroomsArray = Object.entries(groupedByBedroomsMap)
-  .map(([Bedrooms, properties]) => ({
-    Bedrooms: parseFloat(Bedrooms, 10),
-    properties,
-  }))
-  .sort((a, b) => a.Bedrooms - b.Bedrooms);
+  // Convert grouped object to array
+  groupedByBedroomsArray = Object.entries(groupedByBedroomsMap)
+    .map(([Bedrooms, properties]) => ({
+      Bedrooms: parseFloat(Bedrooms, 10),
+      properties,
+    }))
+    .sort((a, b) => a.Bedrooms - b.Bedrooms);
 
-// ✅ Filter out Bedrooms === 0 (avoid double "All")
-groupedByBedroomsArray = groupedByBedroomsArray.filter(
-  (group) => group.Bedrooms !== 0
-);
+  // ✅ Filter out Bedrooms === 0 (avoid double "All")
+  groupedByBedroomsArray = groupedByBedroomsArray.filter(
+    (group) => group.Bedrooms !== 0
+  );
 
-// ✅ Unique properties from Bedrooms === 0 group
-const uniqueProperties = (groupedByBedroomsMap["0"] || []).reduce(
-  (accum, current) => {
-    if (!accum.some((item) => item.PropertyID === current.PropertyID)) {
-      accum.push(current);
-    }
-    return accum;
-  },
-  []
-);
+  // ✅ Unique properties from Bedrooms === 0 group
+  const uniqueProperties = (groupedByBedroomsMap["0"] || []).reduce(
+    (accum, current) => {
+      if (!accum.some((item) => item.PropertyID === current.PropertyID)) {
+        accum.push(current);
+      }
+      return accum;
+    },
+    []
+  );
 
-// ✅ Add back a grouped item with Bedrooms: 0 (representing "All")
-groupedByBedroomsArray.unshift({
-  Bedrooms: 0,
-  properties: uniqueProperties,
-});
+  // ✅ Add back a grouped item with Bedrooms: 0 (representing "All")
+  groupedByBedroomsArray.unshift({
+    Bedrooms: 0,
+    properties: uniqueProperties,
+  });
 
   if (propertyType === 'Property') {
     unitCount = 1;
@@ -177,16 +179,17 @@ groupedByBedroomsArray.unshift({
     <div className="property-details-container">
       <div className="left-section">
         <div className="listingmodal-header">
+          <div className='listingmodal-header1'>
+           <span className="badge for-sale"> {selectedProperty.PropertyType} </span>
 
-          <span className="badge for-sale">
-            {selectedProperty.PropertyType}
+          <span className="property-info">  &nbsp;{" "}
+            <FaEye aria-label="Number of views" />  &nbsp;{" "} {unitCount === 1 ? selectedProperty.PropertyViewCount : selectedProperty.ProjectViewCount} views
           </span>
 
-          <span className="property-info">
-            <FaEye aria-label="Number of views" /> &nbsp;{" "}
-            {unitCount === 1 ? selectedProperty.PropertyViewCount : selectedProperty.ProjectViewCount} views
-          </span>
-    
+          </div>
+
+          <p className="modalproperty-description">Brochure</p>
+
         </div>
 
         <div className="listingmodal-container">
@@ -210,11 +213,32 @@ groupedByBedroomsArray.unshift({
             )}
           </div>
         </div>
+        <div className="modal-description">
+        
+          <h3>Description</h3>
+          <p className="property-description">{selectedProperty.PropertyDescription} </p>
+        </div>
 
-        <h3>Description</h3>
-        <p className="property-description">
-          {selectedProperty.PropertyDescription}
-        </p>
+        {/* <div className="listingmodal-boxes-container">
+      <div className="listingmodal-box">
+        <h4 className="listingmodal-box-title">RERA NO</h4>
+        <p className="listingmodal-box-content">P01100007443</p>
+      </div>
+      <div className="listingmodal-box">
+        <h4 className="listingmodal-box-title">RERA NO</h4>
+        <p className="listingmodal-box-content">P01100007443</p>
+      </div>
+      <div className="listingmodal-box">
+        <h4 className="listingmodal-box-title">RERA NO</h4>
+        <p className="listingmodal-box-content">P01100007443</p>
+      </div>
+      <div className="listingmodal-box">
+        <h4 className="listingmodal-box-title">RERA NO</h4>
+        <p className="listingmodal-box-content">P01100007443</p>
+      </div>
+    </div> */}
+
+
 
         {propertyType === 'Project' && unitCount > 1 && (
 
@@ -260,22 +284,26 @@ groupedByBedroomsArray.unshift({
         </div>
         <div className="amenities">
           <h3>Amenities</h3>
-          <div className="amenities-grid">
-            {amenities.map((amenity, index) => (
-              <div className="amenity-item" key={index}>
-                {amenity.icon && (
-                  <div className="amenity-icon">{amenity.icon}</div>
-                )}{" "}
-                &nbsp; &nbsp;
-                <div className="text">{amenity.label}</div>
-              </div>
-            ))}
+          <div className="modalamenities-grid">
+            {amenities.length > 0 ? (
+              amenities.map((label, idx) => (
+                <div className="amenity-item" key={idx}>
+                  <div>
+                    <GoDotFill size={10} />
+                  </div>
+                  <div className="text">{label}</div>
+                </div>
+              ))
+            ) : (
+              <p className="no-amenities">Amenities information isn’t available.</p>
+            )}
           </div>
+
         </div>
-        {/* <Nearbyplacemap
+        <Nearbyplacemap
           selectedProperty={selectedProperty}
           propertyCardData={propertyCardData}
-        />  */}
+        />
       </div>
 
       <div className="right-section">

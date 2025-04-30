@@ -32,6 +32,7 @@ import { TypesenseProvider } from './components/PropertiesListing/context/Typese
 import Authpopup from './components/Authpopup/Authpopup';
 import { handleProtectedRoute, validateAndSetToken } from './utils/authUtils';
 import {setShowAuthPopup} from "./Redux/Slices/authPopupSlice"
+import AddOrderImages from './components/AddOrderImages/AddOrderImages';
 
 
 const ConditionalNavbarBottom = ({
@@ -45,7 +46,11 @@ const ConditionalNavbarBottom = ({
   handleSearchSubmit
 }) => {
   const location = useLocation();
-  const shouldDisplayNavbarBottom = ['/', '/home', '/owner', "/properties-new", "/about", '/addproject', '/listedagents', '/addlistings', '/forgot-password', '/passwordreset', '/register', '/Notification', '/feedback', '/favorites', '/agents', '/services', '/investors', '/sell'].includes(location.pathname);
+ 
+  const shouldDisplayNavbarBottom = ['/', '/home', '/owner', "/properties-new", "/about", '/addproject',"/addorderimages",
+                                      "/addcompany", '/listedagents', '/addlistings', '/forgot-password', '/passwordreset', '/register', 
+                                       '/Notification', '/feedback', '/favorites', '/agents', '/services', '/investors', '/sell']
+                                       .includes(location.pathname);
 
   return !shouldDisplayNavbarBottom ?
     <NavbarBottom
@@ -122,6 +127,7 @@ const App = () => {
   };
 
   const handleSearchInputChange = (e, { newValue = '' }) => {
+    console.log(newValue,"newsearch");
     setSearchInput(newValue);
   };
 
@@ -262,6 +268,7 @@ const App = () => {
               <Route path="/passwordreset" element={<ResetPasswordForm />} />
               <Route path="/addproject" element={<AddProject />} />
               <Route path="/addcompany" element={<Addcompany />} />
+              <Route path="/addorderimages" element={<AddOrderImages />} />
 
             </Routes>
             <FeedbackWidget bearerToken={bearerToken} />

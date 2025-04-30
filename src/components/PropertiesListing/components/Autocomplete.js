@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import typesense from "../lib/typesense";
 import { useTypesense } from "../context/TypesenseContext";
 import { FaSearch } from "react-icons/fa";
+import "./Autocomplete.css";
 
 const Autocomplete = () => {
   const containerRef = useRef(null);
@@ -25,19 +26,33 @@ const Autocomplete = () => {
             q: query,
             query_by:
               "projectName,propertyName,propertyState,propertyCity,propertyZipCode,propertyCardLine2,propertyCardLine3,propertyAddress1,propertyAddress2,locality",
-            facet_by: "projectName",
-            limit: 50,
+            limit: 250,
+            include_fields: "projectName,propertyName,locality,location",
           });
 
-        const items = response.facet_counts[0].counts.map((item) => ({
-          ...item,
-          propertyName: item.value.replace(/_/g, " "),
-          projectName: item.value.replace(/_/g, " "),
-          location: response.hits.find(
-            (hit) => hit.document.projectName === item.value
-          )?.document.location,
-        }));
-
+        const projectLocalityCombinations = {};
+        
+        response.hits.forEach(hit => {
+          const projectName = hit.document.projectName?.replace(/_/g, " ") || "";
+          const propertyName = hit.document.propertyName?.replace(/_/g, " ") || projectName;
+          const locality = hit.document.locality || "";
+          const location = hit.document.location;
+          
+          const key = `${projectName}-${locality}`;
+          
+          if (!projectLocalityCombinations[key]) {
+            projectLocalityCombinations[key] = {
+              projectName,
+              propertyName,
+              locality,
+              location,
+              value: projectName, 
+            };
+          }
+        });
+        
+        const items = Object.values(projectLocalityCombinations);
+        
         setSuggestions(items);
       } catch (error) {
         console.error("Error fetching suggestions:", error);
@@ -74,7 +89,12 @@ const Autocomplete = () => {
         <input
           type="text"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            if (e.target.value.trim() === "") {
+              handleClear();
+            }
+          }}
           onKeyDown={handleKeyDown}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
@@ -103,7 +123,7 @@ const Autocomplete = () => {
           </button>
           </div>
       </div>
-      {isFocused && suggestions.length > 0 && (
+      { isFocused && suggestions.length > 0 && (
         <ul className="autocomplete-suggestions">
           {suggestions.map((item, index) => (
             <li
@@ -111,7 +131,8 @@ const Autocomplete = () => {
               onMouseDown={() => handleSelect(item)}
               className="autocomplete-suggestion-item"
             >
-              {item.propertyName || item.projectName}
+             <span> {item.propertyName || item.projectName}</span>
+             <span className="autosuggest-locality"> {item.locality}</span>
             </li>
           ))}
         </ul>

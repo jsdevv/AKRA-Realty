@@ -8,11 +8,10 @@ import { LiaRupeeSignSolid } from "react-icons/lia";
 import { FaHeart } from "react-icons/fa";
 import { useFavorites } from "../../context/FavoritesContext";
 import { toast } from "react-toastify";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchPropertyViews } from "../../utils/fetchPropertyViews";
+import {  useSelector } from "react-redux";
 import { usePropertyFavorite } from "../../customHooks/usePropertyFavorite";
+import { useViewsCount } from "../../utils/fetchPropertyViews"; 
 import "./PropertyGrid.css"
-import { setCameFromDetails } from "../../Redux/Slices/propertySlice";
 
 ModuleRegistry.registerModules([AllCommunityModule,MultiFilterModule,SetFilterModule ]);
 
@@ -22,7 +21,8 @@ const PropertyGrid = ({ groupedByBedroomsArray,selectedBedrooms,setSelectedPrope
     const { Id } = useSelector((state) => state.auth.userDetails || {});
     const { favorites,favoriteColor, toggleFavorite } = useFavorites();
     const [localFavorites, setLocalFavorites] = useState(favorites); 
-    const dispatch = useDispatch();
+
+    const { fetchPropertyViews } = useViewsCount();
     
     // Filter and clean the grouped array
     const cleanedGroupedByBedroomsArray = useMemo(() => {
@@ -62,6 +62,7 @@ const PropertyGrid = ({ groupedByBedroomsArray,selectedBedrooms,setSelectedPrope
                     PropertyMainEntranceFacing: property.PropertyMainEntranceFacing || "N/A",
                     Amount: property.Amount || "N/A",
                     fullPropertyData: property,
+                    areaUnit: property.areaUnit || "SqFt",
                 }))
             );
     }, [cleanedGroupedByBedroomsArray, selectedBedrooms]);
@@ -74,8 +75,7 @@ const PropertyGrid = ({ groupedByBedroomsArray,selectedBedrooms,setSelectedPrope
                 toast.error("Invalid property data");
                 return;
             }
-            await fetchPropertyViews(dispatch, property.PropertyID, Id, bearerToken);
-            dispatch(setCameFromDetails(true));
+            await fetchPropertyViews(property.PropertyID);
             setSelectedPropertyForDetailHandler(property); // Update selected property
         } catch (error) {
             toast.error("Failed to fetch project views.");
@@ -112,24 +112,9 @@ const PropertyGrid = ({ groupedByBedroomsArray,selectedBedrooms,setSelectedPrope
             flex: 0.7, 
             valueFormatter: params => {
                 const value = Number(params.value);
-                if (!value) return "N/A";
+                const unitType = params.data?.areaUnit;
             
-                const propertyType = params.data?.PropertyType?.toLowerCase();
-            
-                if (!propertyType) return `${value.toLocaleString()} SqFt`;
-            
-                if (propertyType === "farm lands") {
-                  const acres = (value / 43560).toFixed(2); // 1 Acre = 43,560 SqFt
-                  return `${acres} Acres`;
-                }
-            
-                const sqydTypes = ["lands", "plots"];
-                if (sqydTypes.includes(propertyType)) {
-                  const sqYds = (value / 9).toFixed(2); // 1 SqYd = 9 SqFt
-                  return `${Number(sqYds).toLocaleString()} SqYds`;
-                }
-            
-                return `${value.toLocaleString()} SqFt`;
+                return `${value.toLocaleString()} ${unitType}`;
               },
             filter: "agSetColumnFilter", 
              headerClass: "custom-header"

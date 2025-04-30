@@ -6,36 +6,37 @@ import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { useFavorites } from '../../context/FavoritesContext';
 import { fetchAddprojectFavorties, fetchAddpropertyFavorties, fetchDeleteProjectFavorties, fetchDeletePropertyFavorties, fetchPropertiesDetails } from '../../API/api';
-import { AiOutlineArrowLeft, AiOutlineClose } from 'react-icons/ai';
+import {  AiOutlineClose } from 'react-icons/ai';
 import ListingModalDetails from '../ListingModalDetails/ListingModalDetails';
 import { useSelector } from 'react-redux';
 import './ListingModal.css';
 import { MdOutlineFavorite } from 'react-icons/md';
 import { toast } from 'react-toastify';
-import { useTypesense } from '../PropertiesListing/context/TypesenseContext';
 
 
-const ListingModal = ({ selectedProperty, onClose,   propertyType, onPropertyClose, propertyToOpen }) => {
+const ListingModal = ({ selectedProperty, onClose,  propertyType, propertyToOpen }) => {
 
   const bearerToken = useSelector((state) => state.auth.bearerToken);
   const { Id } = useSelector((state) => state.auth.userDetails || {});
-     const {cameFromDetails } = useSelector((state) => state.properties);
   const { favorites, toggleFavorite, favoriteColor } = useFavorites();
   const [showSharePopup, setShowSharePopup] = useState(false);
   const [propertyDetails, setPropertyDetails] = useState(null);
   const [showCarousel, setShowCarousel] = useState(false);
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [isFavorited, setIsFavorited] = useState(false);
-  const { openPropertyModal } = useTypesense();
+  
+  const isProject = !propertyToOpen?.found || propertyToOpen.found > 1;
+  const propertyKey = isProject ? "ProjectID" : "PropertyID";
+  const currentID = isProject ? selectedProperty?.ProjectID : selectedProperty?.PropertyID;
 
-  console.log(selectedProperty,"selectedproperty");
-
-  useEffect(() => {
-    if (selectedProperty) {
-      setIsFavorited(favorites.some((fav) => fav.PropertyID === selectedProperty.PropertyID));
-    }
-  }, [favorites, selectedProperty]);
-
+  
+    useEffect(() => {
+          if (!currentID) return;
+  
+          const isFav = favorites.some((fav) => fav[propertyKey] === currentID);
+          setIsFavorited(isFav);
+      }, [favorites, currentID, propertyKey]);
+  
 
   useEffect(() => {
     if (selectedProperty && bearerToken) {
@@ -69,7 +70,7 @@ const ListingModal = ({ selectedProperty, onClose,   propertyType, onPropertyClo
   const propertyImages = imageNames.map((imageName) => `${imageName}`);
 
   const handleToggleFavorite = async () => {
-    const isSingleProperty = propertyType === "Property";
+    const isSingleProperty = propertyToOpen.found === 1;
     const payloadKey = isSingleProperty ? "PropertyID" : "ProjectID";
     const payload = { [payloadKey]: selectedProperty[payloadKey] };
 
@@ -92,12 +93,16 @@ const ListingModal = ({ selectedProperty, onClose,   propertyType, onPropertyClo
       if (response?.ProcessCode === 101 || response?.processMessage?.includes("ERROR")) {
         toast.error(errorMessage);
       } else {
-        toggleFavorite(selectedProperty);
-        setIsFavorited(!isFavorited);
+        toggleFavorite({
+          id: isSingleProperty ? selectedProperty.propertyID : selectedProperty.projectID,
+          type: isSingleProperty ? "property" : "project",
+      });
+       
       }
     } catch (error) {
       const errorMessage = error?.response?.data?.processMessage || "Something went wrong. Please try again.";
       toast.error(errorMessage);
+      setIsFavorited(!isFavorited);
     }
   };
 

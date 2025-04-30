@@ -64,7 +64,7 @@ const AddProjectmap = ({ formData, setFieldValue, setTouched, inputRef, geolocat
 
   return (
     <div className="geolocation-container">
-      <APIProvider apiKey={API_KEY}>
+      <APIProvider apiKey={API_KEY} libraries={['places']}>
         
         <Map
           defaultCenter={geolocation}
@@ -125,12 +125,12 @@ const SearchAddress = ({address, inputRef, onPlaceSelected}) => {
 
   useEffect(() => {
     const inputElement = inputRef?.current || localInputRef.current;
-
-    if (window.google && inputElement) {
+  
+    if (window.google?.maps?.places && inputElement) {
       autocompleteRef.current = new window.google.maps.places.Autocomplete(inputElement);
       autocompleteRef.current.addListener("place_changed", handlePlaceSelected);
     }
-
+  
     return () => {
       if (autocompleteRef.current) {
         window.google.maps.event.clearInstanceListeners(autocompleteRef.current);
@@ -138,6 +138,7 @@ const SearchAddress = ({address, inputRef, onPlaceSelected}) => {
       }
     };
   }, []);
+  
 
   const handlePlaceSelected = () => {
     const place = autocompleteRef.current?.getPlace();

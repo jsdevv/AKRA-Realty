@@ -13,6 +13,7 @@ import { fetchPropertyStatusOptions,
          fetchPremiumbuilders 
         } from '../../../API/api';
 import { fetchPremiumListingsThunk,  
+         setFilteredVideos,  
          setListingFilters, 
          setPriceFilter, 
          setSelectedBuilder, 
@@ -349,6 +350,8 @@ const NavbarBottom = ({
         setSelectedPremiumBuilders(updatedPremiumBuilders);
         dispatch(setSelectedBuilder(updatedPremiumBuilders));
         dispatch(setListingFilters());
+        dispatch(setFilteredVideos());
+        
 
     };
 
@@ -363,6 +366,7 @@ const NavbarBottom = ({
             dispatch(setSelectedBuilder([]));
         }
         dispatch(setListingFilters());
+        dispatch(setFilteredVideos());
     }
 
     const togglePremium = () => {
@@ -683,7 +687,7 @@ const NavbarBottom = ({
               </div>
             )}
           </div>
-          <div className="dropdown-container" ref={filterDropdownRef}>
+          {/* <div className="dropdown-container" ref={filterDropdownRef}>
             <button
               className="dropdown-toggle"
               onClick={() => toggleDropdown("filterDropdownOpen")}
@@ -699,11 +703,11 @@ const NavbarBottom = ({
                  
               </div>
             )}
-          </div>
+          </div> */}
 
-             <button className="save-search-button" onClick={handleSetAlert}>
+             {/* <button className="save-search-button" onClick={handleSetAlert}>
               Set Alert
-             </button>
+             </button> */}
 
         </div>
         <div className="premium-toggle-container">
@@ -743,7 +747,7 @@ const NavbarBottom = ({
                 )}
               </div>
             )}
-          <div className="premi m-builders-switch">
+          {/* <div className="premi m-builders-switch">
             <span>Premium</span>
             <label className="premium-toggle-switch">
               <input
@@ -753,7 +757,7 @@ const NavbarBottom = ({
               />
               <span className="premium-slider" />
             </label>
-          </div>
+          </div> */}
 
         </div>
       </div>

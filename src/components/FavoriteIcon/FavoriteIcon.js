@@ -21,31 +21,32 @@ const FavoriteIcon = ({ property }) => {
     const { favorites, toggleFavorite, favoriteColor } = useFavorites();
     const [isFavorited, setIsFavorited] = useState(false);
 
+    const isProject = !property?.found || property.found > 1;
+    const propertyKey = isProject ? "ProjectID" : "PropertyID";
+    const currentID = isProject ? property?.projectID : property?.propertyID;
+
     useEffect(() => {
-        if (property) {
-            // Check if the property or project is favorited in local storage or context
-            const isFavorite = favorites.some(
-                (fav) => 
-                    (fav.PropertyID === property.propertyID) || 
-                    (fav.ProjectID === property.projectID)
-            );
-            setIsFavorited(isFavorite);
-        }
-    }, [favorites, property]);
+        if (!currentID) return;
+
+        const isFav = favorites.some((fav) => fav[propertyKey] === currentID);
+        setIsFavorited(isFav);
+    }, [favorites, currentID, propertyKey]);
+
+    if (!property || !currentID) return null;
     
 
     if (!property) return null;
 
     const handleToggleFavorite = async (e) => {
         e.stopPropagation();
-
+    
         const isAllowed = checkAuthAndPopup({
             token: bearerToken,
             setShowAuthPopup,
             dispatch,
-          });
-        
-          if (!isAllowed) return;
+        });
+    
+        if (!isAllowed) return;
     
         const isSingleProperty = property.found <= 1;
         const isProject = !isSingleProperty;
@@ -53,7 +54,7 @@ const FavoriteIcon = ({ property }) => {
         const payload = isSingleProperty
             ? { PropertyID: property.propertyID }
             : { ProjectID: property.projectID };
-
+    
         try {
             let response;
     
@@ -74,18 +75,21 @@ const FavoriteIcon = ({ property }) => {
     
             if (response?.ProcessCode === 101 || response?.processMessage?.includes("ERROR")) {
                 toast.error(errorMessage);
-                setIsFavorited((prev) => !prev); 
+                setIsFavorited((prev) => !prev);
             } else {
-                
-
-                toggleFavorite(property);
+                // ✅ Instead of sending full property, send type + ID
+                toggleFavorite({
+                    id: isSingleProperty ? property.propertyID : property.projectID,
+                    type: isSingleProperty ? "property" : "project",
+                });
             }
         } catch (error) {
             const errorMessage = error?.response?.data?.processMessage || "Something went wrong. Please try again.";
             toast.error(errorMessage);
-            setIsFavorited((prev) => !prev); 
+            setIsFavorited((prev) => !prev);
         }
     };
+    
     
 
     return (

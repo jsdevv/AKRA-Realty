@@ -414,11 +414,11 @@ const Listingsmap = ({ handlePropertyClick, bearerToken }) => {
 
       const handleInfoWindowClick = (property) => {
   
-        if (relatedUnits.Amount.length > 1) {
-          fetchProjectViews(dispatch, property.ProjectID, Id, bearerToken);
-        } else {
-          fetchPropertyViews(dispatch, property.PropertyID, Id, bearerToken);
-        }
+        // if (relatedUnits.Amount.length > 1) {
+        //   fetchProjectViews(dispatch, property.ProjectID, Id, bearerToken);
+        // } else {
+        //   fetchPropertyViews(dispatch, property.PropertyID, Id, bearerToken);
+        // }
       }
 
       // After InfoWindow opens, attach event listeners to the favorite button

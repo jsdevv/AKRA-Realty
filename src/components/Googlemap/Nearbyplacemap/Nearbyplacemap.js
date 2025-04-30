@@ -3,25 +3,30 @@ import restaurant from "../../../assets/utensils-solid.svg";
 import school from "../../../assets/graduation-cap-solid.svg";
 
 
-const { Map: GMap } = await window.google.maps.importLibrary("maps");
-const { AdvancedMarkerElement } = await window.google.maps.importLibrary(
-  "marker"
-);
-const { Place } = await window.google.maps.importLibrary(
-  "places",
-);
 const NearbyPlaceMap = ({ selectedProperty, propertyCardData }) => {
   const mapRef = useRef(null);
   const infoWindowRef = useRef(null);
 
 
-  const initializeMap = useCallback(() => {
+  const initializeMap = useCallback( async () => {
+          await window.google.maps.importLibrary("maps");
+      await window.google.maps.importLibrary("marker");
+      await window.google.maps.importLibrary("places");
+  
+      const { Map: GMap } = window.google.maps;
     if (!mapRef.current && window.google && window.google.maps) {
       console.error("Map reference is not available.");
       return;
     }
-    const lat = parseFloat(selectedProperty.PropertyLatitude??selectedProperty.Propertylatitude);
-    const lng = parseFloat(selectedProperty.PropertyLongitude??selectedProperty.Propertylongitude);
+
+    const lat = parseFloat(selectedProperty.PropertyLatitude);
+    const lng = parseFloat(selectedProperty.PropertyLongitude);
+
+    if (isNaN(lat) || isNaN(lng)) {
+      console.warn("Invalid coordinates for property:", selectedProperty);
+      return;
+    }
+
     const map = new GMap(mapRef.current, {
       center: { lat: lat, lng: lng },
       zoom: 13,
@@ -52,6 +57,7 @@ const NearbyPlaceMap = ({ selectedProperty, propertyCardData }) => {
       ],
     });
     mapRef.current = map;
+    const service = new window.google.maps.places.PlacesService(map);
     const markerContent = document.createElement("div");
     if(propertyCardData.ShowLocation === 'No'){
       markerContent.style.width = "75px";
@@ -63,14 +69,12 @@ const NearbyPlaceMap = ({ selectedProperty, propertyCardData }) => {
       markerContent.style.border = "1px solid #078e13e6";
       markerContent.style.backgroundColor = "#01ff173b";
     }
-    const markerElement = new AdvancedMarkerElement({
+    
+  
+    const markerElement = new window.google.maps.marker.AdvancedMarkerElement({
       map,
-      title: selectedProperty.PropertyName,
       content: propertyCardData.ShowLocation === 'No' ? markerContent: null,
-      position: new window.google.maps.LatLng(
-        lat,
-        lng
-      ),
+      position: new window.google.maps.LatLng(lat, lng),
     });
 
     markerElement.addListener('click', () => {
@@ -80,80 +84,81 @@ const NearbyPlaceMap = ({ selectedProperty, propertyCardData }) => {
     addNearbyPlaces(map, { lat, lng });
 
   }, []);
+
   useEffect(() => {
     initializeMap();
   }, [initializeMap]);
 
 
-  const addNearbyPlaces = async (map, center) => {
-    const request = {
-      // required parameters
-      fields: ["displayName", "location", "formattedAddress", "types"],
-      locationRestriction: {
-        center: center,
+  const addNearbyPlaces = (map, center) => {
+    const service = new window.google.maps.places.PlacesService(map);
+  
+    const types = ['school', 'restaurant']; // You can also add 'hospital'
+  
+    types.forEach((type) => {
+      const request = {
+        location: center,
         radius: 5000,
-      },
-      // optional parameters
-      includedPrimaryTypes: ["restaurant", "school"],
-      maxResultCount: 20,
-      //rankPreference: SearchNearbyRankPreference.POPULARITY,
-      language: "en-US",
-      //region: "us",
-    };
-    //@ts-ignore
-    const { places } = await Place.searchNearby(request);
+        type: type
+      };
   
-    if (places.length) {
-      
-      // Loop through and get all the results.
-      places.forEach((place) => {
-
-        const markerContent = document.createElement("div");
-  markerContent.style.width = "24px";
-  markerContent.style.height = "24px";
-  markerContent.style.display = "flex";
-  markerContent.style.alignItems = "center";
-  markerContent.style.justifyContent = "center";
-  markerContent.style.backgroundImage = `url(${place.types.includes("school")?school:restaurant})`;
-  markerContent.style.backgroundRepeat = "no-repeat";
-  markerContent.style.backgroundSize = "50%";
-  markerContent.style.borderRadius = "50%";
-  markerContent.style.border = "1px solid";
-  markerContent.style.backgroundPosition = "center";
-  markerContent.style.backgroundColor = "white";
-
-        const markerView = new AdvancedMarkerElement({
-          map,
-          position: place.location,
-          content: markerContent,
-          title: place.displayName,
-        });
+      service.nearbySearch(request, (results, status) => {
+        if (status === window.google.maps.places.PlacesServiceStatus.OK && results.length) {
+          results.forEach((place) => {
+            const markerContent = document.createElement("div");
+            markerContent.style.width = "24px";
+            markerContent.style.height = "24px";
+            markerContent.style.display = "flex";
+            markerContent.style.alignItems = "center";
+            markerContent.style.justifyContent = "center";
+            markerContent.style.backgroundImage = `url(${type === "school" ? school : restaurant})`;
+            markerContent.style.backgroundRepeat = "no-repeat";
+            markerContent.style.backgroundSize = "50%";
+            markerContent.style.borderRadius = "50%";
+            markerContent.style.border = "1px solid";
+            markerContent.style.backgroundPosition = "center";
+            markerContent.style.backgroundColor = "white";
   
-        const schoolInfoWindow = new window.google.maps.InfoWindow({
-          content: `<div class="mappopup-content" style="padding:8px;">
-          <button class="mappopup-close-button">X</button>
-          <strong>${place.displayName}</strong><br>${place.formattedAddress}</div>`,
-        });
-
-        markerView.addListener('click', () => {
-          if (infoWindowRef.current) {
-            infoWindowRef.current.close();
-          }
-          schoolInfoWindow.open(map, markerView);
-          infoWindowRef.current = schoolInfoWindow;
-
-          setTimeout(() => {
-            const closeButton = document.querySelector('.mappopup-close-button');
-            if (closeButton) {
-              closeButton.onclick = () => schoolInfoWindow.close();
-            }}, 500);
-        });
+            const placeLatLng = new window.google.maps.LatLng(
+              place.geometry.location.lat(),
+              place.geometry.location.lng()
+            );
+  
+            const markerView = new window.google.maps.marker.AdvancedMarkerElement({
+              map,
+              position: placeLatLng,
+              content: markerContent,
+              title: place.name,
+            });
+  
+            const infoWindow = new window.google.maps.InfoWindow({
+              content: `<div class="mappopup-content" style="padding:8px;">
+                <button class="mappopup-close-button">X</button>
+                <strong>${place.name}</strong><br>${place.vicinity}</div>`,
+            });
+  
+            markerView.addListener('click', () => {
+              if (infoWindowRef.current) {
+                infoWindowRef.current.close();
+              }
+              infoWindow.open(map, markerView);
+              infoWindowRef.current = infoWindow;
+  
+              setTimeout(() => {
+                const closeButton = document.querySelector('.mappopup-close-button');
+                if (closeButton) {
+                  closeButton.onclick = () => infoWindow.close();
+                }
+              }, 500);
+            });
+          });
+        } else {
+          console.log(`No nearby places found for ${type}. Status: ${status}`);
+        }
       });
-      
-    } else {
-      console.log("No results");
-    }
-  }
+    });
+  };
+  
   const showInfoWindow = (map, marker, property) => {
     if (infoWindowRef.current) {
       infoWindowRef.current.close();

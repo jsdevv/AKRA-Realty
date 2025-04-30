@@ -2,6 +2,7 @@ import { toast } from "react-toastify";
 import { fetchAddpropertyFavorties, fetchDeletePropertyFavorties } from "../API/api"; // update path
 
 export const usePropertyFavorite = (favorites, toggleFavorite, bearerToken, Id, setLocalFavorites) => {
+
   const handleToggleFavorite = async (property) => {
     console.log(property, "toggle");
     console.log(favorites, "fav");
@@ -10,7 +11,7 @@ export const usePropertyFavorite = (favorites, toggleFavorite, bearerToken, Id, 
 
     try {
       // Optimistically update the UI by toggling the favorite state before the API call
-      toggleFavorite(property);
+      // toggleFavorite(property);
       // Update local favorites list optimistically
       setLocalFavorites(prev => {
         if (isFavorited) {

@@ -1190,3 +1190,150 @@ export const fetchProjectView = async (bearerToken, payload) => {
 };
 
 
+export const fetchImagesForDisplayOrder = async (bearerToken) => {
+  try {
+    const response = await fetch(
+      API_URL,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${bearerToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          RequestParamType: 'GetProjectImagesForDisplayOrder',
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok: ' + response.statusText);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching properties:', error);
+    throw error;
+  }
+};
+
+// export const fetchGetImgbasedProject = async (bearerToken) => {
+//   try {
+//     const response = await fetch(
+//       API_URL,
+//       {
+//         method: 'POST',
+//         headers: {
+//           Authorization: `Bearer ${bearerToken}`,
+//           'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify({
+//           RequestParamType: 'GetProjectImagesForDisplayOrder2',
+//         }),
+//       }
+//     );
+
+//     if (!response.ok) {
+//       throw new Error('Network response was not ok: ' + response.statusText);
+//     }
+
+//     const data = await response.json();
+//     return data;
+//   } catch (error) {
+//     console.error('Error fetching properties:', error);
+//     throw error;
+//   }
+// };
+
+export const fetchGetImgbasedProject = async (bearerToken, payload) => {
+  try {
+    const response = await fetch(EditData_API, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${bearerToken}`
+      },
+      body: JSON.stringify({
+        RequestParamType: 'UpdateProjectImagesForDisplayOrder',
+        json: payload
+      })
+    });
+
+    if (!response.ok) {
+      // Log response status for debugging
+      console.error('Fetch failed with status:', response.status);
+      const errorText = await response.text();
+      console.error('Error details:', errorText);
+      throw new Error(`Failed to fetch data: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data; // Assuming data is an array of objects with PropertyStatus field
+  } catch (error) {
+    // Additional logging to help identify the problem
+    console.error('Error fetching property status options:', error);
+    throw error; // Rethrow the error to handle it in the component
+  }
+};
+
+
+export const fetchAddImagesForDisplayOrder = async (bearerToken, payload) => {
+  try {
+    const response = await fetch(EditData_API, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${bearerToken}`
+      },
+      body: JSON.stringify({
+        RequestParamType: 'UpdateProjectImageDisplayOrder',
+        json: payload
+      })
+    });
+
+    if (!response.ok) {
+      // Log response status for debugging
+      console.error('Fetch failed with status:', response.status);
+      const errorText = await response.text();
+      console.error('Error details:', errorText);
+      throw new Error(`Failed to fetch data: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data; // Assuming data is an array of objects with PropertyStatus field
+  } catch (error) {
+    // Additional logging to help identify the problem
+    console.error('Error fetching property status options:', error);
+    throw error; // Rethrow the error to handle it in the component
+  }
+};
+
+
+export const fetchListingsAuthority = async (bearerToken) => {
+  try {
+    const response = await fetch(
+      API_URL,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${bearerToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          RequestParamType: 'ListingsAuthority',
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok: ' + response.statusText);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching properties:', error);
+    throw error;
+  }
+};

@@ -38,68 +38,52 @@ export const forgotPasswordAPI = async (email) => {
 
   
 
-export const formRegistrationAPI = async (firstName, lastName, email, phoneNumber, role, countryCode,Password,ConfirmPassword) => {
+export const formRegistrationAPI = async (firstName, lastName, email, phoneNumber, role, countryCode, Password, ConfirmPassword) => {
   try {
     const response = await fetch(`${BASE_URL}/api/users/signup`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ firstName, lastName, email, phoneNumber, role, countryCode,Password,ConfirmPassword }),
+      body: JSON.stringify({ firstName, lastName, email, phoneNumber, role, countryCode, Password, ConfirmPassword }),
     });
 
+    const data = await response.json();
+
     if (!response.ok) {
-      const errorData = await response.json();
-      console.log(errorData, "error");
-
-      // Extract the first error message from the Errors array
-      const firstError = errorData.Errors?.[0]?.Message;
-      console.log(firstError,"error");
-      if (firstError) {
-        throw new Error(firstError); // Throw the actual error message from the API
-      }
-
-      // Default error message if no specific error is found
-      throw new Error(errorData.message || 'Failed to register user');
+      const firstError = data.Errors?.[0]?.Message;
+      throw new Error(firstError || data.message || 'Failed to register user');
     }
 
-    return await response.json();
+    return { status: response.status, data };
   } catch (error) {
     throw new Error(error.message || 'Something went wrong');
   }
 };
 
-export const formRegistrationAgentAPI = async (firstName, lastName, email, phoneNumber, role, countryCode,Password,ConfirmPassword) => {
+
+export const formRegistrationAgentAPI = async (firstName, lastName, email, phoneNumber, role, countryCode, Password, ConfirmPassword) => {
   try {
     const response = await fetch(`${BASE_URL}/api/users/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ firstName, lastName, email, phoneNumber, role, countryCode,Password,ConfirmPassword }),
+      body: JSON.stringify({ firstName, lastName, email, phoneNumber, role, countryCode, Password, ConfirmPassword }),
     });
 
+    const data = await response.json();
+
     if (!response.ok) {
-      const errorData = await response.json();
-      console.log(errorData, "error");
-
-      // Extract the first error message from the Errors array
-      const firstError = errorData.Errors?.[0]?.Message;
-      console.log(firstError,"error");
-      if (firstError) {
-        throw new Error(firstError); // Throw the actual error message from the API
-      }
-
-      // Default error message if no specific error is found
-      throw new Error(errorData.message || 'Failed to register user');
+      const firstError = data.Errors?.[0]?.Message;
+      throw new Error(firstError || data.message || 'Failed to register user');
     }
 
-    return await response.json();
+    return { status: response.status, data };
   } catch (error) {
     throw new Error(error.message || 'Something went wrong');
   }
 };
-
   
 
   export const formchangepassword = async ( currentPassword, password, confirmPassword) => {

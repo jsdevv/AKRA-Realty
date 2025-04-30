@@ -41,7 +41,14 @@
 .relative{
     position: relative;
 }
+.ml-auto{
+    margin-left: auto;
+}
+.gap-16{
+    gap: 16px;
+}
 
+/* Existing property marker styles */
 .property-marker {
     background-color: rgb(163, 0, 11);
 }
@@ -191,7 +198,7 @@
     cursor: pointer;
     outline: none;
     padding: 0;
-    &btn-search{
+    &.btn-search{
         font-size: 13px;
         margin-left: 10px;
     }
@@ -203,4 +210,13 @@
 }
 .mappopup-close-button{
     z-index: 1000000;
+}
+.autosuggest-locality {
+    font-size: 10px;
+    margin: 0 10px;
+}
+.dropdown-menu{
+    width: auto !important;
+    max-width: fit-content; 
+    min-width: 155px;
 }
