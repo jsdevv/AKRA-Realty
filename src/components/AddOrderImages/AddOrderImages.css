@@ -235,3 +235,7 @@
     justify-content: center;
   }
 }
+
+.orderinput-error {
+  border: 2px solid red;
+}

@@ -4,15 +4,19 @@ import { useTypesense } from "../context/TypesenseContext";
 import { FaSearch } from "react-icons/fa";
 import "./Autocomplete.css";
 
-const Autocomplete = () => {
+const Autocomplete = ({herosearch}) => {
   const containerRef = useRef(null);
-  const [query, setQuery] = useState("");
+  const { query, updateQuery, setHitLocation } = useTypesense();
+  const [searchQuery, setSearchQuery] = useState(query);
   const [suggestions, setSuggestions] = useState([]);
   const [isFocused, setIsFocused] = useState(false);
-  const { updateQuery, setHitLocation } = useTypesense();
 
   useEffect(() => {
-    if (query.trim() === "") {
+    setSearchQuery(query);
+  }, [query]);
+
+  useEffect(() => {
+    if (searchQuery.trim() === "") {
       setSuggestions([]);
       return;
     }
@@ -23,10 +27,11 @@ const Autocomplete = () => {
           .collections("properties")
           .documents()
           .search({
-            q: query,
+            q: searchQuery,
             query_by:
-              "projectName,propertyName,propertyState,propertyCity,propertyZipCode,propertyCardLine2,propertyCardLine3,propertyAddress1,propertyAddress2,locality",
+              "projectName,propertyName,propertyState,propertyCity,propertyZipCode,locality",
             limit: 250,
+            query_by_weights: "10,10,1,1,1,1",
             include_fields: "projectName,propertyName,locality,location",
           });
 
@@ -61,17 +66,17 @@ const Autocomplete = () => {
     };
 
     fetchSuggestions();
-  }, [query]);
+  }, [searchQuery]);
 
   const handleSelect = (item) => {
-    setQuery(item.projectName);
+    setSearchQuery(item.projectName);
     setSuggestions([]);
     updateQuery(item.projectName);
     setHitLocation(item);
   };
 
   const handleClear = () => {
-    setQuery("");
+    setSearchQuery("");
     setSuggestions([]);
     updateQuery('*');
   };
@@ -79,7 +84,7 @@ const Autocomplete = () => {
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       setSuggestions([]);
-      updateQuery(query);
+      updateQuery(searchQuery);
     }
   };
 
@@ -88,21 +93,24 @@ const Autocomplete = () => {
       <div className="autocomplete-input-wrapper">
         <input
           type="text"
-          value={query}
+          value={searchQuery === '*' ? '' : searchQuery}
           onChange={(e) => {
-            setQuery(e.target.value);
+            setSearchQuery(e.target.value);
             if (e.target.value.trim() === "") {
               handleClear();
+            }
+            if(herosearch){
+              updateQuery(e.target.value);
             }
           }}
           onKeyDown={handleKeyDown}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           placeholder="Address City, Pin Code"
-          className="autocomplete-input"
+          className={herosearch? 'search-field' : 'autocomplete-input'}
         />
         <div className="autocomplete-clear-button">
-        {query && (
+        {searchQuery && !herosearch && (
           <button
             type="button"
             
@@ -112,11 +120,11 @@ const Autocomplete = () => {
           </button>
         )}
         <button
-        className="btn-search"
+        className={herosearch? 'search-icon11' : "btn-search"}
             type="button"
             onClick={() => {
               setSuggestions([]);
-              updateQuery(query);
+              updateQuery(searchQuery);
             }}
           >
              <FaSearch />

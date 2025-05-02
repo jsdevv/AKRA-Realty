@@ -87,7 +87,7 @@ function MapResults({ zoom }) {
                     position: "absolute",
                     top: "-230px",
                     left: "-110px",
-                    zIndex: "1",
+                    zIndex: "2",
                     filter: "drop-shadow(0px 2px 5px rgba(0,0,0,0.2))",
                   }}
                 >

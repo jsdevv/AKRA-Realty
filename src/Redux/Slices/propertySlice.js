@@ -335,8 +335,7 @@ const propertySlice = createSlice({
     },
 
     setFilteredVideos(state,action) {
-      const filteredVideos = state.videos.filter((video) => {
-      
+      const filteredVideos = state.videos.filter((video) => {  
         const matchesSearchTerm = [
           video.CompanyName,
           video.ProjectName,
@@ -352,10 +351,16 @@ const propertySlice = createSlice({
         const matchesFilters =
           (!state.selectedPropertyStatus || video.PropertyStatus === state.selectedPropertyStatus) &&
           (state.selectedHomeTypes.length === 0 || state.selectedHomeTypes.includes(String(video.PropertyTypeID))) &&
-          (state.selectedcustomStatus.length === 0 || state.selectedcustomStatus.some((cs) =>
-            video.CustomStatus?.includes(cs)
-          )) &&
-          (state.priceFilter.length === 0 ||
+          // (state.selectedcustomStatus.length === 0 || state.selectedcustomStatus.some((cs) =>
+          //   video.CustomStatus?.includes(cs)
+          // )) 
+          
+          (state.selectedcustomStatus.length === 0 ||
+            state.selectedcustomStatus.some((cs) =>
+              video.CustomPropertyTypes?.includes(cs)
+            ))
+          &&
+          (state.priceFilter.length === 0 ||  
             state.priceFilter.some(
               (price) =>
                 video.DisplayAmount >= price.minPrice &&

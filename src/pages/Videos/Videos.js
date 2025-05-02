@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchVideos } from '../../Redux/Slices/videosSlice';
 import YouTube from 'react-youtube';
@@ -6,25 +6,22 @@ import { MdFilterList } from 'react-icons/md';
 import { FaRupeeSign } from 'react-icons/fa';
 import VideoSlider from '../../components/VideoSlider/VideoSlider';
 import './Videos.css';
-import { fetchPremiumListingsThunk, fetchProperties, setCurrentPage, setFilteredVideos, setPriceFilter, setSearchTerm, setSelectedcustomStatus, setSelectedHomeTypes, setSelectedPropertyStatus } from '../../Redux/Slices/propertySlice';
+import { fetchPremiumListingsThunk, fetchProperties, setFilteredVideos } from '../../Redux/Slices/propertySlice';
 
 const Videos = () => {
   const dispatch = useDispatch();
   const bearerToken = useSelector((state) => state.auth.bearerToken);
-  const [projects, setProjects] = useState([]);
+  // const [projects, setProjects] = useState([]);
   const [isFiltering, setIsFiltering] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
   const [selectedPropertyVideo, setSelectedPropertyVideo] = useState(null);
 
-
   const {
     videos,
     visibleVideos,
-    filteredVideos,
     properties,
     premiumListings,
     loading,
-    error,
     searchTerm,
     selectedPropertyStatus,
     selectedcustomStatus,
@@ -33,27 +30,38 @@ const Videos = () => {
     showPremiumListings,
   } = useSelector((state) => state.properties);
 
-
-  console.log(visibleVideos, "visibleVideos");
+  const hasFetchedProperties = useRef(false);
 
   useEffect(() => {
-    if (bearerToken && !loading && properties.length === 0) {
+    if (bearerToken && !hasFetchedProperties.current && properties.length === 0) {
+      hasFetchedProperties.current = true;
       dispatch(fetchProperties(bearerToken));
     }
-  }, [bearerToken, loading, properties.length, dispatch]);
-
+  }, [bearerToken, properties.length, dispatch]);
+  
+  const hasFetchedVideos = useRef(false);
   useEffect(() => {
-    if (bearerToken && !loading && videos.length === 0) {
+    if (bearerToken && !hasFetchedVideos.current && videos.length === 0) {
+      hasFetchedVideos.current = true;
       dispatch(fetchVideos(bearerToken));
     }
-  }, [bearerToken, loading, videos.length, dispatch]);
-
-
+  }, [bearerToken, videos.length, dispatch]);
+  
+  const hasFetchedPremium = useRef(false);
   useEffect(() => {
-    if (bearerToken && showPremiumListings && !premiumListings.length) {
+    if (bearerToken && showPremiumListings && !hasFetchedPremium.current && premiumListings.length === 0) {
+      hasFetchedPremium.current = true;
       dispatch(fetchPremiumListingsThunk(bearerToken));
     }
-  }, [bearerToken, dispatch, showPremiumListings, premiumListings.length]);
+  }, [bearerToken, showPremiumListings, premiumListings.length, dispatch]);
+  
+
+  useEffect(() => {
+    if (!selectedProject && projects.length > 0) {
+      setSelectedProject(projects[0]);
+    }
+  }, [projects, selectedProject]);
+  
 
   useEffect(() => {
     dispatch(setFilteredVideos());
@@ -67,90 +75,159 @@ const Videos = () => {
     showPremiumListings,
     dispatch]);
 
-  useEffect(() => {
-    if (visibleVideos && visibleVideos.length) {
-      processVideoData(visibleVideos);
-    }
-  }, [visibleVideos]);
+  // useEffect(() => {
+  //   processVideoData(visibleVideos || []);
+  // }, [visibleVideos]);
 
+  // const processVideoData = (data) => {
+  //   if (data && Array.isArray(data)) {
+  //     const projectMap = new Map();
+  //     const propertyList = [];
 
-  const processVideoData = (data) => {
-    if (data && Array.isArray(data)) {
-      const projectMap = new Map();
-      const propertyList = [];
+  //     data.forEach((property) => {
+  //       const {
+  //         ProjectName,
+  //         ProjectVideoUrls,
+  //         PropertyVideoUrls,
+  //         PropertyCardLine3,
+  //         PropertyName,
+  //         PriceRange,
+  //         SqFtRange,
+  //         Amount,
+  //         PropertyID,
+  //         ProjectID,
+  //       } = property;
+
+  //       const projectKey = ProjectName || PropertyName;
+
+  //       if (ProjectName && ProjectVideoUrls) {
+  //         const projectMapKey = `${ProjectID}-${ProjectName}`;
+
+  //         if (!projectMap.has(projectMapKey)) {
+  //           projectMap.set(projectMapKey, {
+  //             id: `${ProjectID}-${ProjectVideoUrls}`,
+  //             videoId: ProjectVideoUrls,
+  //             name: projectKey,
+  //             PropertyCardLine3,
+  //             properties: [],
+  //             PriceRange: PriceRange || Amount,
+  //             SqFtRange,
+  //           });
+  //         }
+
+  //         if (PropertyVideoUrls) {
+  //           projectMap.get(projectMapKey).properties.push({
+  //             id: `${PropertyID}-${PropertyVideoUrls}`, // unique key
+  //             videoId: `${PropertyID}-${ProjectID}-${Math.random().toString(36).substr(2, 5)}`
+  //             ,               // actual YouTube video ID
+  //             title: PropertyName,
+  //           });
+  //         }
+  //       } else if (PropertyVideoUrls) {
+  //         propertyList.push({
+  //           id: `${PropertyID}-${PropertyVideoUrls}`, // unique key
+  //           videoId: `${PropertyID}-${ProjectID}-${Math.random().toString(36).substr(2, 5)}`
+  //           ,               // actual YouTube video ID
+  //           title: PropertyName,
+  //           PriceRange: PriceRange || Amount,
+  //           SqFtRange,
+  //           PropertyCardLine3,
+  //         });
+  //       }
+  //     });
+
+  //     const finalProjects = Array.from(projectMap.values());
+
+  //     const allProperties = [
+  //       ...finalProjects,
+  //       ...propertyList.map((property) => ({
+  //         id: property.id,
+  //         videoId: property.videoId,
+  //         name: property.title,
+  //         description: '',
+  //         properties: [],
+  //         PriceRange: property.PriceRange,
+  //         SqFtRange: property.SqFtRange,
+  //         PropertyCardLine3: property.PropertyCardLine3,
+  //       })),
+  //     ];
+
+  //     setProjects(allProperties);
+  //     setSelectedProject(finalProjects[0] || (propertyList.length > 0 ? { properties: propertyList } : null));
+  //     setSelectedPropertyVideo(null);
+  //   }
+  // };
+  const projects = useMemo(() => {
+    if (!visibleVideos || !Array.isArray(visibleVideos)) return [];
   
-      data.forEach((property) => {
-        const {
-          ProjectName,
-          ProjectVideoUrls,
-          PropertyVideoUrls,
-          PropertyCardLine3,
-          PropertyName,
-          PriceRange,
-          SqFtRange,
-          Amount,
-          PropertyID,
-          ProjectID,
-        } = property;
+    const projectMap = new Map();
+    const propertyList = [];
   
-        const projectKey = ProjectName || PropertyName;
+    visibleVideos.forEach((property) => {
+      const {
+        ProjectName,
+        ProjectVideoUrls,
+        PropertyVideoUrls,
+        PropertyCardLine3,
+        PropertyName,
+        PriceRange,
+        SqFtRange,
+        Amount,
+        PropertyID,
+        ProjectID,
+      } = property;
   
-        if (ProjectName && ProjectVideoUrls) {
-          const projectMapKey = `${ProjectID}-${ProjectName}`;
+      const projectKey = ProjectName || PropertyName;
   
-          if (!projectMap.has(projectMapKey)) {
-            projectMap.set(projectMapKey, {
-              id: `${ProjectID}-${ProjectVideoUrls}`, // unique key
-              videoId: ProjectVideoUrls,              // actual YouTube video ID
-              name: projectKey,
-              PropertyCardLine3,
-              properties: [],
-              PriceRange: PriceRange || Amount,
-              SqFtRange,
-            });
-          }
-  
-          if (PropertyVideoUrls) {
-            projectMap.get(projectMapKey).properties.push({
-              id: `${PropertyID}-${PropertyVideoUrls}`, // unique key
-              videoId: PropertyVideoUrls,               // actual YouTube video ID
-              title: PropertyName,
-            });
-          }
-        } else if (PropertyVideoUrls) {
-          propertyList.push({
-            id: `${PropertyID}-${PropertyVideoUrls}`, // unique key
-            videoId: PropertyVideoUrls,               // actual YouTube video ID
-            title: PropertyName,
+      if (ProjectName && ProjectVideoUrls) {
+        const projectMapKey = `${ProjectID}-${ProjectName}`;
+        if (!projectMap.has(projectMapKey)) {
+          projectMap.set(projectMapKey, {
+            id: `${ProjectID}-${ProjectVideoUrls}`,
+            videoId: ProjectVideoUrls,
+            name: projectKey,
+            PropertyCardLine3,
+            properties: [],
             PriceRange: PriceRange || Amount,
             SqFtRange,
-            PropertyCardLine3,
           });
         }
-      });
   
-      const finalProjects = Array.from(projectMap.values());
+        if (PropertyVideoUrls) {
+          projectMap.get(projectMapKey).properties.push({
+            id: `${PropertyID}-${PropertyVideoUrls}`,
+            videoId: PropertyVideoUrls,
+            title: PropertyName,
+          });
+        }
+      } else if (PropertyVideoUrls) {
+        propertyList.push({
+          id: `${PropertyID}-${PropertyVideoUrls}`,
+          videoId: PropertyVideoUrls,
+          title: PropertyName,
+          PriceRange: PriceRange || Amount,
+          SqFtRange,
+          PropertyCardLine3,
+        });
+      }
+    });
   
-      const allProperties = [
-        ...finalProjects,
-        ...propertyList.map((property) => ({
-          id: property.id,
-          videoId: property.videoId,
-          name: property.title,
-          description: '',
-          properties: [],
-          PriceRange: property.PriceRange,
-          SqFtRange: property.SqFtRange,
-          PropertyCardLine3: property.PropertyCardLine3,
-        })),
-      ];
+    const finalProjects = Array.from(projectMap.values());
   
-      setProjects(allProperties);
-      setSelectedProject(finalProjects[0] || (propertyList.length > 0 ? { properties: propertyList } : null));
-      setSelectedPropertyVideo(null);
-    }
-  };
-  
+    return [
+      ...finalProjects,
+      ...propertyList.map((property) => ({
+        id: property.id,
+        videoId: property.videoId,
+        name: property.title,
+        description: '',
+        properties: [],
+        PriceRange: property.PriceRange,
+        SqFtRange: property.SqFtRange,
+        PropertyCardLine3: property.PropertyCardLine3,
+      })),
+    ];
+  }, [visibleVideos]);
 
   const handleProjectClick = (project) => {
     setSelectedProject(project);
@@ -170,12 +247,10 @@ const Videos = () => {
             <MdFilterList className="videofilter-icon" />
           </div>
 
-          {isFiltering ? (
-            <p>Loading videos...</p>
-          ) : error ? (
-            <p className="error-text">Error: {error}</p>
-          ) : projects.length === 0 ? (
-            <p>No videos available</p>
+          {loading ? (
+            <p>Videos are loading...</p>
+          ) : visibleVideos && visibleVideos.length === 0 ? (
+            <p>No videos found based on your filters.</p>
           ) : (
             <div className="video-list">
               {projects.map((project) => (
@@ -234,7 +309,7 @@ const Videos = () => {
             </div>
           ) : (
             <div className="project-info">
-              <p>No Property Videos available.</p>
+              <p>Property videos are currently unavailable.</p>
             </div>
           )}
         </div>

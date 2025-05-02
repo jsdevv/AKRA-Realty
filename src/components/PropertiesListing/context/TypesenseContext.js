@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import typesense from "../lib/typesense"; // Import your Typesense client
-import { useViewsCount } from "../../../utils/fetchPropertyViews";
 
 // Create the context
 const TypesenseContext = createContext();
@@ -77,7 +76,6 @@ export const TypesenseProvider = ({ children }) => {
   const [facetData, setFacetData] = useState(null);
   const [facetStats, setFacetStats] = useState(null);
   const [hitLocation, setHitLocation] = useState(null);
-    const { fetchPropertyViews, fetchProjectViews } = useViewsCount();
 
   const formatCurrency = (value) => {
     if (value < 1000) return value.toString();
@@ -142,6 +140,7 @@ export const TypesenseProvider = ({ children }) => {
             .join(" && "),
           query_by:
             "projectName,propertyName,propertyState,propertyCity,propertyZipCode,locality",
+          query_by_weights: "10,10,1,1,1,1",
           limit: PAGE_SIZE,
           page: 1,
           num_typos: 0,
@@ -171,8 +170,8 @@ export const TypesenseProvider = ({ children }) => {
                   .filter((f) => !f.endsWith("[]") && !f.trim().endsWith(":"))
                   .map((f) => `(${f})`)
                   .join(" && "),
-                query_by:
-                  "projectName,propertyName,propertyState,propertyCity,propertyZipCode,locality",
+                query_by: "projectName,propertyName,propertyState,propertyCity,propertyZipCode,locality",
+                query_by_weights: "10,10,1,1,1,1",
                 limit: PAGE_SIZE,
                 page: page,
                 num_typos: 0,
@@ -381,20 +380,9 @@ export const TypesenseProvider = ({ children }) => {
     setFacetStats(stats);
   };
 
-  // const openPropertyModal = async (property) => {
-  //   setPropertyToOpen(property);
-  // };
-
   const openPropertyModal = async (property) => {
-    if (property?.found === 1) {
-      await fetchPropertyViews(property.propertyID);
-    } else {
-      await fetchProjectViews(property.projectID);
-    }
-  
     setPropertyToOpen(property);
   };
-  
 
   const closePropertyModal = () => {
     setPropertyToOpen(null);

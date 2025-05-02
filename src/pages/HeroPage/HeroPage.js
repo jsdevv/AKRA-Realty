@@ -12,6 +12,7 @@ import CustomerSupport from '../../components/CustomerSupport/CustomerSupport';
 import { motion } from "framer-motion";
 import WhatWeServe from '../../components/WhatWeServe/WhatWeServe';
 import { FaSearch } from 'react-icons/fa';
+import Autocomplete from '../../components/PropertiesListing/components/Autocomplete';
 
 const HeroPage = () => {
     const slides = [
@@ -60,15 +61,16 @@ const HeroPage = () => {
 
                         <div className='dreamhome'>
                             <div  className="landpage-search">
-                            <input
+                            {/* <input
                                                                     type="text"
                                                                     placeholder="Enter a Locality or City"
                                                                     className="search-field"
                                                                  
-                                                                />
-                                                                <button className="search-icon11" >
+                                                                /> */}
+                                                                <Autocomplete herosearch={true}/>
+                                                                {/* <button className="search-icon11" >
                                                                     <FaSearch />
-                                                                </button>
+                                                                </button> */}
 
                             </div>
                                  

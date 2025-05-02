@@ -9,7 +9,6 @@ import "./PropertiesListing.css";
 import Autocomplete from "./components/Autocomplete";
 import {
   prices,
-  TypesenseProvider,
   useTypesense,
 } from "./context/TypesenseContext";
 import ListingModal from "../ListingModal/ListingModal";
@@ -57,7 +56,7 @@ const PropertiesListing = (bearerToken) => {
     fetchData();
   }, [bearerToken]);
   return (
-    <TypesenseProvider>
+    <>
       <div className="navbar-bottom">
         <div className="search-container">
           <div className="search-input">
@@ -124,7 +123,7 @@ const PropertiesListing = (bearerToken) => {
           <Map />
         </div>
       </div>
-    </TypesenseProvider>
+    </>
   );
 };
 

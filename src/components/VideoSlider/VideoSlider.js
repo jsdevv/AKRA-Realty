@@ -59,7 +59,7 @@ const VideoSlider = ({ properties, selectedPropertyVideo, onPropertyClick }) => 
                 onClick={() => onPropertyClick(property)}
               >
                 <img
-                  src={`https://img.youtube.com/vi/${property.id}/mqdefault.jpg`}
+                  src={`https://img.youtube.com/vi/${property.videoId}/mqdefault.jpg`}
                   alt={property.title}
                   className="property-video-thumbnail"
                   loading="lazy"

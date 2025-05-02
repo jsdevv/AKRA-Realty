@@ -9,6 +9,9 @@ const AddOrderImages = () => {
   const bearerToken = useSelector((state) => state.auth.bearerToken);
   const [searchTerm, setSearchTerm] = useState('');
   const [images, setImages] = useState([]);
+  const [uniqueProjects, setUniqueProjects] = useState([]);
+  const [loadingImages, setLoadingImages] = useState(false);
+  console.log(images,"images");
   const [selectedProjectID, setSelectedProjectID] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -18,15 +21,21 @@ const AddOrderImages = () => {
     const fetchData = async () => {
       try {
         const data = await fetchImagesForDisplayOrder(bearerToken);
-        setImages(data);
-
-        // Initialize displayOrders with the existing DisplayOrderID values
-        const initialDisplayOrders = data.reduce((acc, img) => {
-          acc[img.ProjectImageID] = img.DisplayOrderID;
-          return acc;
-        }, {});
-
-        setDisplayOrders(initialDisplayOrders);
+  
+        // Only extract unique project info
+        const uniqueProjects = Array.from(
+          new Map(
+            data.map(item => [item.ProjectID, {
+              ProjectID: item.ProjectID,
+              ProjectName: item.ProjectName,
+              Locality: item.Locality,
+              City: item.City,
+              Zipcode: item.Zipcode,
+            }])
+          ).values()
+        );
+  
+        setUniqueProjects(uniqueProjects); // Create a new state to hold just project info
       } catch (err) {
         setError(err.message || 'Something went wrong');
       } finally {
@@ -35,64 +44,78 @@ const AddOrderImages = () => {
     };
     fetchData();
   }, [bearerToken]);
+  
 
-
-  const uniqueProjects = Array.from(
-    new Map(
-      images.map(item => [item.ProjectID, {
-        ProjectID: item.ProjectID,
-        ProjectName: item.ProjectName,
-        Locality: item.Locality,
-        City: item.City,
-        Zipcode: item.Zipcode,
-      }])
-    ).values()
-  );
-
-  const handleProjectClick = (projectID) => {
-    setSelectedProjectID(projectID);
+  const handleProjectClick = async (projectID) => {
+    setLoadingImages(true);
+    try {
+      const projectImages = await fetchGetImgbasedProject(bearerToken, Number(projectID));
+      const sortedImages = projectImages.sort((a, b) => {
+        if (a.DisplayOrderID == null) return 1;
+        if (b.DisplayOrderID == null) return -1;
+        return a.DisplayOrderID - b.DisplayOrderID;
+      });
+      
+      
+      setImages(sortedImages);
+  
+      const initialDisplayOrders = projectImages.reduce((acc, img) => {
+        acc[img.ProjectImageID] = img.DisplayOrderID;
+        return acc;
+      }, {});
+      
+      setDisplayOrders(initialDisplayOrders);
+      setSelectedProjectID(projectID);
+    } catch (err) {
+      console.error('Error fetching project images:', err);
+      toast.error('Failed to load project images.');
+    } finally {
+      setLoadingImages(false);
+    }
   };
-
+  
   const handleSubmit = async () => {
     if (!selectedProjectID) return;
-
+  
     const projectImages = images.filter(img => img.ProjectID === selectedProjectID);
-
-    const payload = projectImages.map(img => ({
-      ProjectID: Number(img.ProjectID),
-      ProjectImageID: Number(img.ProjectImageID),
-      DisplayOrderID: displayOrders[img.ProjectImageID] || img.DisplayOrderID,  // Use updated or original DisplayOrderID
-    }));
-
-    // Check for duplicates in DisplayOrderID for the same ProjectID
-    const displayOrderIDs = payload.map(item => item.DisplayOrderID);
-    const uniqueDisplayOrderIDs = new Set(displayOrderIDs);
-
-    if (uniqueDisplayOrderIDs.size !== displayOrderIDs.length) {
-      toast.error('Duplicate DisplayOrderID found! Each image must have a unique DisplayOrderID for the same project.');
+  
+    if (projectImages.length === 0) {
+      toast.error('No images found for the selected project.');
       return;
     }
-
-    console.log('Submitting payload:', payload);
-
-    // Ensure no DisplayOrderID is empty
+  
+    const payload = projectImages.map(img => ({
+      ProjectID: Number(img.ProjectID),
+      ProjectImageID: Number(img.ProjectimageID),
+      DisplayOrderID: displayOrders[img.ProjectimageID] || img.DisplayOrderID,
+    }));
+  
     const hasEmptyDisplayOrder = payload.some(item => item.DisplayOrderID === 0);
     if (hasEmptyDisplayOrder) {
       toast.error('Please enter a valid Display Order for all images.');
       return;
     }
-
+  
     try {
-      await fetchAddImagesForDisplayOrder(bearerToken, payload);
-      toast.success('Display order updated successfully!');
-      setSelectedProjectID(null);
-      setDisplayOrders({});
+      const response = await fetchAddImagesForDisplayOrder(bearerToken, payload);
+      console.log('API Response:', response);
+  
+      const code = String(response.ProcessCode); // Ensure type safety
+  
+      if (code === '151') {
+        toast.error(response.processMessage.replace('ERROR: ', ''));
+      } else if (response.ProcessCode === 0) {
+        toast.success('Display order updated successfully!');
+        setSelectedProjectID(null);
+        setDisplayOrders({});
+      } else {
+        toast.error('Display order not updated properly.');
+      }
     } catch (err) {
-      console.error(err);
-      toast.error('Error updating display order: ' + err.message);
+      toast.error(err?.processMessage || 'Something went wrong while updating display order.');
     }
   };
-
+  
 
   const projectImages = images.filter(img => img.ProjectID === selectedProjectID);
 
@@ -138,14 +161,14 @@ const AddOrderImages = () => {
                   <tr
                     key={project.ProjectID}
                     className="clickable"
-                    onClick={() => handleProjectClick(project.ProjectID)}
+                    // onClick={() => handleProjectClick(project.ProjectID)}
                   >
                     <td>{project.ProjectID}</td>
                     <td>{project.ProjectName}</td>
                     <td>{project.Locality}</td>
                     <td>{project.City}</td>
                     <td>{project.Zipcode}</td>
-                    <td> <p className='addorder-editbtn'> Edit </p> </td>
+                    <td> <p className='addorder-editbtn'  onClick={() => handleProjectClick(project.ProjectID)} > Edit </p> </td>
                   </tr>
                 ))}
             </tbody>
@@ -168,10 +191,10 @@ const AddOrderImages = () => {
 
             <div className="add-order-images-image-list">
               {projectImages.map((img) => (
-                <div key={img.ProjectImageID} className="add-order-images-card">
+                <div key={img.ProjectimageID} className="add-order-images-card">
                   {img.ImageURL && (
                     <img
-                      src={img.ImageURL.trim()}
+                      src={img.ImageURL}
                       alt={`Project ${img.ProjectID}`}
                       className="add-order-images-preview"
                       loading="lazy"
@@ -193,22 +216,20 @@ const AddOrderImages = () => {
                               // If the value is cleared by the user, we remove the corresponding entry
                               setDisplayOrders((prev) => {
                                 const newOrders = { ...prev };
-                                delete newOrders[img.ProjectImageID];  // Remove the entry from the state
+                                delete newOrders[img.ProjectimageID];  // Remove the entry from the state
                                 return newOrders;
                               });
                             } else {
                               // If a value is entered, we update the state with the new numeric value
                               setDisplayOrders((prev) => ({
                                 ...prev,
-                                [img.ProjectImageID]: value,  // Save the new value for this image
+                                [img.ProjectimageID]: value,  // Save the new value for this image
                               }));
                             }
                           }}
-                          value={displayOrders[img.ProjectImageID] || img.DisplayOrderID || ''}  // Display the entered or initial value
+                          value={displayOrders[img.ProjectimageID] ?? img.DisplayOrderID ?? ''}
+                        
                         />
-
-
-
 
                       </div>
 

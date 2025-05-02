@@ -127,7 +127,6 @@ const App = () => {
   };
 
   const handleSearchInputChange = (e, { newValue = '' }) => {
-    console.log(newValue,"newsearch");
     setSearchInput(newValue);
   };
 
