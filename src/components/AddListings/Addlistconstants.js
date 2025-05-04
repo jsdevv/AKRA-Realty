@@ -25,3 +25,17 @@ export const possessionStatusOptions = [
     "Rental Properties",
     "Resale Properties"
   ];
+
+  
+export const groupAFeatures = ["Land Owner Share", "Investor Share","Resale Properties"];
+
+export const groupBFeatures = [
+  "Investment Properties",
+  "Unique Concepts",
+  "Ultra Luxury",
+  "Duplex Apartments",
+  "Triplex Villas",
+  "New Launch",
+  "Fully Furnished",
+  "Rental Properties"
+];

@@ -461,11 +461,7 @@ const Stepper3 = ({formData}) => {
 
         <div className="stepper3-box stepper3-map">
           <div ref={addlistingmapRef} className="stepper3-map-view"></div>
-          {/* {
-            <pre>
-              {JSON.stringify(values, null, 2)}
-            </pre>
-          } */}
+
         </div>
       </div>
     </div>

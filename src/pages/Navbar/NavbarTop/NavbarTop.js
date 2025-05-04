@@ -67,7 +67,7 @@ const NavbarTop = ({ handleLogout, handleLogin, propertyStatusOptions = [], onSe
         <Link to="/" className={`navbar-centerlink  ${location.pathname === '/' ? 'active' : ''}`}>
           <FaHome size={22} className="home-icon" />
         </Link>
-        <Link to="/properties-new" className={`navbar-centerlink ${location.pathname ===  '/properties-new' ? 'active' : ''}`} >
+        <Link to="/properties" className={`navbar-centerlink ${location.pathname ===  '/properties' ? 'active' : ''}`} >
             Properties
           </Link>
           <Link to="/videos" className={`navbar-centerlink ${location.pathname ===  '/videos' ? 'active' : ''}`} >Videos</Link>
@@ -114,7 +114,7 @@ const NavbarTop = ({ handleLogout, handleLogin, propertyStatusOptions = [], onSe
                 className={`navbar-centerlink ${location.pathname === '/listedagents' ? 'active' : ''}`}
                 onClick={() => handlemoreLinkClick('listedagents')}
               >
-                Listed Agents
+                 Agents Listing
               </Link>
 
             </div>

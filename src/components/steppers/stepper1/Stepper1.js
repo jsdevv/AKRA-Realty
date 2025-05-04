@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Autocomplete, MenuItem, Select, TextField } from "@mui/material";
 import { AddlistingFormData, fetchcompanynameData, fetchprojectnameData } from "../../../Redux/Slices/addListingsSlice";
-import { facingOptions, possessionStatusOptions, PropertyFeatures } from "../../AddListings/Addlistconstants";
+import { facingOptions, possessionStatusOptions, groupAFeatures,groupBFeatures } from "../../AddListings/Addlistconstants";
 
 import {
   fetchPropertyHomeTypeThunk,
@@ -584,7 +584,7 @@ const Stepper1 = () => {
 
 
       </div>
-
+{/* 
       <div className="step-content">
         <h4>Select Property Features:</h4>
         <div className="checkbox-column">
@@ -602,8 +602,70 @@ const Stepper1 = () => {
             </div>
           ))}
         </div>
+      </div> */}
 
-      </div>
+<div className="step-content">
+  
+{/* Group A - Ownership Type */}
+<div className="step1radio-group">
+  <h4>Ownership Type</h4>
+  {groupAFeatures.map((feature, index) => (
+    <div className="step1radio-item" key={index}>
+      <input
+        type="radio"
+        id={`groupA-${feature}`}
+        name="groupA"
+        value={feature}
+        checked={values.PropertyFeatures?.includes(feature)}
+        onChange={(e) => {
+          const selectedGroupB = groupBFeatures.find(f =>
+            values.PropertyFeatures?.includes(f)
+          );
+          const updatedValue = selectedGroupB
+            ? `${e.target.value}, ${selectedGroupB}`
+            : e.target.value;
+
+            console.log(updatedValue,"updatedValue");
+
+          setFieldValue("PropertyFeatures", updatedValue);
+        }}
+      />
+      <label htmlFor={`groupA-${feature}`}>{feature}</label>
+    </div>
+  ))}
+</div>
+
+{/* Group B - Listing Type */}
+<div className="step1radio-group">
+  <h4>Listing Type</h4>
+  {groupBFeatures.map((feature, index) => (
+    <div className="step1radio-item" key={index}>
+      <input
+        type="radio"
+        id={`groupB-${feature}`}
+        name="groupB"
+        value={feature}
+        checked={values.PropertyFeatures?.includes(feature)}
+        onChange={(e) => {
+          const selectedGroupA = groupAFeatures.find(f =>
+            values.PropertyFeatures?.includes(f)
+          );
+          const updatedValue = selectedGroupA
+            ? `${selectedGroupA}, ${e.target.value}`
+            : e.target.value;
+
+            console.log(updatedValue,"updatedValueBBB");
+
+          setFieldValue("PropertyFeatures", updatedValue);
+        }}
+      />
+      <label htmlFor={`groupB-${feature}`}>{feature}</label>
+    </div>
+  ))}
+</div>
+
+</div>
+
     </div>
   );
 };

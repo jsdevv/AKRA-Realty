@@ -46,6 +46,7 @@ const Feedback = () => {
 
   return (
     <div className="bug-feedback-container">
+       <h1 className="bug-feedback-header">Feedback Details</h1>
            {/* Search input */}
            <div className="bug-feedback-search">
         <input
@@ -56,7 +57,7 @@ const Feedback = () => {
           className="bug-feedback-search-input"
         />
       </div>
-      <h1 className="bug-feedback-header">Feedback Details</h1>
+     
       <div className="bug-feedback-table-wrapper">
       <table className="bug-feedback-table">
         <thead>

@@ -217,7 +217,7 @@ const Agentsproperties = ({ agentsproperties }) => {
       <ToastContainer />
 
       {filteredProperties.length === 0 ? (
-        <p>No properties available</p>
+        <p>Agent Listed properties Loading.... </p>
       ) : (
         <table {...getTableProps()} className={`rwd-table agents-properties-table ${isMapVisible ? 'expanded' : ''}`}>
           <thead>

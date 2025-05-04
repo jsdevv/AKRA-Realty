@@ -11,7 +11,6 @@ import Slider from 'react-slick';
 import CustomerSupport from '../../components/CustomerSupport/CustomerSupport';
 import { motion } from "framer-motion";
 import WhatWeServe from '../../components/WhatWeServe/WhatWeServe';
-import { FaSearch } from 'react-icons/fa';
 import Autocomplete from '../../components/PropertiesListing/components/Autocomplete';
 
 const HeroPage = () => {
@@ -26,12 +25,9 @@ const HeroPage = () => {
 
 
     const handleViewListings = () => {
-        navigate('/properties-new');
+        navigate('/properties');
     };
 
-    const handleInvestorsclub = () => {
-        navigate('/investors');
-    };
 
     return (
         <>
@@ -43,7 +39,6 @@ const HeroPage = () => {
                         <span className="small-text">Smart & Accessible</span>
                         <div className="landbold-text">
                             <span className="landbold-line">Real Estate Experience<br /> made <span style={{ color: "#a38937" }}>Simple</span> & <span style={{ color: "#a38937" }}>Transparent</span>.</span> <br /> <br />
-                            {/*<span className="bold-line1">Built on <span style={{ color: "#a38937" }}>Trust</span> & <span style={{ color: "#a38937" }}>Transparency</span></span> <br/> <br/>*/}
                         </div>
 
                         <div className="Unique-text">
@@ -53,27 +48,17 @@ const HeroPage = () => {
 
                         <div className='dreamhome'>
 
-                            {/* <p>Discover Prime Properties and Investment Opportunities</p> */}
 
                             <p>Discover Your Dream Home and Investment Opportunities</p>
 
                         </div>
 
                         <div className='dreamhome'>
-                            <div  className="landpage-search">
-                            {/* <input
-                                                                    type="text"
-                                                                    placeholder="Enter a Locality or City"
-                                                                    className="search-field"
-                                                                 
-                                                                /> */}
-                                                                <Autocomplete herosearch={true}/>
-                                                                {/* <button className="search-icon11" >
-                                                                    <FaSearch />
-                                                                </button> */}
+                            <div className="landpage-search">
+
+                                <Autocomplete herosearch={true} />
 
                             </div>
-                                 
 
                             <button
                                 className="landview-listings-button"
@@ -82,19 +67,8 @@ const HeroPage = () => {
                             >
                                 View Properties
                             </button>
-{/* 
-                            <button
-                                className="landinvestor-button"
-                                onClick={handleInvestorsclub}
-                                type="button"
-                            >
-                                Investors Club
-                            </button> */}
 
                         </div>
-
-
-
 
                     </div>
 
@@ -157,10 +131,6 @@ const HeroPage = () => {
                         <h2>100+</h2>
                         <p>Agents</p>
                     </div>
-                    {/* <div className="landstat-box">
-                                <h2>10K+</h2>
-                                <p>Users</p>
-                            </div> */}
                     <div className="landstat-box">
                         <h2>6K+</h2>
                         <p>Investors</p>
@@ -177,7 +147,6 @@ const HeroPage = () => {
             <div>
                 <WhatWeServe />
             </div>
-
 
             <div className="carousel-heropage">
                 <CarouselComponent />

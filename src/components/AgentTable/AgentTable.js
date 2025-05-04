@@ -1,13 +1,9 @@
-import React, {useMemo, useCallback } from 'react';
+import React, {useMemo } from 'react';
 import { useTable } from 'react-table';
 import './AgentTable.css';
 
 
 const AgentTable = ({ agents, onAgentClick }) => {
-
-
-
-
 
 
   const columns = useMemo(() => [

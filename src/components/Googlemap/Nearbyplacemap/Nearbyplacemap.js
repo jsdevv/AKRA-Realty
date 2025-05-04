@@ -31,6 +31,7 @@ const NearbyPlaceMap = ({ selectedProperty, propertyCardData }) => {
       center: { lat: lat, lng: lng },
       zoom: 13,
       mapId: "5e34ee2a0a0595d8",
+      clickableIcons: false,
       zoomControlOptions: {
         position: window.google.maps.ControlPosition.RIGHT_CENTER,
         style: window.google.maps.ZoomControlStyle.SMALL, // Ensures small, consistent controls
@@ -169,8 +170,8 @@ const NearbyPlaceMap = ({ selectedProperty, propertyCardData }) => {
         <button class="mappopup-close-button">X</button>
         <div class="mappopup-details">
           <h3 class="mappopup-amount">${property.PropertyName}, ₹${property.Amount}</h3>
-          <p class="mappopup-address">${property.PropertyType} | ${property.Bedrooms} Bedrooms | ${property.SqFt} Sqft <br />
-          ${property.PropertyArea} | ${property.PropertyCity} | ${property.PropertyZipCode}</p>
+          <p class="mappopup-address">${property.PropertyType} | ${property.Bedrooms} Bedrooms | ${property.SqFt} <br />
+          ${property.Locality} | ${property.ZipCode}</p>
         </div>
       </div>
     `;

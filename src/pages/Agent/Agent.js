@@ -131,24 +131,29 @@ const Agent = () => {
   };
   
 
-  const handleToggleAgentTable = () => {
-    setShowAgentTable(!showAgentTable);
-    setShowMap(false); // Hide the map when toggling
-  };
+  // const handleToggleAgentTable = () => {
+  //   setShowAgentTable(!showAgentTable);
+  //   setShowMap(false);
+  // };
 
   return (
     <>
       <AgentFilter
-        handleToggleAgentTable={handleToggleAgentTable}
-        showAgentTable={showAgentTable}
+        // handleToggleAgentTable={handleToggleAgentTable}
+        // showAgentTable={showAgentTable}
       />
       <div className="agent-container">
         <div className="agent-testimonials" style={{ width: showMap ? '60%' : '100%' }}>
-          {showAgentTable ? (
+
+       <Agentsproperties agentsproperties={agentproperties} /> 
+      
+
+          {/* {showAgentTable ? (
             <Agentsproperties agentsproperties={agentproperties} />
-          ) : (
+          )
+           : (
             <AgentTable agents={agents} onAgentClick={flyToAgent} />
-          )}
+          )} */}
         </div>
         <div className={`agentmap-container ${showMap ? 'visible' : ''}`} ref={mapContainerRef} />
       </div>

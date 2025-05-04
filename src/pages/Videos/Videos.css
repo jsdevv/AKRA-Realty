@@ -3,19 +3,19 @@
   display: grid;
   grid-template-columns: 1fr 2fr;
   gap: 20px;
-  padding: 10px 20px 0px 20px;
+  padding:10px 20px 0px 0px;
   height: 84vh;
 }
 
 /* Left Side - Scrollable Video List */
 .video-list {
-  flex-grow: 1;
-  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Two cards per row */
+  gap: 15px;
   padding: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  background-color: #f0f0f0;
+  overflow-y: auto; /* Enable vertical scrolling */
+  max-height: 76vh; /* Set max height to create scroll effect */
+  background-color: #F0F0F0;
 }
 
 .video-list::-webkit-scrollbar {
@@ -32,22 +32,15 @@
   border-radius: 8px;
 }
 
-/* Video List Container */
-.video-list-container {
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
+/* Video List Header */
 .video-list-header {
   position: sticky;
   top: 0;
-  background-color: #fff;
-  padding: 10px;
+  background-color: #F0F0F0;
+  padding: 5px 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #ddd;
 }
 
 .video-list-header div:first-child {
@@ -61,13 +54,14 @@
 
 .video-list-header h3 {
   font-size: 14px;
-  margin: 0;
+  font-weight: 500;
+  margin: 5px;
 }
 
-.video-list-header span {
+/* .video-list-header span {
   font-size: 12px;
   color: rgb(110, 67, 67);
-}
+} */
 
 .videofilter-icon {
   cursor: pointer;
@@ -80,88 +74,123 @@
   transform: scale(1.1);
 }
 
-/* Video Card */
+/* Video Card - Zillow Style */
 .video-card {
-  display: flex;
   cursor: pointer;
-  border-radius: 12px;
+  border-radius: 8px;
   background: #fff;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-  padding: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-width: 260px; /* Reduce card width */
+  margin: 0 auto; /* Center the card */
 }
-
 .video-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
 }
 
+/* Thumbnail Image */
 .video-thumbnail {
-  width: 150px;
-  height: 100px;
+  width: 100%;
+  height: 174px;
   object-fit: cover;
-  border-radius: 8px;
-  flex-shrink: 0;
+  border-bottom: 1px solid #eee;
 }
 
+/* Card Content */
 .video-info {
-  flex-grow: 1;
-  padding-left: 15px;
-  gap: 15px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* Allow content to grow */
 }
 
+/* Title & Price Row */
 .video-title-price {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: -3px;
-}
-
-.video-title-price1 {
-  display: flex;
   justify-content: space-between;
-  align-items: center;
+  width: 100%;
+  gap: 10px;
+  overflow: hidden;
 }
 
 .video-title {
-  font-size: 14px;
-  font-weight: 500;
-  margin: 0;
+  flex: 1;
+  min-width: 0; /* REQUIRED for text-overflow to work */
+  font-weight: 600;
   color: #333;
+  margin: 0px 0px 0px 0px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+  padding: 2px 0;
+  font-size: 14px;
+  color: #2A3650;
+}
+
+.video-displayheader{
+  display: flex;
+  align-items: center;
+}
+
+.video-displayheader p{
+  font-size: 12px;
+  margin: 10px 12px 14px 0px;
+}
+
+
+.video-title1 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin: 10px 12px 14px 4px;
 }
 
 .video-price {
-  font-size: 12px;
-  font-weight: 500;
-  color: #333;
+  margin: 0;
+  padding: 2px 0;
+  font-size: 13px;
+  color: #2A3650;
+  flex-shrink: 0;
+  font-weight: 600;
+  white-space: nowrap;
 }
 
+
+
+/* Additional Info */
 .video-area {
-  font-size: 12px;
-  color: #333;
+  font-size: 11px; /* Smaller font size */
+  color: #555;
   display: flex;
-  align-items: center;
-  gap: 0px;
-  margin: 0px 0px 4px 0px;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .video-count {
-  font-size: 11px;
+  font-size: 10px;
   color: #ffffff;
   background-color: #2A3650;
-  padding: 4PX 6px;
-  border-radius:8px;
+  padding: 4px 6px;
+  border-radius: 8px;
+  margin-top: 4px;
+  white-space: nowrap; /* Prevent text wrapping */
 }
-
 
 /* Right Side - Fixed Video Player */
 .video-display {
-  width: 95%;
+  width: 100%;
   border-radius: 12px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  margin: 10px;
+  margin: 0px 0px 10px 0px;
   position: relative;
 }
 
@@ -172,10 +201,10 @@
 }
 
 .video-container h3 {
- font-size: 16px;
- font-weight: 500;
- margin:0px;
- padding-bottom: 4px;
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0px;
+  padding-bottom: 4px;
 }
 
 .youtube-iframe iframe {
@@ -218,12 +247,11 @@
   border-radius: 8px;
 }
 
-
-.property-video-slide{
+.property-video-slide {
   background-color: #ebebeb;
 }
 
-.property-video-card  p{
+.property-video-card p {
   margin: 0px;
   padding: 2px;
   font-size: 9px;
@@ -241,14 +269,12 @@
   color: #333;
 }
 
-.property-playlist h4{
+.property-playlist h4 {
   padding: 5px;
   margin: 0px;
 }
 
-
-
-/* Responsive */
+/* Responsive Styles */
 @media (max-width: 900px) {
   .videos-layout {
     grid-template-columns: 1fr;
@@ -256,8 +282,9 @@
   }
 
   .video-list {
-    height: auto;
-    overflow-y: visible;
+    grid-template-columns: 1fr; /* Stack 1 column on mobile */
+    gap: 10px; /* Reduced gap for smaller screens */
+    padding: 5px;
   }
 
   .video-display {
@@ -267,4 +294,10 @@
   .youtube-iframe iframe {
     height: 250px;
   }
+}
+
+.project-info{
+  color: #666;
+  text-align: left;
+  margin: 1rem;
 }

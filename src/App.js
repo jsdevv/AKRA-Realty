@@ -47,7 +47,7 @@ const ConditionalNavbarBottom = ({
 }) => {
   const location = useLocation();
  
-  const shouldDisplayNavbarBottom = ['/', '/home', '/owner', "/properties-new", "/about", '/addproject',"/addorderimages",
+  const shouldDisplayNavbarBottom = ['/', '/home', '/owner', "/properties", "/about", '/addproject',"/addorderimages",
                                       "/addcompany", '/listedagents', '/addlistings', '/forgot-password', '/passwordreset', '/register', 
                                        '/Notification', '/feedback', '/favorites', '/agents', '/services', '/investors', '/sell']
                                        .includes(location.pathname);
@@ -158,7 +158,7 @@ const App = () => {
 
             <NavbarTop handleLogout={handleLogout} handleLogin={handleLogin} />
 
-            {!window.location.pathname.includes('/properties-new') && <ConditionalNavbarBottom
+            {!window.location.pathname.includes('/properties') && <ConditionalNavbarBottom
               onSelectPropertyStatus={(status) => dispatch(setSelectedPropertyStatus(status))}
               onSelectHomeTypes={(types) => dispatch(setSelectedHomeTypes(types))}
               onPriceFilterChange={handlePriceFilterChange}
@@ -194,7 +194,7 @@ const App = () => {
                 element={<LoginForm onLogin={handleLogin} />}
               />
               <Route
-                 path="/properties-new" 
+                 path="/properties" 
                  element={<PropertiesListing  setShowAuthPopup={setShowAuthPopup}  />} />
               <Route path="/Dashboard"
                 element={

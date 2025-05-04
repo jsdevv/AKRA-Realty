@@ -19,7 +19,7 @@
 
   /* Wrap table inside a scrollable div */
 .bug-feedback-table-wrapper {
-  max-height: 65vh; /* Set a max height for scrollable content */
+  max-height: 75vh; /* Set a max height for scrollable content */
   overflow-y: auto; /* Allow vertical scrolling */
   overflow-x: hidden;
   border: 1px solid #e0e0e0;

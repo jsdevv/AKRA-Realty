@@ -49,10 +49,10 @@ const AgentFilter = ({  handleToggleAgentTable, showAgentTable }) => {
     const propertyStatusRef = useRef(null);
     // Fetch Property Status Options and Home Type Options on mount if not already loaded
     useEffect(() => {
-        if (!statusOptions.length && showAgentTable) {
+        if (!statusOptions.length ) {
             dispatch(fetchStatusOptions(bearerToken));
         }
-    }, [bearerToken, dispatch, statusOptions.length, showAgentTable]);
+    }, [bearerToken, dispatch, statusOptions.length]);
 
 
     // Fetch Property Status Options and Home Type Options on mount if not already loaded
@@ -168,12 +168,12 @@ const AgentFilter = ({  handleToggleAgentTable, showAgentTable }) => {
         dispatch(setSearchFilter('')); // Clear Redux search filter
     };
 
-    const enhancedToggleHandler = () => {
-        dispatch(clearAgentFilters());
-        setSearchAgentProperty('');  // Clear local search
-        dispatch(setSearchFilter('')); 
-        handleToggleAgentTable();
-    };
+    // const enhancedToggleHandler = () => {
+    //     dispatch(clearAgentFilters());
+    //     setSearchAgentProperty('');  
+    //     dispatch(setSearchFilter('')); 
+    //     handleToggleAgentTable();
+    // };
 
     return (
         <div className="filter-bar-unique-component">
@@ -301,9 +301,9 @@ const AgentFilter = ({  handleToggleAgentTable, showAgentTable }) => {
             </div>
 
             {/* Submit Button */}
-            <button className="showagent-unique-component" onClick={enhancedToggleHandler}>
+            {/* <button className="showagent-unique-component" onClick={enhancedToggleHandler}>
                 {showAgentTable ? 'Agents' : 'Agent Properties'}
-            </button>
+            </button> */}
         </div>
     );
 };
