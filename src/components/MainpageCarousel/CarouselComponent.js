@@ -3,8 +3,6 @@ import { FaShieldAlt, FaChartBar, FaExchangeAlt, FaBriefcase } from 'react-icons
 import { MdMoneyOff } from 'react-icons/md';
 import './CarouselComponent.css';
 
-const iconColor = '#007ACC'; 
-
 const CarouselComponent = () => {
     const items = [
         { icon: <FaExchangeAlt className="carousel-icon" />, text: 'Buy & Sell' },

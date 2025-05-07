@@ -101,13 +101,14 @@ const NavbarTop = ({ handleLogout, handleLogin, propertyStatusOptions = [], onSe
               >
                 Learnings
               </Link>
-              <Link
+
+              {/* <Link
                 to="/blogs"
                 className={`navbar-centerlink ${location.pathname === '/blogs' ? 'active' : ''}`}
                 onClick={() => handlemoreLinkClick('blogs')}
               >
                 Blogs
-              </Link>
+              </Link> */}
 
               <Link
                 to="/listedagents"
